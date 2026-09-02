@@ -14,12 +14,14 @@ function SessionPageBody() {
 
 export default function SessionPage() {
   return (
-    <div className="min-h-screen px-4 py-12">
-      <div className="container mx-auto max-w-3xl">
-        <Suspense fallback={<div className="text-gray-400">Session wird vorbereitet…</div>}>
-          <SessionPageBody />
-        </Suspense>
-      </div>
-    </div>
+    <Suspense
+      fallback={
+        <p className="mx-auto max-w-[640px] px-4 pt-8 font-mono text-[12px] uppercase tracking-[0.18em] text-dim">
+          Session wird vorbereitet…
+        </p>
+      }
+    >
+      <SessionPageBody />
+    </Suspense>
   )
 }

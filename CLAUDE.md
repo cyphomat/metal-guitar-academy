@@ -31,6 +31,7 @@ entscheidet der Scheduler aus dem Übungs-Log — die **Form** ist fix, der
 | `lib/session/drills.ts` | Der Übungs-Katalog (reine Daten) |
 | `lib/session/progress.ts` | Auswertung des Logs: Tempo-Fortschreibung, Streak, Mastery |
 | `lib/session/builder.ts` | Wählt aus, was heute drankommt |
+| `lib/session/briefing.ts` | Die Ansage: der Ton des Tages, aus dem Log |
 | `lib/storage/practice-log.ts` | localStorage, einziger Zugriffspunkt aufs Log |
 | `components/session/*` | UI der Session |
 | `lib/base-path.ts` | Präfix für Laufzeit-Pfade unter GitHub Pages |
@@ -56,6 +57,12 @@ Komponente.
 - **Ein AudioContext für alles.** Metronom und Mikrofon müssen auf derselben
   Uhr liegen, sonst ist jede Timing-Messung Rauschen. Nie einen zweiten anlegen.
 - **Theorie gehört an den Drill** (`why`-Feld), nicht in einen eigenen Bereich.
+- **Die Design-Sprache kommt aus Setlist.** Matte Flächen, Bernstein nur auf
+  dem, was zählt, Stahlblau für alles Zweitrangige, harte Kanten mit 2 px.
+  Farben stehen als CSS-Variablen in `app/globals.css`, nicht als Hex-Werte in
+  Komponenten. Road-Case, kein HUD.
+- **Die Ansage behauptet nichts.** Jede Zeile in `briefing.ts` muss aus dem Log
+  ableitbar sein, sonst gehört sie da nicht hin.
 
 ## Inhalte und Recht
 

@@ -1,12 +1,15 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Inter } from "next/font/google"
+import { Oswald } from "next/font/google"
 import "./globals.css"
 import { Navigation } from "@/components/navigation"
 import { ServiceWorker } from "@/components/service-worker"
 import { asset } from "@/lib/base-path"
 
-const inter = Inter({ subsets: ["latin"] })
+// Kondensiert und versal — trägt Tempi, Zahlen und Drill-Namen.
+// next/font lädt sie beim Build herunter und liefert sie selbst aus, damit
+// die App offline genauso aussieht wie online.
+const oswald = Oswald({ subsets: ["latin"], weight: ["400", "600", "700"], variable: "--font-display" })
 
 export const metadata: Metadata = {
   title: "Metal Guitar Academy",
@@ -31,7 +34,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#111111",
+  themeColor: "#0c0c0e",
   // Fills the notch area on iPhone; the safe-area padding below keeps content
   // out from under it.
   viewportFit: "cover",
@@ -39,16 +42,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className="dark">
-      <body className={`${inter.className} min-h-screen bg-[#111] text-white`}>
+    <html lang="de" className={`dark ${oswald.variable}`}>
+      <body className="min-h-screen">
         <ServiceWorker />
         <Navigation />
-        <main
-          className="pb-[env(safe-area-inset-bottom)]"
-          style={{ paddingTop: "calc(4rem + env(safe-area-inset-top))" }}
-        >
-          {children}
-        </main>
+        <main className="pb-[env(safe-area-inset-bottom)]">{children}</main>
       </body>
     </html>
   )

@@ -1,5 +1,10 @@
 import type { Config } from "tailwindcss"
 
+/**
+ * Farben und Kanten kommen aus Setlists Design-Sprache: matte Flächen,
+ * Bernstein nur auf dem, was zählt, und harte Rechtecke mit 2 px.
+ * Die Werte selbst stehen als CSS-Variablen in globals.css.
+ */
 const config: Config = {
   darkMode: ["class"],
   content: [
@@ -9,48 +14,38 @@ const config: Config = {
     "./lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: { "2xl": "1400px" },
-    },
     extend: {
       colors: {
-        background: "#111111",
-        foreground: "#ffffff",
-        card: { DEFAULT: "#18181b", foreground: "#ffffff" },
-        popover: { DEFAULT: "#18181b", foreground: "#ffffff" },
-        primary: { DEFAULT: "#ea580c", foreground: "#ffffff" },
-        secondary: { DEFAULT: "#1f2937", foreground: "#ffffff" },
-        muted: { DEFAULT: "#374151", foreground: "#d1d5db" },
-        accent: { DEFAULT: "#ea580c", foreground: "#ffffff" },
-        destructive: { DEFAULT: "#dc2626", foreground: "#ffffff" },
-        border: "#374151",
-        input: "#374151",
-        ring: "#ea580c",
+        bg: "var(--bg)",
+        panel: "var(--panel)",
+        panel2: "var(--panel2)",
+        sunken: "var(--sunken)",
+        fg: "var(--fg)",
+        muted: "var(--muted)",
+        dim: "var(--dim)",
+        line: "var(--line)",
+        akzent: "var(--akzent)",
+        stahl: "var(--stahl)",
+        gruen: "var(--gruen)",
+        rost: "var(--rost)",
+        rot: "var(--rot)",
+      },
+      fontFamily: {
+        display: ["var(--font-display)", "Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
+        mono: ["ui-monospace", "SF Mono", "SFMono-Regular", "Menlo", "monospace"],
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        // Road-Case, kein HUD: eine Kante, kein Radius.
+        none: "0",
+        DEFAULT: "2px",
+        sm: "2px",
+        md: "2px",
+        lg: "2px",
+        full: "9999px",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [],
 }
 
 export default config

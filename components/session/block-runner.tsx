@@ -1,9 +1,6 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import { BeatIndicator } from "@/components/session/beat-indicator"
 import { MicPanel } from "@/components/session/mic-panel"
 import { TabView } from "@/components/session/tab-view"
@@ -134,48 +131,46 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
 
   if (phase === "rate") {
     return (
-      <div className="space-y-6">
+      <div className="space-y-5">
         <div>
-          <p className="text-sm uppercase tracking-wider text-gray-500">
+          <p className="kicker">
             Block {index + 1} von {total}
           </p>
-          <h2 className="mt-1 text-3xl font-bold text-white">{drill.title}</h2>
-          <p className="mt-2 text-gray-400">
-            {formatClock(Math.round(timer.elapsed))} gespielt bei {metronome.bpm} BPM
+          <h2 className="display mt-1 text-[32px] text-fg">{drill.title}</h2>
+          <p className="num mt-1 text-[13px] text-muted">
+            {formatClock(Math.round(timer.elapsed))} bei {metronome.bpm} BPM
           </p>
         </div>
 
         {analysis && <TimingReport analysis={analysis} />}
 
         <div>
-          <h3 className="mb-4 text-lg font-semibold text-orange-500">Wie lief&apos;s?</h3>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <h3 className="rule mb-3">Wie lief&apos;s?</h3>
+          <div className="grid gap-[9px] sm:grid-cols-2">
             {RATINGS.map((option) => {
               const isSuggested = suggested === option.value
               return (
                 <button
                   key={option.value}
                   onClick={() => rate(option.value)}
-                  className={`rounded-lg border p-4 text-left transition-colors ${
+                  className={`border p-[14px] text-left transition-colors ${
                     isSuggested
-                      ? "border-orange-500/70 bg-orange-950/30 hover:bg-orange-950/50"
-                      : "border-gray-800 bg-gray-900/50 hover:border-orange-500/60 hover:bg-gray-900"
+                      ? "border-akzent bg-[--tint-akzent] hover:bg-[--tint-akzent-stark]"
+                      : "border-line bg-panel hover:border-stahl"
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-semibold text-white">{option.label}</span>
-                    {isSuggested && (
-                      <span className="text-xs uppercase tracking-wider text-orange-500">
-                        gemessen
-                      </span>
-                    )}
+                    <span className={`display text-[19px] ${isSuggested ? "text-akzent" : "text-fg"}`}>
+                      {option.label}
+                    </span>
+                    {isSuggested && <span className="kicker text-akzent">gemessen</span>}
                   </div>
-                  <div className="mt-1 text-sm text-gray-400">{option.hint}</div>
+                  <div className="mt-1 text-[13px] text-muted">{option.hint}</div>
                 </button>
               )
             })}
           </div>
-          <p className="mt-4 text-sm text-gray-500">
+          <p className="mt-3 text-[12.5px] leading-relaxed text-dim">
             {suggested
               ? "Vorgeschlagen aus dem gemessenen Timing — überstimm es, wenn es sich anders angefühlt hat."
               : "Ehrlich antworten — daraus kommt das Tempo für das nächste Mal."}
@@ -186,75 +181,68 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <p className="text-sm uppercase tracking-wider text-gray-500">
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="kicker">
             Block {index + 1} von {total}
           </p>
-          <h2 className="mt-1 text-3xl font-bold text-white">{drill.title}</h2>
-          <p className="mt-1 text-gray-400">{drill.goal}</p>
+          <h2 className="display mt-1 text-[32px] text-fg">{drill.title}</h2>
+          <p className="mt-1 text-[14px] text-muted">{drill.goal}</p>
         </div>
-        <Badge variant="outline" className="border-orange-500 text-orange-500">
+        <span className="kicker flex-none border border-stahl px-2 py-[3px] text-stahl">
           {TECHNIQUE_LABELS[drill.technique]}
-        </Badge>
+        </span>
       </div>
 
-      <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6">
-        <div className="flex flex-wrap items-center justify-between gap-6">
+      <div className="card plain">
+        <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <div className="font-mono text-6xl font-bold tabular-nums text-white">
+            <span className="kicker">Verbleibend</span>
+            <div className="display num text-[56px] leading-none text-fg">
               {formatClock(timer.remaining)}
             </div>
-            <Progress value={progress} className="mt-3 h-2 w-48" />
           </div>
 
           <div className="text-right">
-            <div className="font-mono text-5xl font-bold tabular-nums text-orange-500">
-              {metronome.bpm}
-            </div>
-            <div className="text-sm uppercase tracking-wider text-gray-500">BPM</div>
-            <div className="mt-3 flex items-center justify-end gap-2">
-              <Button
-                size="sm"
-                variant="outline"
-                className="border-gray-700 text-gray-300"
+            <span className="kicker">Tempo</span>
+            <div className="display num text-[44px] leading-none text-akzent">{metronome.bpm}</div>
+            <div className="mt-2 flex items-center justify-end gap-2">
+              <button
+                className="btn btn-ghost btn-small"
                 onClick={() => metronome.setBpm(metronome.bpm - drill.bpmStep)}
               >
                 −{drill.bpmStep}
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="border-gray-700 text-gray-300"
+              </button>
+              <button
+                className="btn btn-ghost btn-small"
                 onClick={() => metronome.setBpm(metronome.bpm + drill.bpmStep)}
               >
                 +{drill.bpmStep}
-              </Button>
+              </button>
             </div>
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center gap-4">
-          <Button onClick={toggle} size="lg" className="bg-orange-600 hover:bg-orange-700">
+        <div className="bar mt-4 h-[7px]">
+          <i style={{ width: `${progress}%` }} />
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-[9px]">
+          <button onClick={toggle} className="btn flex-1">
             {timer.isRunning ? (
               <>
-                <MdPause className="mr-2 h-5 w-5" /> Pause
+                <MdPause className="h-[18px] w-[18px]" /> Pause
               </>
             ) : (
               <>
-                <MdPlayArrow className="mr-2 h-5 w-5" /> {timer.elapsed > 0 ? "Weiter" : "Los"}
+                <MdPlayArrow className="h-[18px] w-[18px]" /> {timer.elapsed > 0 ? "Weiter" : "Los"}
               </>
             )}
-          </Button>
-          <Button
-            onClick={finishPlaying}
-            size="lg"
-            variant="outline"
-            className="border-gray-700 text-gray-300"
-          >
-            <MdSkipNext className="mr-2 h-5 w-5" /> Block beenden
-          </Button>
+          </button>
+          <button onClick={finishPlaying} className="btn btn-ghost btn-small px-4 py-4">
+            <MdSkipNext className="h-[18px] w-[18px]" /> Beenden
+          </button>
           <BeatIndicator beatInBar={metronome.beatInBar} beatsPerBar={drill.beatsPerBar} />
         </div>
       </div>
@@ -269,28 +257,24 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
 
       {drill.tab && <TabView tab={drill.tab} />}
 
-      {drill.why && (
-        <details className="rounded-lg border border-gray-800 bg-gray-900/30 px-4 py-3">
-          <summary className="cursor-pointer text-sm font-semibold uppercase tracking-wider text-gray-500 hover:text-gray-300">
-            Warum das so ist
-          </summary>
-          <p className="mt-3 text-gray-300">{drill.why}</p>
-        </details>
-      )}
-
       <div>
-        <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-orange-500">
-          Worauf achten
-        </h3>
-        <ul className="space-y-2">
+        <h3 className="rule mb-2">Worauf achten</h3>
+        <ul className="border-t border-line">
           {drill.cues.map((cue) => (
-            <li key={cue} className="flex items-start text-gray-300">
-              <span className="mr-3 mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-orange-500" />
+            <li key={cue} className="flex gap-3 border-b border-line py-[9px] text-[14px] text-fg">
+              <span className="num flex-none text-akzent">›</span>
               <span>{cue}</span>
             </li>
           ))}
         </ul>
       </div>
+
+      {drill.why && (
+        <details className="info">
+          <summary>Warum das so ist</summary>
+          <p className="px-[15px] pb-[15px] text-[14px] leading-relaxed text-muted">{drill.why}</p>
+        </details>
+      )}
     </div>
   )
 }

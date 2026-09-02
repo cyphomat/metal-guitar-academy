@@ -58,13 +58,11 @@ export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?:
   }
 
   return (
-    <div>
-      <div className="mb-8 h-1 w-full overflow-hidden rounded-full bg-gray-800">
-        <div
-          className="h-full bg-orange-500 transition-[width] duration-500"
-          style={{ width: `${overallProgress}%` }}
-        />
+    <div className="mx-auto max-w-[640px] px-4 pb-16">
+      <div className="bar mt-6 h-[3px]">
+        <i className="transition-[width] duration-500" style={{ width: `${overallProgress}%` }} />
       </div>
+      <div className="mt-5" />
       <BlockRunner
         key={`${block.drill.id}-${current}`}
         block={block}

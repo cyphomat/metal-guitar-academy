@@ -21,12 +21,12 @@ function offsetText(offsetMs: number): string {
 
 function Metric({ value, unit, label }: { value: string | number; unit?: string; label: string }) {
   return (
-    <div className="text-center">
-      <div className="font-mono text-2xl font-bold text-white">
+    <div className="stat">
+      <div className="n">{label}</div>
+      <div className="v">
         {value}
-        {unit && <span className="ml-0.5 text-sm font-normal text-gray-500">{unit}</span>}
+        {unit && <span className="ml-1 font-mono text-[13px] font-normal text-dim">{unit}</span>}
       </div>
-      <div className="mt-1 text-xs uppercase tracking-wider text-gray-500">{label}</div>
     </div>
   )
 }
@@ -37,20 +37,20 @@ function Metric({ value, unit, label }: { value: string | number; unit?: string;
  */
 function Scatter({ deviations }: { deviations: number[] }) {
   return (
-    <div className="relative h-10 overflow-hidden rounded border border-gray-800 bg-black/40">
-      <div className="absolute inset-y-0 left-1/2 w-px bg-gray-600" />
+    <div className="relative h-11 overflow-hidden border border-line bg-sunken">
+      <div className="absolute inset-y-0 left-1/2 w-px bg-akzent opacity-40" />
       {deviations.map((deviation, index) => {
         const position = 50 + Math.max(-50, Math.min(50, (deviation / 60) * 50))
         return (
           <div
             key={index}
-            className="absolute top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/70"
+            className="absolute top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 bg-akzent opacity-70"
             style={{ left: `${position}%` }}
           />
         )
       })}
-      <span className="absolute bottom-0.5 left-1 text-[10px] text-gray-600">früh</span>
-      <span className="absolute bottom-0.5 right-1 text-[10px] text-gray-600">spät</span>
+      <span className="absolute bottom-0.5 left-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-dim">früh</span>
+      <span className="absolute bottom-0.5 right-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-dim">spät</span>
     </div>
   )
 }
@@ -60,7 +60,7 @@ export function TimingReport({ analysis }: { analysis: TimingAnalysis }) {
 
   if (analysis.hits === 0) {
     return (
-      <div className="rounded-lg border border-gray-800 bg-gray-900/50 p-4 text-sm text-gray-400">
+      <div className="border border-line bg-panel px-[15px] py-3 text-[13.5px] leading-relaxed text-muted">
         Das Mikrofon hat nichts gehört, was zum Klick passt. Lauter spielen oder näher ans
         Mikrofon — die Einschätzung unten machst du diesmal selbst.
       </div>
@@ -68,8 +68,8 @@ export function TimingReport({ analysis }: { analysis: TimingAnalysis }) {
   }
 
   return (
-    <div className="space-y-4 rounded-lg border border-gray-800 bg-gray-900/50 p-4">
-      <div className="grid grid-cols-3 gap-4">
+    <div className="space-y-3">
+      <div className="grid grid-cols-3 gap-[9px]">
         <Metric value={analysis.score} label="Timing-Score" />
         <Metric value={`±${analysis.spreadMs}`} unit="ms" label="Streuung" />
         <Metric value={`${analysis.hits}/${analysis.expected}`} label="Getroffen" />
@@ -77,9 +77,9 @@ export function TimingReport({ analysis }: { analysis: TimingAnalysis }) {
 
       <Scatter deviations={analysis.deviationsMs} />
 
-      <div className="space-y-1 text-sm text-gray-400">
-        <p>{TREND_TEXT[analysis.trend]}.</p>
-        <p className="text-xs text-gray-600">
+      <div className="border-l-2 border-line pl-3">
+        <p className="text-[14px] text-fg">{TREND_TEXT[analysis.trend]}.</p>
+        <p className="mt-1 text-[12px] leading-relaxed text-dim">
           Gemessen wird die Streuung, nicht der Versatz. {offsetText(analysis.offsetMs)}
         </p>
       </div>

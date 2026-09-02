@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
 import { DRILLS } from "@/lib/session/drills"
 import { masteryOf, nextBpm, progressFor } from "@/lib/session/progress"
 import { loadLog } from "@/lib/storage/practice-log"
 import { EMPTY_LOG, TECHNIQUE_LABELS, type BlockKind, type PracticeLog } from "@/lib/session/types"
-import { MdPlayArrow } from "react-icons/md"
 
 const SECTIONS: Array<{ kind: BlockKind; title: string; blurb: string }> = [
   { kind: "warmup", title: "Warm-up", blurb: "Zwei Minuten, bevor es losgeht" },
@@ -23,49 +21,47 @@ export function DrillLibrary() {
   }, [])
 
   return (
-    <div className="space-y-12">
+    <div>
       {SECTIONS.map((section) => (
         <section key={section.kind}>
-          <h2 className="text-xl font-semibold text-white">{section.title}</h2>
-          <p className="mb-4 text-sm text-gray-500">{section.blurb}</p>
+          <h2 className="rule mb-1 mt-9">{section.title}</h2>
+          <p className="mb-3 text-[12.5px] text-dim">{section.blurb}</p>
 
-          <div className="space-y-3">
+          <div className="flex flex-col gap-[9px]">
             {DRILLS.filter((drill) => drill.kind === section.kind).map((drill) => {
               const progress = progressFor(log, drill.id)
               const mastery = masteryOf(drill, progress)
+              const started = progress.attempts > 0
 
               return (
                 <Link
                   key={drill.id}
                   href={`/session?drill=${drill.id}&minutes=10`}
-                  className="group block rounded-lg border border-gray-800 bg-gray-900/50 p-4 transition-colors hover:border-orange-500/60"
+                  className="group block border border-line bg-panel px-[15px] py-[13px] transition-colors hover:border-akzent"
                 >
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-baseline justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-white">{drill.title}</span>
-                        <Badge variant="outline" className="border-gray-700 text-xs text-gray-400">
-                          {TECHNIQUE_LABELS[drill.technique]}
-                        </Badge>
+                      <div className="display text-[18px] text-fg group-hover:text-akzent">
+                        {drill.title}
                       </div>
-                      <p className="mt-1 text-sm text-gray-400">{drill.goal}</p>
+                      <div className="kicker mt-0.5 text-dim">
+                        {TECHNIQUE_LABELS[drill.technique]}
+                      </div>
                     </div>
-                    <div className="flex flex-shrink-0 items-center gap-3 text-right">
-                      <div className="font-mono text-sm">
-                        <div className="text-orange-500">
-                          {progress.attempts > 0 ? `${nextBpm(drill, progress)}` : drill.startBpm} BPM
-                        </div>
-                        <div className="text-xs text-gray-600">Ziel {drill.targetBpm}</div>
+                    <div className="flex-none text-right">
+                      <div className="num text-[15px] font-bold text-akzent">
+                        {started ? nextBpm(drill, progress) : drill.startBpm}
                       </div>
-                      <MdPlayArrow className="h-6 w-6 text-gray-600 transition-colors group-hover:text-orange-500" />
+                      <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-dim">
+                        Ziel {drill.targetBpm}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="mt-3 h-1 overflow-hidden rounded-full bg-gray-800">
-                    <div
-                      className="h-full rounded-full bg-orange-500/70"
-                      style={{ width: `${Math.round(mastery * 100)}%` }}
-                    />
+                  <p className="mt-2 text-[13.5px] leading-relaxed text-muted">{drill.goal}</p>
+
+                  <div className="bar mt-[10px] h-[4px]">
+                    <i style={{ width: `${Math.round(mastery * 100)}%` }} />
                   </div>
                 </Link>
               )
