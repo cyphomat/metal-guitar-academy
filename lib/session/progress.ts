@@ -8,6 +8,8 @@ export interface DrillProgress {
   lastBpm: number | null
   lastRating: Rating | null
   lastPlayedAt: string | null
+  /** Best measured timing score, or null if the mic was never on for this drill. */
+  bestTimingScore: number | null
 }
 
 const MIN_BPM = 40
@@ -22,6 +24,7 @@ export function resultsFor(log: PracticeLog, drillId: string): DrillResult[] {
 export function progressFor(log: PracticeLog, drillId: string): DrillProgress {
   const results = resultsFor(log, drillId)
   const clean = results.filter((r) => r.rating >= 3)
+  const measured = results.filter((r) => r.timing !== undefined)
 
   return {
     drillId,
@@ -30,6 +33,7 @@ export function progressFor(log: PracticeLog, drillId: string): DrillProgress {
     lastBpm: results[0]?.bpm ?? null,
     lastRating: results[0]?.rating ?? null,
     lastPlayedAt: results[0]?.at ?? null,
+    bestTimingScore: measured.length ? Math.max(...measured.map((r) => r.timing!.score)) : null,
   }
 }
 

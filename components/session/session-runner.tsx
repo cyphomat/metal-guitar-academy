@@ -1,11 +1,11 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { BlockRunner } from "@/components/session/block-runner"
+import { BlockRunner, type BlockOutcome } from "@/components/session/block-runner"
 import { SessionSummary } from "@/components/session/session-summary"
 import { buildDrillSession, buildSession, nextExtraBlock } from "@/lib/session/builder"
 import { appendResults, loadLog } from "@/lib/storage/practice-log"
-import type { DrillResult, PracticeLog, Rating, SessionBlock } from "@/lib/session/types"
+import type { DrillResult, PracticeLog, SessionBlock } from "@/lib/session/types"
 
 export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?: string }) {
   // The log as it stood when the session opened. Kept so the wrap-up can show
@@ -23,7 +23,7 @@ export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?:
   const block = blocks[current]
   const done = current >= blocks.length
 
-  const completeBlock = (outcome: { bpm: number; rating: Rating; seconds: number }) => {
+  const completeBlock = (outcome: BlockOutcome) => {
     const result: DrillResult = {
       drillId: block.drill.id,
       technique: block.drill.technique,
@@ -31,6 +31,7 @@ export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?:
       rating: outcome.rating,
       seconds: outcome.seconds,
       at: new Date().toISOString(),
+      timing: outcome.timing,
     }
 
     // Written per block, not at the end: a session abandoned halfway still

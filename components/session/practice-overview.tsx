@@ -110,8 +110,15 @@ export function PracticeOverview() {
                         </div>
                       </div>
                       <div className="text-right font-mono text-sm text-gray-400">
-                        <span className="text-orange-500">{progress.bestBpm ?? "–"}</span>
-                        <span className="text-gray-600"> / {drill.targetBpm} BPM</span>
+                        <div>
+                          <span className="text-orange-500">{progress.bestBpm ?? "–"}</span>
+                          <span className="text-gray-600"> / {drill.targetBpm} BPM</span>
+                        </div>
+                        {progress.bestTimingScore !== null && (
+                          <div className="text-xs text-gray-600">
+                            Timing {progress.bestTimingScore}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-gray-800">

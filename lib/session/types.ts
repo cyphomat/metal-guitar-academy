@@ -38,6 +38,12 @@ export interface Drill {
   cues: string[]
   /** ASCII tab, monospace. Optional for pure coordination drills. */
   tab?: string
+  /**
+   * The theory behind the exercise, in two or three sentences. Shown next to
+   * the drill rather than in a section of its own — theory sticks when it
+   * explains something your hands are doing right now.
+   */
+  why?: string
   /** Tempo to start at when there is no history for this drill. */
   startBpm: number
   /** The tempo that counts as "owned". */
@@ -59,6 +65,20 @@ export const RATINGS = [
 
 export type Rating = (typeof RATINGS)[number]["value"]
 
+/** What the microphone measured, when it was on. */
+export const timingResultSchema = z.object({
+  hits: z.number().int().min(0),
+  expected: z.number().int().min(0),
+  /** Median absolute deviation around the systematic offset, in ms. */
+  spreadMs: z.number(),
+  /** Median deviation in ms — mostly capture latency, kept out of the score. */
+  offsetMs: z.number(),
+  score: z.number().min(0).max(100),
+  trend: z.enum(["steady", "rushing", "dragging"]),
+})
+
+export type TimingResult = z.infer<typeof timingResultSchema>
+
 export const drillResultSchema = z.object({
   drillId: z.string(),
   technique: z.enum(TECHNIQUES),
@@ -68,6 +88,8 @@ export const drillResultSchema = z.object({
   seconds: z.number().min(0),
   /** ISO timestamp. */
   at: z.string(),
+  /** Absent when the block was played without the microphone. */
+  timing: timingResultSchema.optional(),
 })
 
 export type DrillResult = z.infer<typeof drillResultSchema>

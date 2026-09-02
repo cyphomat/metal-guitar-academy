@@ -62,7 +62,15 @@ export function SessionSummary({ results, previousLog, log, onExtend }: SessionS
               className="flex items-center justify-between rounded-lg border border-gray-800 bg-gray-900/50 px-4 py-3"
             >
               <span className="text-gray-200">{drill?.title ?? result.drillId}</span>
-              <span className="font-mono text-orange-500">{result.bpm} BPM</span>
+              <span className="flex items-center gap-3 font-mono text-sm">
+                {result.timing && (
+                  <span className="text-gray-500">
+                    Timing <span className="text-gray-300">{result.timing.score}</span>
+                    <span className="text-gray-600"> · ±{result.timing.spreadMs} ms</span>
+                  </span>
+                )}
+                <span className="text-orange-500">{result.bpm} BPM</span>
+              </span>
             </div>
           )
         })}

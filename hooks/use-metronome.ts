@@ -1,7 +1,16 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
+import type { AudioEngine } from "@/lib/audio/audio-engine"
 import { Metronome, type MetronomeTick } from "@/lib/audio/metronome"
+
+export interface UseMetronomeOptions {
+  bpm: number
+  beatsPerBar?: number
+  subdivision?: number
+  /** Called as each beat sounds. Use it to record what the player was asked for. */
+  onTick?: (tick: MetronomeTick) => void
+}
 
 export interface UseMetronome {
   isRunning: boolean
@@ -9,26 +18,37 @@ export interface UseMetronome {
   setBpm: (bpm: number) => void
   /** Beat within the bar, or -1 while stopped. */
   beatInBar: number
-  bar: number
   start: () => Promise<void>
   stop: () => void
-  toggle: () => Promise<void>
 }
 
-export function useMetronome(initialBpm: number, beatsPerBar = 4, subdivision = 1): UseMetronome {
+export function useMetronome(engine: AudioEngine, options: UseMetronomeOptions): UseMetronome {
+  const { beatsPerBar = 4, subdivision = 1 } = options
+
   const metronomeRef = useRef<Metronome | null>(null)
   const [isRunning, setIsRunning] = useState(false)
-  const [bpm, setBpmState] = useState(initialBpm)
-  const [tick, setTick] = useState<MetronomeTick | null>(null)
+  const [bpm, setBpmState] = useState(options.bpm)
+  const [beatInBar, setBeatInBar] = useState(-1)
 
-  // Built lazily: constructing an AudioContext before a user gesture makes
-  // browsers complain, and on iOS leaves it permanently suspended.
+  const onTickRef = useRef(options.onTick)
+  onTickRef.current = options.onTick
+
+  const handleTick = useCallback((tick: MetronomeTick) => {
+    setBeatInBar(tick.beatInBar)
+    onTickRef.current?.(tick)
+  }, [])
+
   const getMetronome = useCallback(() => {
     if (!metronomeRef.current) {
-      metronomeRef.current = new Metronome({ bpm, beatsPerBar, subdivision, onTick: setTick })
+      metronomeRef.current = new Metronome(engine, {
+        bpm,
+        beatsPerBar,
+        subdivision,
+        onTick: handleTick,
+      })
     }
     return metronomeRef.current
-  }, [bpm, beatsPerBar, subdivision])
+  }, [beatsPerBar, bpm, engine, handleTick, subdivision])
 
   useEffect(() => {
     return () => {
@@ -36,10 +56,6 @@ export function useMetronome(initialBpm: number, beatsPerBar = 4, subdivision = 
       metronomeRef.current = null
     }
   }, [])
-
-  useEffect(() => {
-    metronomeRef.current?.setSubdivision(subdivision)
-  }, [subdivision])
 
   const setBpm = useCallback((next: number) => {
     setBpmState(next)
@@ -56,22 +72,8 @@ export function useMetronome(initialBpm: number, beatsPerBar = 4, subdivision = 
   const stop = useCallback(() => {
     metronomeRef.current?.stop()
     setIsRunning(false)
-    setTick(null)
+    setBeatInBar(-1)
   }, [])
 
-  const toggle = useCallback(async () => {
-    if (isRunning) stop()
-    else await start()
-  }, [isRunning, start, stop])
-
-  return {
-    isRunning,
-    bpm,
-    setBpm,
-    beatInBar: isRunning && tick ? tick.beatInBar : -1,
-    bar: tick?.bar ?? 0,
-    start,
-    stop,
-    toggle,
-  }
+  return { isRunning, bpm, setBpm, beatInBar, start, stop }
 }

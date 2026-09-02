@@ -7,7 +7,6 @@ import { MdMusicNote } from "react-icons/md"
 const navItems = [
   { href: "/", label: "Start" },
   { href: "/drills", label: "Drills" },
-  { href: "/theory", label: "Theorie" },
 ]
 
 export function Navigation() {

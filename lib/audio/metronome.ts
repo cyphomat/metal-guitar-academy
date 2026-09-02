@@ -1,3 +1,5 @@
+import type { AudioEngine } from "./audio-engine"
+
 /**
  * Sample-accurate metronome built on the Web Audio lookahead pattern.
  *
@@ -33,6 +35,7 @@ const LOOKAHEAD_MS = 25
 const SCHEDULE_AHEAD_S = 0.1
 
 export class Metronome {
+  private engine: AudioEngine
   private ctx: AudioContext | null = null
   private timer: ReturnType<typeof setInterval> | null = null
   private nextNoteTime = 0
@@ -46,7 +49,8 @@ export class Metronome {
   /** Beats already scheduled but not yet heard, so the UI can fire in sync. */
   private pending: MetronomeTick[] = []
 
-  constructor(options: MetronomeOptions = {}) {
+  constructor(engine: AudioEngine, options: MetronomeOptions = {}) {
+    this.engine = engine
     this.bpm = options.bpm ?? 100
     this.beatsPerBar = options.beatsPerBar ?? 4
     this.subdivision = options.subdivision ?? 1
@@ -81,13 +85,7 @@ export class Metronome {
   async start(): Promise<void> {
     if (this.timer) return
 
-    if (!this.ctx) {
-      const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
-      this.ctx = new Ctor()
-    }
-    if (this.ctx.state === "suspended") {
-      await this.ctx.resume()
-    }
+    this.ctx = await this.engine.resume()
 
     this.beat = 0
     this.pending = []
@@ -104,16 +102,15 @@ export class Metronome {
     this.beat = 0
   }
 
-  /** Releases the AudioContext. The metronome is unusable afterwards. */
+  /** Stops scheduling. The shared AudioContext is left alone. */
   dispose(): void {
     this.stop()
-    void this.ctx?.close()
     this.ctx = null
   }
 
-  /** Audio-clock time, for scoring how close a tap or onset was to the beat. */
+  /** Audio-clock time, for scoring how close an onset was to the beat. */
   now(): number {
-    return this.ctx?.currentTime ?? 0
+    return this.engine.now()
   }
 
   /** Seconds between clicks at the current tempo and subdivision. */

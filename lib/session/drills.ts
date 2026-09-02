@@ -25,6 +25,7 @@ G|----------------------------1--2--3--4----------------------|
 D|-------------------1--2--3--4-------------------------------|
 A|----------1--2--3--4----------------------------------------|
 E|-1--2--3--4-------------------------------------------------|`,
+    why: "Vier Bünde nebeneinander sind vier Halbtöne — die kleinste Einheit, aus der alles gebaut ist. Tonleitern und Akkorde sind nur Auswahlen daraus.",
     startBpm: 60,
     targetBpm: 120,
     bpmStep: 4,
@@ -48,6 +49,7 @@ G|-------5-----------5-----------5-----|
 D|-------------------------------------|
 A|-5-----------7-----------8-----------|
 E|-------------------------------------|`,
+    why: "Der Abstand zwischen benachbarten Saiten ist eine Quarte (fünf Halbtöne) — außer zwischen G und H, da ist es eine große Terz. Genau deshalb verschieben sich Griffbilder auf der H-Saite um einen Bund.",
     startBpm: 60,
     targetBpm: 130,
     bpmStep: 5,
@@ -74,6 +76,7 @@ D|-2--2--2--2--2--2--2--2--|
 A|-2--2--2--2--2--2--2--2--|
 E|-0--0--0--0--0--0--0--0--|
    N  N  N  N  N  N  N  N`,
+    why: "Reine Abschläge klingen härter als Wechselschlag, weil jeder Anschlag dieselbe Richtung und damit denselben Attack hat. Der Preis ist Ausdauer — deshalb ist Downpicking eine Kondi-Übung, keine Technik-Übung.",
     startBpm: 90,
     targetBpm: 190,
     bpmStep: 5,
@@ -98,6 +101,7 @@ D|----------------------------------|
 A|----------------------------------|
 E|-0--0--0--0--0--0--0--0--0--0--0--|
    PM-----------------------------`,
+    why: "Palm Muting kürzt die Ausklingzeit, ohne die Tonhöhe zu ändern. Dadurch wird der Ton perkussiv: Du hörst den Rhythmus deutlicher als die Harmonie — die Basis des Metal-Riffings.",
     startBpm: 80,
     targetBpm: 170,
     bpmStep: 6,
@@ -123,6 +127,7 @@ A|--------------------------------------|
 E|-0--0-0---0--0-0---0--0-0---0--0-0----|
    PM--------------------------------
    N  N V   N  N V   N  N V   N  N V`,
+    why: "Der Gallop ist ein Achtel plus zwei Sechzehntel: drei Anschläge auf einen Schlag, ungleich verteilt. Diese Ungleichheit erzeugt den Vorwärtsdrall — bei gleichmäßigen Sechzehnteln wäre er weg.",
     startBpm: 70,
     targetBpm: 150,
     bpmStep: 5,
@@ -147,6 +152,7 @@ D|-2----5----7----10-------|
 A|-2----5----7----10-------|
 E|-0----3----5----8--------|
    E5   G5   A5   C5`,
+    why: "Ein Power Chord ist Grundton plus Quinte (sieben Halbtöne), ohne Terz. Weil die Terz fehlt, ist er weder Dur noch Moll — deshalb passt er über jede Tonart und verzerrt sauber, statt zu matschen.",
     startBpm: 70,
     targetBpm: 160,
     bpmStep: 6,
@@ -171,6 +177,7 @@ D|-------------------------|
 A|-------------------------|
 E|-5--6--7--8--7--6--5--6--|
    N  V  N  V  N  V  N  V`,
+    why: "Wechselschlag halbiert den Weg des Plektrums pro Ton. Die Grenze ist nicht die Geschwindigkeit der Hand, sondern wie gleichmäßig Auf- und Abschlag klingen.",
     startBpm: 60,
     targetBpm: 140,
     bpmStep: 5,
@@ -194,6 +201,7 @@ G|--------------------5--7--------------|
 D|--------------5--7--------------------|
 A|--------5--7--------------------------|
 E|--5--8--------------------------------|`,
+    why: "Die Moll-Pentatonik ist die Moll-Tonleiter ohne den zweiten und sechsten Ton — die beiden, die Halbtonreibung erzeugen. Was übrig bleibt, klingt über fast jeder Begleitung richtig.",
     startBpm: 60,
     targetBpm: 150,
     bpmStep: 6,
@@ -218,6 +226,7 @@ D|-----------------------------|
 A|-----------------------------|
 E|-----------------------------|
    b = Ganzton ziehen (2 Bünde)`,
+    why: "Beim Bending erzeugst du die Tonhöhe selbst, statt sie zu greifen. Ein Ganzton-Bending in Bund 7 muss exakt so klingen wie Bund 9 gegriffen — dazwischen ist es einfach falsch.",
     startBpm: 50,
     targetBpm: 100,
     bpmStep: 5,
@@ -245,6 +254,7 @@ A|-2--2-2--2--2-2----5-----4-----|
 E|-0--0-0--0--0-0----3-----2-----|
    PM..............
    E5                G5    F#5`,
+    why: "E5, G5 und F#5 kommen alle aus E-Moll. Das F#5 direkt vor der Wiederholung erzeugt Zug zurück zum E — dieselbe Spannung, die eine Kadenz auflöst, nur ohne Terzen.",
     startBpm: 70,
     targetBpm: 145,
     bpmStep: 5,
@@ -269,6 +279,7 @@ D|-------------------------------------|
 A|-------------------------------------|
 E|-0-0-0-1---0-0-0-2---0-0-0-3---0-0-0-5|
    PM--------------------------------`,
+    why: "Die Zielnoten 1, 2, 3, 5 über dem offenen E sind chromatische Durchgänge — sie gehören zu keiner Tonart. Genau das macht sie unruhig, und der Kontrast zur ruhenden offenen Saite ist der Effekt.",
     startBpm: 80,
     targetBpm: 160,
     bpmStep: 6,
@@ -294,6 +305,7 @@ A|-7--7--5--5--2--2--4--4-----|
 E|-5--5--3--3--0--0--2--2-----|
    N  N  N  N  N  N  N  N
    A5    G5    E5    F#5`,
+    why: "A5 – G5 – E5 – F#5 ist eine reine Quintenfolge in E-Moll. Bei langsamem Tempo hört man jeden Wechsel einzeln, deshalb fällt jede Ungenauigkeit im Timing sofort auf.",
     startBpm: 60,
     targetBpm: 130,
     bpmStep: 5,
@@ -317,6 +329,7 @@ G|--------------5--7----------7--|
 D|--------5--7-------------------|
 A|--5--7-------------------------|
 E|-------------------------------|`,
+    why: "Das Lick bleibt komplett in der A-Moll-Pentatonik. Das Bending am Ende zielt auf die Quinte — der stabilste Ton nach dem Grundton, deshalb wirkt es wie ein Schlusspunkt.",
     startBpm: 55,
     targetBpm: 120,
     bpmStep: 5,

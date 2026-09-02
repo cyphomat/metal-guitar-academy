@@ -18,6 +18,21 @@ Die Einschätzung ist der Motor: Wer sauber durchkommt, startet nächstes Mal
 schneller; wer sich quält, langsamer. Was drankommt, wählt die App aus dem
 Übungs-Log — was am schwächsten sitzt oder am längsten her ist.
 
+## Timing messen
+
+In jedem Block lässt sich das Mikrofon zuschalten. Die App hört dann deine
+Anschläge und vergleicht sie mit dem Metronom: wie viele Klicks du getroffen
+hast, und vor allem wie **gleichmäßig**. Die Streuung ist das Maß — ein
+konstanter Versatz ist grösstenteils Laufzeit bis ins Mikrofon und zählt nicht
+gegen dich.
+
+Danach schlägt die App die Einschätzung selbst vor. Du kannst sie überstimmen.
+
+**Kopfhörer benutzen.** Über Lautsprecher hört das Mikrofon das Metronom mit
+und zählt es als Anschlag. Nichts davon verlässt dein Gerät — es wird nichts
+aufgenommen und nichts hochgeladen, nur der Zeitpunkt jedes Anschlags
+ausgewertet.
+
 ## Loslegen
 
 ```bash

@@ -66,6 +66,29 @@ describe("progressFor", () => {
   })
 })
 
+describe("bestTimingScore", () => {
+  const timing = (score: number) => ({
+    hits: 8, expected: 8, spreadMs: 10, offsetMs: 20, score, trend: "steady" as const,
+  })
+
+  it("is null when the microphone was never used for that drill", () => {
+    expect(progressFor(log(result()), DRILL.id).bestTimingScore).toBeNull()
+  })
+
+  it("keeps the best measured score, not the latest", () => {
+    const entries = log(
+      result({ timing: timing(88), at: "2026-03-01T20:00:00.000Z" }),
+      result({ timing: timing(54), at: "2026-03-09T20:00:00.000Z" }),
+    )
+    expect(progressFor(entries, DRILL.id).bestTimingScore).toBe(88)
+  })
+
+  it("ignores rounds played without the microphone", () => {
+    const entries = log(result(), result({ timing: timing(71) }))
+    expect(progressFor(entries, DRILL.id).bestTimingScore).toBe(71)
+  })
+})
+
 describe("masteryOf", () => {
   it("is 0 untouched and 1 at target tempo", () => {
     expect(masteryOf(DRILL, progressFor(log(), DRILL.id))).toBe(0)
