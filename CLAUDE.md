@@ -42,6 +42,8 @@ Verschiedenes.
 | `lib/session/calendar.ts` | Das Raster für den Übungskalender |
 | `lib/session/merge.ts` | Logs verschmelzen — für Import und später den Abgleich |
 | `lib/storage/practice-log.ts` | localStorage, einziger Zugriffspunkt aufs Log |
+| `lib/sync/store.ts` | Abgleich-Logik, unabhängig von GitHub — deshalb testbar |
+| `lib/sync/github.ts` | GitHub-API als Ablageort, einziger Netz-Zugriff |
 | `components/session/*` | UI der Session |
 | `lib/base-path.ts` | Präfix für Laufzeit-Pfade unter GitHub Pages |
 | `public/sw.js`, `public/manifest.json` | PWA: offline und installierbar |
@@ -75,6 +77,9 @@ Komponente.
   Komponenten. Road-Case, kein HUD.
 - **Die Ansage behauptet nichts.** Jede Zeile in `briefing.ts` muss aus dem Log
   ableitbar sein, sonst gehört sie da nicht hin.
+- **Beim Abgleich gewinnt keine Seite.** Konflikt heisst: neu lesen, erneut
+  verschmelzen, noch einmal schreiben — und dann aufhören. Genau ein zweiter
+  Versuch, sonst hängt es.
 - **Der Log ist append-only.** Einträge sind unveränderlich und über
   `drillId` plus `at` identifiziert. Deshalb ist Verschmelzen die richtige
   Antwort auf zwei Stände, nicht "der neuere gewinnt" — nie überschreiben.

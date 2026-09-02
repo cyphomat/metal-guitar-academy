@@ -154,8 +154,7 @@ sie wirklich installierst.
 ## Daten
 
 Der Übungsfortschritt liegt in `localStorage` auf dem Gerät. Kein Konto, kein
-Server, nichts verlässt den Browser. Das heisst auch: **kein Sync.** iPhone und
-Mac führen getrennte Logs.
+Server — solange du nichts anderes einrichtest, verlässt nichts den Browser.
 
 Unter **Daten** holst du ihn als JSON heraus und wieder herein. Ein Import
 **legt dazu, statt zu ersetzen**: Einträge sind unveränderlich und tragen Drill
@@ -163,7 +162,25 @@ und Zeitstempel, also ist die Vereinigung beider Seiten die richtige Antwort —
 zwei Geräte, die unabhängig geübt haben, haben beide recht. Vor dem Übernehmen
 zeigt die App, wie viel davon wirklich neu ist.
 
-Dieselbe Verschmelzung trägt später den Abgleich über ein privates Datenrepo.
+### Abgleich zwischen Geräten
+
+Dort lässt sich auch ein **privates Datenrepo** verbinden. Die App legt den Log
+dann zusätzlich als eine Datei dorthin, und iPhone und Mac ziehen sich
+gegenseitig nach — nach jeder Session automatisch, oder von Hand.
+
+Es gewinnt dabei keine Seite. Beim Schreibkonflikt wird neu gelesen, erneut
+verschmolzen und noch einmal geschrieben; dieselbe Vereinigung wie beim Import.
+Ein Abgleich ohne Neuigkeiten erzeugt keinen Commit.
+
+Was du brauchst: ein privates Repo (etwa `riffforge-data`) und einen
+**fein granulierten** Token, der ausschliesslich darauf zeigt, mit
+*Contents: Read and write*. Eng gefasst aus einem konkreten Grund — alle Seiten
+unter `github.io` teilen sich denselben Browser-Speicher, und ein Token, der
+nur ein Datenrepo öffnen kann, begrenzt den Schaden, falls irgendeine dieser
+Seiten einmal eine Lücke hat.
+
+Steht das Datenrepo auf öffentlich, sagt die App das deutlich: sie funktioniert
+dann genauso, nur liest jeder mit.
 
 ---
 
@@ -216,9 +233,6 @@ abgeschriebenen Tabs, kein Audio urheberrechtlich geschützter Aufnahmen.
 
 ## Was noch kommt
 
-- **Abgleich zwischen Geräten** über ein privates Datenrepo, wie Setlist es
-  macht. Die Verschmelzung dafür steht schon (`lib/session/merge.ts`): der Log
-  ist append-only, also gewinnt keine Seite — beide werden vereinigt.
 - **Stimmgerät.** Autokorrelation reicht dafür, und man braucht es vor jeder
   Session ohnehin.
 - **Kalibrierung**: den Versatz einmal messen und behalten, statt ihn pro Block

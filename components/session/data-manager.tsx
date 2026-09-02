@@ -11,6 +11,7 @@ import {
   loadLog,
 } from "@/lib/storage/practice-log"
 import { EMPTY_LOG, type PracticeLog } from "@/lib/session/types"
+import { SyncPanel } from "@/components/session/sync-panel"
 import { MdFileDownload, MdFileUpload } from "react-icons/md"
 
 type Notice = { tone: "ok" | "err"; text: string } | null
@@ -68,7 +69,8 @@ export function DataManager() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="zwei-spalten">
+      <div className="spalte">
       <section>
         <h2 className="rule mb-3 mt-8">Was drinsteht</h2>
         <div className="grid grid-cols-3 gap-[9px]">
@@ -93,8 +95,13 @@ export function DataManager() {
         )}
       </section>
 
+      </div>
+
+      <div className="spalte">
+      <SyncPanel onChanged={() => setLog(loadLog())} />
+
       <section>
-        <h2 className="rule mb-1">Sichern</h2>
+        <h2 className="rule mb-1 mt-9">Sichern</h2>
         <p className="mb-3 text-[13px] leading-relaxed text-dim">
           Eine JSON-Datei mit allem. Leg sie irgendwohin, wo sie einen Browserwechsel überlebt.
         </p>
@@ -153,7 +160,7 @@ export function DataManager() {
       )}
 
       <section>
-        <h2 className="rule mb-1">Löschen</h2>
+        <h2 className="rule mb-1 mt-9">Löschen</h2>
         <p className="mb-3 text-[13px] leading-relaxed text-dim">
           Setzt alles zurück: Tempi, Serien, Bestwerte. Vorher exportieren.
         </p>
@@ -184,6 +191,7 @@ export function DataManager() {
           </button>
         )}
       </section>
+      </div>
     </div>
   )
 }

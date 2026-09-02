@@ -1,9 +1,11 @@
 "use client"
 
+import { useEffect } from "react"
 import Link from "next/link"
 import { DRILLS_BY_ID } from "@/lib/session/drills"
 import { progressFor, streakDays } from "@/lib/session/progress"
 import type { DrillResult, PracticeLog } from "@/lib/session/types"
+import { syncInBackground } from "@/lib/sync/run"
 import { MdAdd } from "react-icons/md"
 
 export interface SessionSummaryProps {
@@ -39,6 +41,13 @@ export function SessionSummary({ results, previousLog, log, onExtend }: SessionS
   const minutes = Math.max(1, Math.round(results.reduce((sum, r) => sum + r.seconds, 0) / 60))
   const streak = streakDays(log)
   const gains = gainsFrom(results, previousLog)
+
+  // Die frische Session hochschieben, sobald sie steht. Lautlos: mitten nach
+  // dem Üben ist ein Fehlerbanner das Letzte, was jemand braucht, und der
+  // lokale Log bleibt ohnehin vollständig.
+  useEffect(() => {
+    syncInBackground()
+  }, [])
 
   return (
     <div className="huelle">
