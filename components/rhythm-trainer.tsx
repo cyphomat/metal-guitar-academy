@@ -466,9 +466,9 @@ export function RhythmTrainer({ demoMode = false }: RhythmTrainerProps) {
         <div className="bg-blue-900/20 rounded-lg p-4 border border-blue-500/30">
           <h4 className="text-blue-400 font-semibold mb-2 font-mono">Instructions</h4>
           <ul className="text-sm text-gray-300 space-y-1 font-mono">
-            <li>• Press "Start Recording" to begin</li>
+            <li>• Press &quot;Start Recording&quot; to begin</li>
             <li>• Tap SPACEBAR to match the rhythm shown</li>
-            <li>• Don't tap during rests (empty spaces)</li>
+            <li>• Don&apos;t tap during rests (empty spaces)</li>
             <li>• Orange line shows current beat position</li>
             <li>• Accuracy is calculated when recording stops</li>
           </ul>

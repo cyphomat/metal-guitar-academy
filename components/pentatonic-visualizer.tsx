@@ -289,7 +289,7 @@ export function PentatonicVisualizer() {
               </CardHeader>
               <CardContent>
                 <ul className="text-sm text-gray-300 space-y-1">
-                  <li>• Start with Box 1 - it's the most common</li>
+                  <li>• Start with Box 1 - it&apos;s the most common</li>
                   <li>• Practice connecting adjacent boxes</li>
                   <li>• Focus on root note positions (orange)</li>
                   <li>• Use alternate picking for smooth runs</li>

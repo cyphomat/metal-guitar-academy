@@ -51,7 +51,7 @@ function AsideCard({ keyPoints, hasQuiz, slug }: AsideCardProps) {
               <MdQuiz className="h-8 w-8 text-orange-500 mx-auto" />
               <div>
                 <h3 className="text-white font-semibold">Test Your Knowledge</h3>
-                <p className="text-gray-400 text-sm">Take the quiz to reinforce what you've learned</p>
+                <p className="text-gray-400 text-sm">Take the quiz to reinforce what you&apos;ve learned</p>
               </div>
               <Button asChild className="w-full bg-orange-600 hover:bg-orange-700">
                 <Link href={`/theory/${slug}/quiz`}>

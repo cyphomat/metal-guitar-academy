@@ -159,52 +159,18 @@ export default function TheoryPage() {
         >
           <Card className="bg-orange-900/20 border-orange-500/30 max-w-lg mx-auto">
             <CardHeader>
-              <CardTitle className="text-orange-400">Interactive Learning Tools</CardTitle>
+              <CardTitle className="text-orange-400">Theorie in die Finger kriegen</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-gray-300 mb-4">
-                Practice with our interactive components including chord builders, interval quizzes, and rhythm
-                trainers.
+                Theorie sitzt erst, wenn sie unter den Fingern war. Die Drills verbinden beides.
               </p>
               <Button asChild className="bg-orange-600 hover:bg-orange-700">
-                <Link href="/components">
+                <Link href="/drills">
                   <MdMusicNote className="mr-2 h-4 w-4" />
-                  Try Interactive Components
+                  Zu den Drills
                 </Link>
               </Button>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Stats Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="mt-16"
-        >
-          <Card className="bg-gray-900/50 border-gray-800">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <MdTrendingUp className="mr-2 h-5 w-5 text-orange-500" />
-                Your Theory Progress
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-500 mb-2">0</div>
-                  <div className="text-gray-400">Topics Completed</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-500 mb-2">0h</div>
-                  <div className="text-gray-400">Study Time</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-500 mb-2">0%</div>
-                  <div className="text-gray-400">Quiz Average</div>
-                </div>
-              </div>
             </CardContent>
           </Card>
         </motion.div>

@@ -1,30 +1,50 @@
-# New Project
+# Metal Guitar Academy
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+Eine Übungs-App für Metal-Gitarre, gebaut um eine einzige Gewohnheit:
+**starten, fünfzehn Minuten spielen, fertig.** Wenn du magst, hängst du
+Minuten dran — aber die Session ist auch nach fünfzehn ein abgeschlossenes
+Ding.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/check24-aihackathon/v0-new-project-tkli8ld8fjj)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/tKLI8LD8Fjj)
+## Wie eine Session abläuft
 
-## Overview
+Immer dieselbe Form, damit sie keine Entscheidung kostet:
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+1. **Warm-up** (2 Min) — Finger wach kriegen
+2. **Technik** (~6 Min) — eine Sache isoliert, mit Metronom
+3. **Riff** (~6 Min) — dieselbe Technik im musikalischen Zusammenhang
+4. **Abschluss** — kurz einschätzen, wie es lief
 
-## Deployment
+Die Einschätzung ist der Motor: Wer sauber durchkommt, startet nächstes Mal
+schneller; wer sich quält, langsamer. Was drankommt, wählt die App aus dem
+Übungs-Log — was am schwächsten sitzt oder am längsten her ist.
 
-Your project is live at:
+## Loslegen
 
-**[https://vercel.com/check24-aihackathon/v0-new-project-tkli8ld8fjj](https://vercel.com/check24-aihackathon/v0-new-project-tkli8ld8fjj)**
+```bash
+pnpm install
+pnpm dev
+```
 
-## Build your app
+Dann [localhost:3000](http://localhost:3000) öffnen und auf *Session starten*
+drücken. Ton kommt erst nach dem ersten Klick — Browser starten Audio nicht
+von selbst.
 
-Continue building your app on:
+Der Übungsfortschritt liegt in `localStorage` im Browser. Kein Konto, kein
+Server, nichts verlässt das Gerät. Andere Browser oder ein geleerter Cache
+heissen: von vorn.
 
-**[https://v0.dev/chat/projects/tKLI8LD8Fjj](https://v0.dev/chat/projects/tKLI8LD8Fjj)**
+## Entwicklung
 
-## How It Works
+```bash
+pnpm test     # Vitest — die Logik in lib/session
+pnpm check    # Typen, Tests und Lint in einem Rutsch
+pnpm build    # Produktions-Build
+```
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+Architektur, Konventionen und der Stand der Baustelle stehen in
+[CLAUDE.md](./CLAUDE.md).
+
+## Inhalte
+
+Alle Drills und Riffs sind eigene Übungen im jeweiligen Stil — keine
+abgeschriebenen Tabs, kein fremdes Audio.

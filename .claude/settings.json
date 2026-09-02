@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm install --prefer-offline --silent 2>&1 | tail -3"
+          }
+        ]
+      }
+    ]
+  }
+}

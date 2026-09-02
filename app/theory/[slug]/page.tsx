@@ -683,13 +683,13 @@ export async function generateStaticParams() {
 }
 
 interface TheoryPageProps {
-  params: {
-    slug: string
-  }
+  // Next 15 hands route params to the page as a promise.
+  params: Promise<{ slug: string }>
 }
 
-export default function TheorySlugPage({ params }: TheoryPageProps) {
-  const content = theoryContent[params.slug as keyof typeof theoryContent]
+export default async function TheorySlugPage({ params }: TheoryPageProps) {
+  const { slug } = await params
+  const content = theoryContent[slug as keyof typeof theoryContent]
 
   if (!content) {
     return (
@@ -702,5 +702,5 @@ export default function TheorySlugPage({ params }: TheoryPageProps) {
     )
   }
 
-  return <TheoryClientPage params={params} content={content} />
+  return <TheoryClientPage params={{ slug }} content={content} />
 }
