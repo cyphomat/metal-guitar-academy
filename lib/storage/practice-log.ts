@@ -1,5 +1,6 @@
 "use client"
 
+import { mergeLogs } from "@/lib/session/merge"
 import { EMPTY_LOG, practiceLogSchema, type DrillResult, type PracticeLog } from "@/lib/session/types"
 
 const STORAGE_KEY = "mga.practice-log.v1"
@@ -46,6 +47,16 @@ export function appendResults(results: DrillResult[]): PracticeLog {
   return next
 }
 
+/**
+ * Übernimmt einen eingelesenen Log. Vereinigt, nie ersetzt — ein Import darf
+ * nichts wegwerfen, was auf diesem Gerät geübt wurde.
+ */
+export function importLog(incoming: PracticeLog): PracticeLog {
+  const merged = mergeLogs(loadLog(), incoming)
+  saveLog(merged)
+  return merged
+}
+
 export function clearLog(): void {
   if (typeof window === "undefined") return
   window.localStorage.removeItem(STORAGE_KEY)
@@ -53,4 +64,10 @@ export function clearLog(): void {
 
 export function exportLog(): string {
   return JSON.stringify(loadLog(), null, 2)
+}
+
+/** Dateiname mit Datum, damit mehrere Sicherungen nebeneinander liegen können. */
+export function exportFilename(now: Date = new Date()): string {
+  const day = `${now.getFullYear()}-${`${now.getMonth() + 1}`.padStart(2, "0")}-${`${now.getDate()}`.padStart(2, "0")}`
+  return `metal-guitar-academy-${day}.json`
 }

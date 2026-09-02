@@ -72,6 +72,11 @@ heutigen Tag — aus dem Log, nicht aus dem Bauch.
   denn genau dort passiert die Konsolidierung.
 - **Was drankommt**, wählt der Scheduler nach zwei Kräften: was am schwächsten
   sitzt, und was am längsten her ist.
+- **Ein Drill, den du kennst, kommt zweimal dran** — mit etwas anderem
+  dazwischen. Das ist der [Kontextinterferenz-Effekt](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4989027/):
+  verteilte Wiederholung behält sich messbar besser als eine lange am Stück,
+  obwohl sie sich schlechter anfühlt. Ein **neuer** Drill bekommt seinen Block
+  am Stück — beim Erlernen einer Bewegung ist das die bessere Reihenfolge.
 - **Erst das Geschaffte, dann der Bericht.** Neue Bestwerte stehen nach der
   Session ganz oben.
 
@@ -136,7 +141,15 @@ sie wirklich installierst.
 
 Der Übungsfortschritt liegt in `localStorage` auf dem Gerät. Kein Konto, kein
 Server, nichts verlässt den Browser. Das heisst auch: **kein Sync.** iPhone und
-Mac führen getrennte Logs, und ein geleerter Browserspeicher ist weg.
+Mac führen getrennte Logs.
+
+Unter **Daten** holst du ihn als JSON heraus und wieder herein. Ein Import
+**legt dazu, statt zu ersetzen**: Einträge sind unveränderlich und tragen Drill
+und Zeitstempel, also ist die Vereinigung beider Seiten die richtige Antwort —
+zwei Geräte, die unabhängig geübt haben, haben beide recht. Vor dem Übernehmen
+zeigt die App, wie viel davon wirklich neu ist.
+
+Dieselbe Verschmelzung trägt später den Abgleich über ein privates Datenrepo.
 
 ---
 

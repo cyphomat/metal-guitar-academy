@@ -20,7 +20,8 @@ function formatClock(seconds: number): string {
 
 export interface BlockOutcome {
   bpm: number
-  rating: Rating
+  /** null, wenn nur eine Zwischenrunde vorbei ist — bewertet wird am Ende. */
+  rating: Rating | null
   seconds: number
   timing?: TimingResult
 }
@@ -33,6 +34,10 @@ export interface BlockRunnerProps {
 }
 
 export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProps) {
+  const onDoneRef = useRef(onComplete)
+  onDoneRef.current = onComplete
+  const onDone = useCallback((outcome: BlockOutcome) => onDoneRef.current(outcome), [])
+
   const { drill } = block
   const [phase, setPhase] = useState<"play" | "rate">("play")
   const [analysis, setAnalysis] = useState<TimingAnalysis | null>(null)
@@ -59,6 +64,8 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
   const { stop: stopMetronome } = metronome
   const { onsets, disable: disableMic } = mic
 
+  const isLastRound = block.round >= block.rounds
+
   const finishPlaying = useCallback(() => {
     stopMetronome()
 
@@ -75,11 +82,21 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
     }
 
     disableMic()
+
+    if (!isLastRound) {
+      onDone({ bpm: metronome.bpm, rating: null, seconds: Math.round(elapsedRef.current) })
+      return
+    }
     setPhase("rate")
-  }, [disableMic, drill.subdivision, metronome.bpm, onsets, stopMetronome])
+  }, [disableMic, drill.subdivision, isLastRound, metronome.bpm, onDone, onsets, stopMetronome])
 
   const timer = useCountdown(block.seconds, finishPlaying)
   const { pause: pauseTimer } = timer
+
+  // finishPlaying wird vom Timer aufgerufen und darf sich nicht bei jedem
+  // Tick neu bilden — deshalb liest es die Spielzeit über eine Referenz.
+  const elapsedRef = useRef(0)
+  elapsedRef.current = timer.elapsed
 
   useEffect(() => {
     return () => {
@@ -109,7 +126,7 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
   }
 
   const rate = (rating: Rating) => {
-    onComplete({
+    onDone({
       bpm: metronome.bpm,
       rating,
       seconds: Math.round(timer.elapsed),
@@ -135,6 +152,7 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
         <div>
           <p className="kicker">
             Block {index + 1} von {total}
+            {block.rounds > 1 && ` · Runde ${block.round} von ${block.rounds}`}
           </p>
           <h2 className="display mt-1 text-[32px] text-fg">{drill.title}</h2>
           <p className="num mt-1 text-[13px] text-muted">
@@ -186,6 +204,7 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
         <div className="min-w-0">
           <p className="kicker">
             Block {index + 1} von {total}
+            {block.rounds > 1 && ` · Runde ${block.round} von ${block.rounds}`}
           </p>
           <h2 className="display mt-1 text-[32px] text-fg">{drill.title}</h2>
           <p className="mt-1 text-[14px] text-muted">{drill.goal}</p>
@@ -246,6 +265,14 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
           <BeatIndicator beatInBar={metronome.beatInBar} beatsPerBar={drill.beatsPerBar} />
         </div>
       </div>
+
+      {block.rounds > 1 && (
+        <p className="border-l-2 border-stahl py-1.5 pl-3 text-[13px] leading-relaxed text-muted">
+          {block.round === 1
+            ? "Dieser Drill kommt später nochmal — dazwischen liegt etwas anderes."
+            : "Zweite Runde. Dass dazwischen etwas anderes lag, ist Absicht: mit Abstand behält es sich besser, auch wenn es sich schlechter anfühlt."}
+        </p>
+      )}
 
       <MicPanel
         status={mic.status}

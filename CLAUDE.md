@@ -9,14 +9,21 @@ Eine Session ist immer gleich aufgebaut, damit sie keine Entscheidung kostet:
 
 ```
 Warm-up    2 min    Finger wach kriegen
-Technik    ~6 min   eine Sache isoliert, mit Metronom
-Riff       ~6 min   dieselbe Technik im musikalischen Kontext
+Technik    ~3 min   eine Sache isoliert, mit Metronom
+Riff       ~3 min   dieselbe Technik im musikalischen Kontext
+Technik    ~3 min   zweite Runde, mit Abstand dazwischen
+Riff       ~3 min   zweite Runde
 Abschluss           Selbsteinschätzung → landet im Log
 ```
 
-Am Ende: *Feierabend* oder *Noch 5 Minuten*. Was in den Blöcken steckt,
-entscheidet der Scheduler aus dem Übungs-Log — die **Form** ist fix, der
-**Inhalt** passt sich an.
+Am Ende: *Feierabend* oder *+5 Minuten*. Was in den Blöcken steckt, entscheidet
+der Scheduler aus dem Übungs-Log — die **Form** ist fix, der **Inhalt** passt
+sich an.
+
+Die zwei Runden mit Abstand sind kein Zufall: verteilte Wiederholung behält
+sich besser als eine lange am Stück. Ein Drill **ohne** Vorgeschichte bekommt
+seinen Block trotzdem am Stück — Erlernen und Behalten verlangen
+Verschiedenes.
 
 ## Architektur
 
@@ -32,6 +39,7 @@ entscheidet der Scheduler aus dem Übungs-Log — die **Form** ist fix, der
 | `lib/session/progress.ts` | Auswertung des Logs: Tempo-Fortschreibung, Streak, Mastery |
 | `lib/session/builder.ts` | Wählt aus, was heute drankommt |
 | `lib/session/briefing.ts` | Die Ansage: der Ton des Tages, aus dem Log |
+| `lib/session/merge.ts` | Logs verschmelzen — für Import und später den Abgleich |
 | `lib/storage/practice-log.ts` | localStorage, einziger Zugriffspunkt aufs Log |
 | `components/session/*` | UI der Session |
 | `lib/base-path.ts` | Präfix für Laufzeit-Pfade unter GitHub Pages |
@@ -63,6 +71,11 @@ Komponente.
   Komponenten. Road-Case, kein HUD.
 - **Die Ansage behauptet nichts.** Jede Zeile in `briefing.ts` muss aus dem Log
   ableitbar sein, sonst gehört sie da nicht hin.
+- **Der Log ist append-only.** Einträge sind unveränderlich und über
+  `drillId` plus `at` identifiziert. Deshalb ist Verschmelzen die richtige
+  Antwort auf zwei Stände, nicht "der neuere gewinnt" — nie überschreiben.
+- **Ein Drill über mehrere Runden ist ein Eintrag**, nicht drei. Der
+  Session-Runner sammelt die Spielzeit und schreibt nach der letzten Runde.
 
 ## Inhalte und Recht
 

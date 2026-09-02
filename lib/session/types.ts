@@ -109,6 +109,10 @@ export interface SessionBlock {
   seconds: number
   /** Tempo chosen for this round, derived from history. */
   bpm: number
+  /** 1-based round of this drill within the session. */
+  round: number
+  /** How many rounds this drill gets today. */
+  rounds: number
 }
 
 export interface SessionPlan {

@@ -30,6 +30,12 @@ describe("buildSession", () => {
     expect(plan.blocks.map((block) => block.drill.kind)).toEqual(["warmup", "technique", "riff"])
   })
 
+  it("gives a brand-new drill one block, not two rounds", () => {
+    // Erlernen braucht den Block am Stueck; erst danach lohnt der Wechsel.
+    const plan = buildSession(log(), { now: NOW, random: fixed })
+    for (const block of plan.blocks) expect(block.rounds).toBe(1)
+  })
+
   it("fits the requested length, leaving room for the wrap-up", () => {
     for (const minutes of [10, 15, 20, 30]) {
       const plan = buildSession(log(), { minutes, now: NOW, random: fixed })
@@ -106,7 +112,7 @@ describe("nextExtraBlock", () => {
   })
 
   it("repeats rather than failing once every drill has been used", () => {
-    const all = DRILLS.map((drill) => ({ drill, seconds: 300, bpm: drill.startBpm }))
+    const all = DRILLS.map((drill) => ({ drill, seconds: 300, bpm: drill.startBpm, round: 1, rounds: 1 }))
     expect(() => nextExtraBlock(log(), all, { now: NOW, random: fixed })).not.toThrow()
   })
 })
@@ -126,6 +132,67 @@ describe("drill catalogue", () => {
     for (const drill of DRILLS) {
       expect(drill.targetBpm).toBeGreaterThan(drill.startBpm)
       expect(drill.bpmStep).toBeGreaterThan(0)
+    }
+  })
+})
+
+describe("interleaving", () => {
+  /** Ein Log, in dem jeder Drill schon einmal gespielt wurde. */
+  function everythingKnown(): PracticeLog {
+    return {
+      version: 1,
+      results: DRILLS.map((drill, index) => ({
+        drillId: drill.id,
+        technique: drill.technique,
+        bpm: drill.startBpm,
+        rating: 3 as const,
+        seconds: 300,
+        // Verschiedene Tage, damit die Auswahl nicht alles gleich bewertet.
+        at: new Date(2026, 1, 1 + index, 20).toISOString(),
+      })),
+    }
+  }
+
+  it("splits a known drill into two rounds", () => {
+    const plan = buildSession(everythingKnown(), { now: NOW, random: fixed })
+    const technique = plan.blocks.filter((block) => block.drill.kind === "technique")
+    expect(technique).toHaveLength(2)
+    expect(technique.map((block) => block.round)).toEqual([1, 2])
+  })
+
+  it("puts something else between the two rounds", () => {
+    // Genau das ist der Punkt: die Wiederholung darf nicht direkt folgen.
+    const plan = buildSession(everythingKnown(), { now: NOW, random: fixed })
+    for (let i = 1; i < plan.blocks.length; i += 1) {
+      expect(plan.blocks[i].drill.id).not.toBe(plan.blocks[i - 1].drill.id)
+    }
+  })
+
+  it("keeps the same tempo across both rounds of a drill", () => {
+    const plan = buildSession(everythingKnown(), { now: NOW, random: fixed })
+    const technique = plan.blocks.filter((block) => block.drill.kind === "technique")
+    expect(technique[0].bpm).toBe(technique[1].bpm)
+  })
+
+  it("still fits the requested length", () => {
+    for (const minutes of [10, 15, 25]) {
+      const plan = buildSession(everythingKnown(), { minutes, now: NOW, random: fixed })
+      expect(plan.totalSeconds).toBeLessThanOrEqual(minutes * 60)
+      const sum = plan.blocks.reduce((total, block) => total + block.seconds, 0)
+      expect(plan.totalSeconds).toBe(sum)
+    }
+  })
+
+  it("does not cut rounds below a usable length", () => {
+    const plan = buildSession(everythingKnown(), { minutes: 6, now: NOW, random: fixed })
+    for (const block of plan.blocks) expect(block.seconds).toBeGreaterThanOrEqual(90)
+  })
+
+  it("marks every block with its round out of the total", () => {
+    const plan = buildSession(everythingKnown(), { now: NOW, random: fixed })
+    for (const block of plan.blocks) {
+      expect(block.round).toBeGreaterThanOrEqual(1)
+      expect(block.round).toBeLessThanOrEqual(block.rounds)
     }
   })
 })

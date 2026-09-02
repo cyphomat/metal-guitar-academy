@@ -170,4 +170,9 @@ await page.goto(`${BASE}/drills/`, { waitUntil: 'networkidle' })
 await page.waitForTimeout(600)
 await shot('drills')
 
+// 6 — Sicherung
+await page.goto(`${BASE}/daten/`, { waitUntil: 'networkidle' })
+await page.waitForTimeout(600)
+await shot('daten')
+
 await browser.close()

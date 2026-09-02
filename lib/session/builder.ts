@@ -4,6 +4,16 @@ import type { BlockKind, Drill, PracticeLog, SessionBlock, SessionPlan } from ".
 
 /** Share of the session each kind gets, after the fixed warm-up. */
 const WARMUP_SECONDS = 120
+/**
+ * Unter dieser Länge lohnt eine Runde nicht: bis Griff und Tempo sitzen,
+ * wäre sie vorbei.
+ */
+const MIN_ROUND_SECONDS = 90
+/**
+ * Anteil der ersten von zwei Runden. Etwas länger, weil dort das Reinkommen
+ * steckt — die zweite Runde beginnt bereits warm.
+ */
+const FIRST_ROUND_SHARE = 0.55
 
 export interface BuildOptions {
   minutes?: number
@@ -42,12 +52,44 @@ function rank(kind: BlockKind, log: PracticeLog, now: Date, random: () => number
     .map((entry) => entry.drill)
 }
 
-function toBlock(drill: Drill, log: PracticeLog, seconds: number): SessionBlock {
+function toBlock(drill: Drill, log: PracticeLog, seconds: number, round = 1, rounds = 1): SessionBlock {
   return {
     drill,
     seconds,
     bpm: nextBpm(drill, progressFor(log, drill.id)),
+    round,
+    rounds,
   }
+}
+
+/**
+ * Zerlegt die Zeit eines Drills in Runden.
+ *
+ * Zwei kurze Runden mit etwas anderem dazwischen behalten sich messbar besser
+ * als eine lange am Stück — der Kontextinterferenz-Effekt. Das gilt aber fürs
+ * *Behalten*, nicht fürs *Erlernen*: eine Bewegung, die die Hand noch nie
+ * gemacht hat, braucht erst den Block am Stück. Deshalb bekommt nur ein Drill
+ * mit Vorgeschichte zwei Runden.
+ */
+function roundsFor(drill: Drill, log: PracticeLog, seconds: number): SessionBlock[] {
+  const known = progressFor(log, drill.id).attempts > 0
+  const first = Math.round((seconds * FIRST_ROUND_SHARE) / 15) * 15
+  const second = seconds - first
+
+  if (!known || Math.min(first, second) < MIN_ROUND_SECONDS) {
+    return [toBlock(drill, log, seconds)]
+  }
+  return [toBlock(drill, log, first, 1, 2), toBlock(drill, log, second, 2, 2)]
+}
+
+/** Abwechselnd aus beiden Listen — daher kommt das Interleaving. */
+function interleave(a: SessionBlock[], b: SessionBlock[]): SessionBlock[] {
+  const out: SessionBlock[] = []
+  for (let i = 0; i < Math.max(a.length, b.length); i += 1) {
+    if (a[i]) out.push(a[i])
+    if (b[i]) out.push(b[i])
+  }
+  return out
 }
 
 /**
@@ -71,8 +113,7 @@ export function buildSession(log: PracticeLog, options: BuildOptions = {}): Sess
 
   const blocks = [
     toBlock(warmup, log, WARMUP_SECONDS),
-    toBlock(technique, log, techniqueSeconds),
-    toBlock(riff, log, riffSeconds),
+    ...interleave(roundsFor(technique, log, techniqueSeconds), roundsFor(riff, log, riffSeconds)),
   ]
 
   return {
