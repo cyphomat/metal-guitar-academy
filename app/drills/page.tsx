@@ -1,6 +1,6 @@
 import { DrillLibrary } from "@/components/session/drill-library"
 
-export const metadata = { title: "Drills · Metal Guitar Academy" }
+export const metadata = { title: "Drills · Riffforge" }
 
 export default function DrillsPage() {
   return (

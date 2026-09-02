@@ -12,12 +12,12 @@ import { asset } from "@/lib/base-path"
 const oswald = Oswald({ subsets: ["latin"], weight: ["400", "600", "700"], variable: "--font-display" })
 
 export const metadata: Metadata = {
-  title: "Metal Guitar Academy",
+  title: "Riffforge",
   description: "15 Minuten Metal-Gitarre am Tag — aufwärmen, eine Technik, ein Riff.",
   manifest: asset("/manifest.json"),
   appleWebApp: {
     capable: true,
-    title: "Riff",
+    title: "Riffforge",
     statusBarStyle: "black-translucent",
   },
   icons: {

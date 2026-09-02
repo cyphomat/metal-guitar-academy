@@ -1,6 +1,6 @@
 import { DataManager } from "@/components/session/data-manager"
 
-export const metadata = { title: "Daten · Metal Guitar Academy" }
+export const metadata = { title: "Daten · Riffforge" }
 
 export default function DatenPage() {
   return (

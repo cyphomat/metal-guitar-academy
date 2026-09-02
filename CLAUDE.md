@@ -1,4 +1,4 @@
-# Metal Guitar Academy
+# Riffforge
 
 Eine Übungs-App für Metal-Gitarre. Kein Kurskatalog — eine **Session-Maschine**:
 starten, ~15 Minuten üben, fertig, morgen wieder.

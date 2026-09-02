@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.svg" alt="Metal Guitar Academy" width="100%">
+  <img src="assets/banner.svg" alt="Riffforge" width="100%">
 </p>
 
 <p align="center">

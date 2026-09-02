@@ -3,6 +3,9 @@
 import { mergeLogs } from "@/lib/session/merge"
 import { EMPTY_LOG, practiceLogSchema, type DrillResult, type PracticeLog } from "@/lib/session/types"
 
+// Bleibt beim alten Präfix, obwohl die App inzwischen anders heisst: der
+// Schlüssel identifiziert die Daten, nicht das Produkt. Ihn umzubenennen
+// würde jeden bestehenden Übungs-Log stillschweigend verwaisen lassen.
 const STORAGE_KEY = "mga.practice-log.v1"
 
 /**
@@ -69,5 +72,5 @@ export function exportLog(): string {
 /** Dateiname mit Datum, damit mehrere Sicherungen nebeneinander liegen können. */
 export function exportFilename(now: Date = new Date()): string {
   const day = `${now.getFullYear()}-${`${now.getMonth() + 1}`.padStart(2, "0")}-${`${now.getDate()}`.padStart(2, "0")}`
-  return `metal-guitar-academy-${day}.json`
+  return `riffforge-${day}.json`
 }

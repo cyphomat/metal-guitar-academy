@@ -1,5 +1,5 @@
 /**
- * The subdirectory the app is served from — empty locally, "/metal-guitar-academy"
+ * The subdirectory the app is served from — empty locally, "/<repo>"
  * on GitHub Pages. Inlined at build time from NEXT_PUBLIC_BASE_PATH.
  */
 export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? ""

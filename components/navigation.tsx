@@ -15,13 +15,14 @@ export function Navigation() {
   return (
     <nav className="sticky top-0 z-20 border-b border-line bg-bg pt-[env(safe-area-inset-top)]">
       <div className="mx-auto flex h-14 max-w-[640px] items-center gap-3 px-4">
-        {/* Auf schmalen Geräten kleiner statt gekürzt: "Academy" allein sagt
-            nichts, und drei Knöpfe brauchen den Platz. */}
+        {/* Der Farbwechsel fällt zwischen zweitem und drittem F: "Riffforge"
+            ist als Kompositum richtig geschrieben, aber drei gleiche Buchstaben
+            in versaler Schrift liest man sonst nicht auseinander. */}
         <Link
           href="/"
-          className="display flex-1 truncate text-[15px] tracking-[0.04em] text-fg sm:text-[19px] sm:tracking-[0.05em]"
+          className="display flex-1 truncate text-[19px] tracking-[0.06em] text-fg"
         >
-          Metal Guitar <span className="text-akzent">Academy</span>
+          Riff<span className="text-akzent">forge</span>
         </Link>
 
         {navItems.map((item) => {
