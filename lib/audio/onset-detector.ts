@@ -1,3 +1,4 @@
+import { asset } from "@/lib/base-path"
 import type { AudioEngine } from "./audio-engine"
 
 export type MicStatus = "idle" | "starting" | "listening" | "denied" | "unsupported" | "error"
@@ -64,7 +65,7 @@ export class OnsetDetector {
         },
       })
 
-      await ctx.audioWorklet.addModule("/worklets/onset-processor.js")
+      await ctx.audioWorklet.addModule(asset("/worklets/onset-processor.js"))
 
       this.source = ctx.createMediaStreamSource(this.stream)
       this.node = new AudioWorkletNode(ctx, "onset-processor")

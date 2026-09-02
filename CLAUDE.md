@@ -33,6 +33,8 @@ entscheidet der Scheduler aus dem Übungs-Log — die **Form** ist fix, der
 | `lib/session/builder.ts` | Wählt aus, was heute drankommt |
 | `lib/storage/practice-log.ts` | localStorage, einziger Zugriffspunkt aufs Log |
 | `components/session/*` | UI der Session |
+| `lib/base-path.ts` | Präfix für Laufzeit-Pfade unter GitHub Pages |
+| `public/sw.js`, `public/manifest.json` | PWA: offline und installierbar |
 
 **Kernregel:** Die Logik in `lib/session/` ist rein und ohne React oder
 Browser-APIs. Deshalb ist sie testbar — und deshalb liegen dort die Tests.
@@ -65,10 +67,23 @@ neue Inhalte dazukommen: bitte dabei bleiben.
 
 ```bash
 pnpm dev      # Entwicklung
-pnpm test     # Vitest (Logik in lib/session)
+pnpm test     # Vitest (Logik in lib/session und lib/audio)
 pnpm check    # tsc --noEmit && vitest run && next lint
-pnpm build    # Produktions-Build
+pnpm build    # statischer Export nach out/
 ```
+
+## Deployment
+
+Statischer Export auf GitHub Pages, per Actions bei Push auf `main`. Pages
+liefert unter `/<repo>/` aus:
+
+- Pfade, die **Next erzeugt**, bekommen `basePath` automatisch.
+- Pfade, die **zur Laufzeit** entstehen — `audioWorklet.addModule`,
+  `serviceWorker.register` — müssen durch `asset()` aus `lib/base-path.ts`.
+  Das ist die Stelle, an der es sonst still im Unterverzeichnis danebengreift.
+
+`output: "export"` heißt: keine API-Routen, keine Server-Komponenten mit
+Laufzeitlogik, kein `next/image`-Optimizer.
 
 `next.config.mjs` unterdrückt **keine** Fehler mehr. TypeScript- und
 ESLint-Fehler brechen den Build — bitte so lassen.

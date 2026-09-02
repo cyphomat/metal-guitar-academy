@@ -13,7 +13,7 @@ export function Navigation() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed left-0 right-0 top-0 z-50 border-b border-orange-500/20 bg-[#111]/95 backdrop-blur-sm">
+    <nav className="fixed left-0 right-0 top-0 z-50 border-b border-orange-500/20 bg-[#111]/95 pt-[env(safe-area-inset-top)] backdrop-blur-sm">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center space-x-2">
           <MdMusicNote className="h-7 w-7 rotate-12 text-orange-500" />
