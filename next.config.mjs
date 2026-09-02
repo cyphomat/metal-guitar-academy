@@ -1,9 +1,11 @@
 /**
  * Static export for GitHub Pages.
  *
- * Pages serves the site from a subdirectory (/metal-guitar-academy), so every
- * URL needs that prefix. Next rewrites the ones it generates itself; paths we
- * build at runtime have to go through `lib/base-path.ts`.
+ * Pages serves the site from a subdirectory named after the repository, so
+ * every URL needs that prefix. Next rewrites the ones it generates itself;
+ * paths we build at runtime have to go through `lib/base-path.ts`. Der
+ * Workflow setzt NEXT_PUBLIC_BASE_PATH aus dem Repo-Namen — eine Umbenennung
+ * zieht damit von selbst mit.
  */
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? ""
 
