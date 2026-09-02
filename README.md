@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="App öffnen" src="https://img.shields.io/badge/App-öffnen-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-100%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-123%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-läuft-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Abhängigkeiten" src="https://img.shields.io/badge/Abhängigkeiten-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -16,6 +16,10 @@
 
 <p align="center">
   <sub>100% vibe coded. Nutzung auf eigene Gefahr. Featurewünsche gerne gesehen.</sub>
+</p>
+
+<p align="center">
+  <b>Deutsch</b> · <a href="README.en.md">English</a>
 </p>
 
 ---
@@ -48,6 +52,21 @@ gescrollt werden muss:
 <sub>Echte Bildschirme mit Beispieldaten, aufgenommen über <code>tools/shots.mjs</code>. Keine Mockups — die Timing-Werte oben stammen aus einer echten Messung.</sub>
 
 ---
+
+## Beim ersten Start
+
+<p align="center">
+  <img src="assets/screens/erster-start.png" alt="Die zwei Fragen beim ersten Start" width="300">
+</p>
+
+Zwei Fragen, danach nie wieder: **wo du stehst** und **was dich zuerst
+interessiert**. Beide ändern etwas Echtes — die erste setzt die Starttempi
+aller Drills, die zweite gewichtet, was zuerst drankommt.
+
+Ein Schwerpunkt ist dabei kein Filter: wer Lead wählt, kommt trotzdem an die
+rechte Hand, nur später. Und beides betrifft nur den *Anfang* — sobald ein Log
+da ist, schreibt sich das Tempo daraus fort und die Antwort spielt keine Rolle
+mehr.
 
 ## Wie eine Session abläuft
 
@@ -93,6 +112,44 @@ heutigen Tag — aus dem Log, nicht aus dem Bauch.
   nicht, ohne Abstufung nach Minuten: eine Session ist per Konstruktion rund
   eine Viertelstunde: die Minuten pro Tag als Farbverlauf zu zeigen hiesse,
   Rauschen als Signal auszugeben. Was hier zählt, sind Serien und Lücken.
+
+## Die Übungen
+
+Dreizehn Stück. Das Tempo rechts ist Start → Ziel; wo du tatsächlich anfängst,
+hängt an deiner Antwort beim ersten Start, und wie es weitergeht an dem, was du
+spielst.
+
+**Warm-up**
+
+| Drill | Technik | Ziel | BPM |
+|---|---|---|---|
+| Chromatic 1-2-3-4 | — | Finger unabhängig machen und die Hand aufwärmen | 60 → 120 |
+| String Skipping | — | Anschlaghand treffsicher machen, ohne hinzusehen | 60 → 130 |
+
+**Technik**
+
+| Drill | Technik | Ziel | BPM |
+|---|---|---|---|
+| Downpicking Endurance | Downpicking | Ausdauer im reinen Abschlag — der Kern des Thrash-Sounds | 90 → 190 |
+| Chug Control | Palm Muting | Gleichmässige Palm Mutes — jeder Chug gleich laut, gleich kurz | 80 → 170 |
+| Gallop | Gallop | Das Achtel-plus-zwei-Sechzehntel-Muster sauber und stabil | 70 → 150 |
+| Power Chord Shifts | Power Chords | Lagenwechsel ohne Lücke und ohne Nebengeräusch | 70 → 160 |
+| Alternate Picking | Alternate Picking | Gleichmässiger Wechselschlag auf einer Saite | 60 → 140 |
+| Pentatonik Box 1 | Pentatonik | A-Moll-Pentatonik in der 5. Lage, hoch und runter | 60 → 150 |
+| Bending & Vibrato | Bending | Ganztonziehen auf Tonhöhe treffen und halten | 50 → 100 |
+
+**Riff**
+
+| Drill | Technik | Ziel | BPM |
+|---|---|---|---|
+| Ironclad | Gallop | Gallop plus Lagenwechsel — das erste richtige Riff | 70 → 145 |
+| Chromatic Crawl | Palm Muting | Offene Chugs gegen chromatische Zielnoten — Timing unter Druck | 80 → 160 |
+| Downpicked Dirge | Downpicking | Langsam, schwer, alles Abschlag — Timing ohne Versteck | 60 → 130 |
+| Escape Lick | Pentatonik | Erstes Lead-Lick: Pentatonik mit Bending am Ende | 55 → 120 |
+
+Alles eigene Patterns im jeweiligen Stil — keine abgeschriebenen Tabs. Jeder
+Drill bringt seine eigenen Cues mit und ein aufklappbares **Warum das so ist**,
+das die Theorie dahinter in zwei Sätzen erklärt.
 
 ## Was das Mikrofon hört
 

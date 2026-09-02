@@ -12,6 +12,9 @@ import {
   totalMinutes,
 } from "@/lib/session/progress"
 import { loadLog } from "@/lib/storage/practice-log"
+import { loadProfile } from "@/lib/storage/profile"
+import type { Profile } from "@/lib/session/profile"
+import { Onboarding } from "@/components/session/onboarding"
 import { PracticeCalendar } from "@/components/session/practice-calendar"
 import { EMPTY_LOG, TECHNIQUE_LABELS, type PracticeLog } from "@/lib/session/types"
 
@@ -31,12 +34,20 @@ export function PracticeOverview() {
   // localStorage gibt es beim Rendern auf dem Server nicht: der erste Anstrich
   // zeigt den leeren Stand, die echten Zahlen kommen beim Mounten.
   const [log, setLog] = useState<PracticeLog>(EMPTY_LOG)
+  const [profile, setProfile] = useState<Profile | null>(null)
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     setLog(loadLog())
+    setProfile(loadProfile())
     setLoaded(true)
   }, [])
+
+  // Ersteinrichtung nur beim allerersten Mal — und nur, solange noch nichts
+  // geübt wurde. Wer schon einen Log hat, braucht keine Starttempi mehr.
+  if (loaded && !profile && log.results.length === 0) {
+    return <Onboarding onDone={() => setProfile(loadProfile())} />
+  }
 
   const briefing = briefingFor(log)
   const hasHistory = loaded && log.results.length > 0

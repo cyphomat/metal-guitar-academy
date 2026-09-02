@@ -190,4 +190,15 @@ await wide.waitForTimeout(2000)
 await wide.screenshot({ path: `${OUT}/session-desktop.png` })
 console.log(`${OUT}/session-desktop.png`)
 
+// 8 — Der erste Start. Braucht einen eigenen Kontext: die Ersteinrichtung
+// zeigt sich nur, solange weder Profil noch Log existieren — der Kontext oben
+// hat beides.
+const frisch = await browser.newContext({ viewport: PHONE, deviceScaleFactor: 2 })
+const ersteSeite = await frisch.newPage()
+await ersteSeite.goto(`${BASE}/`, { waitUntil: 'networkidle' })
+await ersteSeite.waitForTimeout(700)
+await ersteSeite.screenshot({ path: `${OUT}/erster-start.png` })
+console.log(`${OUT}/erster-start.png`)
+await frisch.close()
+
 await browser.close()

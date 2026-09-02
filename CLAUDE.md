@@ -38,10 +38,12 @@ Verschiedenes.
 | `lib/session/drills.ts` | Der Übungs-Katalog (reine Daten) |
 | `lib/session/progress.ts` | Auswertung des Logs: Tempo-Fortschreibung, Streak, Mastery |
 | `lib/session/builder.ts` | Wählt aus, was heute drankommt |
+| `lib/session/profile.ts` | Die zwei Antworten vom ersten Start: Starttempo und Gewichtung |
 | `lib/session/briefing.ts` | Die Ansage: der Ton des Tages, aus dem Log |
 | `lib/session/calendar.ts` | Das Raster für den Übungskalender |
 | `lib/session/merge.ts` | Logs verschmelzen — für Import und später den Abgleich |
 | `lib/storage/practice-log.ts` | localStorage, einziger Zugriffspunkt aufs Log |
+| `lib/storage/profile.ts` | localStorage, einziger Zugriffspunkt aufs Profil |
 | `lib/sync/store.ts` | Abgleich-Logik, unabhängig von GitHub — deshalb testbar |
 | `lib/sync/github.ts` | GitHub-API als Ablageort, einziger Netz-Zugriff |
 | `components/session/*` | UI der Session |
@@ -83,14 +85,25 @@ Komponente.
 - **Der Log ist append-only.** Einträge sind unveränderlich und über
   `drillId` plus `at` identifiziert. Deshalb ist Verschmelzen die richtige
   Antwort auf zwei Stände, nicht "der neuere gewinnt" — nie überschreiben.
+- **Das Profil ist ein Startwert, kein Filter.** Die zwei Fragen beim ersten
+  Start skalieren die Starttempi und gewichten die Auswahl leicht — sie
+  schliessen nie einen Drill aus. Sobald ein Log da ist, schreibt sich das
+  Tempo daraus fort und das Profil zählt für diesen Drill nicht mehr. Es darf
+  deshalb auch fehlen: jede Funktion nimmt `Profile | null`.
 - **Ein Drill über mehrere Runden ist ein Eintrag**, nicht drei. Der
   Session-Runner sammelt die Spielzeit und schreibt nach der letzten Runde.
 
 ## Beim Veröffentlichen
 
-Die Testzahl steht als Abzeichen in der README und zieht nicht von selbst mit.
-Wer Tests hinzufügt, zieht sie dort nach — sonst steht dort irgendwann eine
-Zahl, die niemand mehr glaubt.
+Die Testzahl steht als Abzeichen in **beiden** READMEs (`README.md` und
+`README.en.md`) und zieht nicht von selbst mit. Wer Tests hinzufügt, zieht sie
+dort nach — sonst steht dort irgendwann eine Zahl, die niemand mehr glaubt.
+Dasselbe gilt für die Drill-Tabellen unter *Die Übungen* / *The drills*: sie
+sind aus `lib/session/drills.ts` erzeugt, aber nicht generiert. Wer den Katalog
+ändert, zieht sie nach — in beiden Sprachen.
+
+Die beiden READMEs haben dieselbe Gliederung. Ein neuer Abschnitt gehört in
+beide, sonst laufen sie auseinander.
 
 ## Inhalte und Recht
 

@@ -5,6 +5,7 @@ import { BlockRunner, type BlockOutcome } from "@/components/session/block-runne
 import { SessionSummary } from "@/components/session/session-summary"
 import { buildDrillSession, buildSession, nextExtraBlock } from "@/lib/session/builder"
 import { appendResults, loadLog } from "@/lib/storage/practice-log"
+import { loadProfile } from "@/lib/storage/profile"
 import { EMPTY_LOG, type DrillResult, type PracticeLog, type SessionBlock } from "@/lib/session/types"
 
 export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?: string }) {
@@ -26,10 +27,11 @@ export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?:
 
   useEffect(() => {
     const initial = loadLog()
-    const single = drillId ? buildDrillSession(initial, drillId, { minutes }) : null
+    const profile = loadProfile()
+    const single = drillId ? buildDrillSession(initial, drillId, { minutes, profile }) : null
     setStartingLog(initial)
     setLog(initial)
-    setBlocks((single ?? buildSession(initial, { minutes })).blocks)
+    setBlocks((single ?? buildSession(initial, { minutes, profile })).blocks)
   }, [drillId, minutes])
 
   /**

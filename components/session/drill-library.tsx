@@ -5,6 +5,8 @@ import Link from "next/link"
 import { DRILLS } from "@/lib/session/drills"
 import { masteryOf, nextBpm, progressFor } from "@/lib/session/progress"
 import { loadLog } from "@/lib/storage/practice-log"
+import { loadProfile } from "@/lib/storage/profile"
+import type { Profile } from "@/lib/session/profile"
 import { EMPTY_LOG, TECHNIQUE_LABELS, type BlockKind, type PracticeLog } from "@/lib/session/types"
 
 const SECTIONS: Array<{ kind: BlockKind; title: string; blurb: string }> = [
@@ -15,9 +17,11 @@ const SECTIONS: Array<{ kind: BlockKind; title: string; blurb: string }> = [
 
 export function DrillLibrary() {
   const [log, setLog] = useState<PracticeLog>(EMPTY_LOG)
+  const [profile, setProfile] = useState<Profile | null>(null)
 
   useEffect(() => {
     setLog(loadLog())
+    setProfile(loadProfile())
   }, [])
 
   return (
@@ -31,7 +35,6 @@ export function DrillLibrary() {
             {DRILLS.filter((drill) => drill.kind === section.kind).map((drill) => {
               const progress = progressFor(log, drill.id)
               const mastery = masteryOf(drill, progress)
-              const started = progress.attempts > 0
 
               return (
                 <Link
@@ -50,7 +53,7 @@ export function DrillLibrary() {
                     </div>
                     <div className="flex-none text-right">
                       <div className="num text-[15px] font-bold text-akzent">
-                        {started ? nextBpm(drill, progress) : drill.startBpm}
+                        {nextBpm(drill, progress, profile)}
                       </div>
                       <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-dim">
                         Ziel {drill.targetBpm}

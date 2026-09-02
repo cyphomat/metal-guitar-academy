@@ -1,3 +1,4 @@
+import { startBpmFor, type Profile } from "./profile"
 import type { Drill, DrillResult, PracticeLog, Rating } from "./types"
 
 export interface DrillProgress {
@@ -44,9 +45,11 @@ export function progressFor(log: PracticeLog, drillId: string): DrillProgress {
  * back off. Holding after a wobbly round is deliberate — repeating a tempo is
  * how it gets consolidated.
  */
-export function nextBpm(drill: Drill, progress: DrillProgress): number {
+export function nextBpm(drill: Drill, progress: DrillProgress, profile: Profile | null = null): number {
   if (progress.lastBpm === null || progress.lastRating === null) {
-    return drill.startBpm
+    // Beim ersten Mal zählt das Starttempo dieses Spielers, nicht das des
+    // Katalogs — danach schreibt sich das Tempo ohnehin selbst fort.
+    return startBpmFor(drill, profile)
   }
 
   const delta =

@@ -1,5 +1,6 @@
 import { DRILLS } from "./drills"
 import { daysSince, masteryOf, nextBpm, progressFor } from "./progress"
+import { focusBonus, type Profile } from "./profile"
 import type { BlockKind, Drill, PracticeLog, SessionBlock, SessionPlan } from "./types"
 
 /** Share of the session each kind gets, after the fixed warm-up. */
@@ -20,6 +21,8 @@ export interface BuildOptions {
   now?: Date
   /** Deterministic tie-breaking for tests. */
   random?: () => number
+  /** Aus der Ersteinrichtung: Starttempo und Schwerpunkt. */
+  profile?: Profile | null
 }
 
 /**
@@ -29,7 +32,12 @@ export interface BuildOptions {
  * Staleness saturates after a week so a drill skipped for a month does not
  * crowd out everything else forever.
  */
-export function priorityOf(drill: Drill, log: PracticeLog, now: Date): number {
+export function priorityOf(
+  drill: Drill,
+  log: PracticeLog,
+  now: Date,
+  profile: Profile | null = null,
+): number {
   const progress = progressFor(log, drill.id)
   const weakness = 1 - masteryOf(drill, progress)
   const staleness = Math.min(daysSince(progress.lastPlayedAt, now), 7) / 7
@@ -38,25 +46,38 @@ export function priorityOf(drill: Drill, log: PracticeLog, now: Date): number {
   // being worked on and still far from target.
   const novelty = progress.attempts === 0 ? 0.15 : 0
 
-  return weakness * 0.55 + staleness * 0.45 + novelty
+  return weakness * 0.55 + staleness * 0.45 + novelty + focusBonus(drill, profile)
 }
 
-function rank(kind: BlockKind, log: PracticeLog, now: Date, random: () => number): Drill[] {
+function rank(
+  kind: BlockKind,
+  log: PracticeLog,
+  now: Date,
+  random: () => number,
+  profile: Profile | null,
+): Drill[] {
   return DRILLS.filter((drill) => drill.kind === kind)
     .map((drill) => ({
       drill,
       // Small jitter so equal-priority drills rotate instead of locking in.
-      score: priorityOf(drill, log, now) + random() * 0.02,
+      score: priorityOf(drill, log, now, profile) + random() * 0.02,
     }))
     .sort((a, b) => b.score - a.score)
     .map((entry) => entry.drill)
 }
 
-function toBlock(drill: Drill, log: PracticeLog, seconds: number, round = 1, rounds = 1): SessionBlock {
+function toBlock(
+  drill: Drill,
+  log: PracticeLog,
+  seconds: number,
+  round = 1,
+  rounds = 1,
+  profile: Profile | null = null,
+): SessionBlock {
   return {
     drill,
     seconds,
-    bpm: nextBpm(drill, progressFor(log, drill.id)),
+    bpm: nextBpm(drill, progressFor(log, drill.id), profile),
     round,
     rounds,
   }
@@ -71,15 +92,20 @@ function toBlock(drill: Drill, log: PracticeLog, seconds: number, round = 1, rou
  * gemacht hat, braucht erst den Block am Stück. Deshalb bekommt nur ein Drill
  * mit Vorgeschichte zwei Runden.
  */
-function roundsFor(drill: Drill, log: PracticeLog, seconds: number): SessionBlock[] {
+function roundsFor(
+  drill: Drill,
+  log: PracticeLog,
+  seconds: number,
+  profile: Profile | null,
+): SessionBlock[] {
   const known = progressFor(log, drill.id).attempts > 0
   const first = Math.round((seconds * FIRST_ROUND_SHARE) / 15) * 15
   const second = seconds - first
 
   if (!known || Math.min(first, second) < MIN_ROUND_SECONDS) {
-    return [toBlock(drill, log, seconds)]
+    return [toBlock(drill, log, seconds, 1, 1, profile)]
   }
-  return [toBlock(drill, log, first, 1, 2), toBlock(drill, log, second, 2, 2)]
+  return [toBlock(drill, log, first, 1, 2, profile), toBlock(drill, log, second, 2, 2, profile)]
 }
 
 /** Abwechselnd aus beiden Listen — daher kommt das Interleaving. */
@@ -107,13 +133,17 @@ export function buildSession(log: PracticeLog, options: BuildOptions = {}): Sess
   const techniqueSeconds = Math.round(remaining / 2 / 30) * 30
   const riffSeconds = remaining - techniqueSeconds
 
-  const warmup = rank("warmup", log, now, random)[0]
-  const technique = rank("technique", log, now, random)[0]
-  const riff = rank("riff", log, now, random)[0]
+  const profile = options.profile ?? null
+  const warmup = rank("warmup", log, now, random, profile)[0]
+  const technique = rank("technique", log, now, random, profile)[0]
+  const riff = rank("riff", log, now, random, profile)[0]
 
   const blocks = [
-    toBlock(warmup, log, WARMUP_SECONDS),
-    ...interleave(roundsFor(technique, log, techniqueSeconds), roundsFor(riff, log, riffSeconds)),
+    toBlock(warmup, log, WARMUP_SECONDS, 1, 1, profile),
+    ...interleave(
+      roundsFor(technique, log, techniqueSeconds, profile),
+      roundsFor(riff, log, riffSeconds, profile),
+    ),
   ]
 
   return {
@@ -141,16 +171,17 @@ export function nextExtraBlock(
   const techniqueCount = used.filter((block) => block.drill.kind === "technique").length
   const preferred: BlockKind = riffCount > techniqueCount ? "technique" : "riff"
 
+  const profile = options.profile ?? null
   const candidates = [
-    ...rank(preferred, log, now, random),
-    ...rank(preferred === "riff" ? "technique" : "riff", log, now, random),
+    ...rank(preferred, log, now, random, profile),
+    ...rank(preferred === "riff" ? "technique" : "riff", log, now, random, profile),
   ]
 
   // Everything played already? Then repeat the highest-priority drill rather
   // than refusing to extend the session.
   const drill = candidates.find((candidate) => !usedIds.has(candidate.id)) ?? candidates[0]
 
-  return toBlock(drill, log, seconds)
+  return toBlock(drill, log, seconds, 1, 1, profile)
 }
 
 /**
@@ -166,6 +197,6 @@ export function buildDrillSession(
   if (!drill) return null
 
   const seconds = Math.max(60, (options.minutes ?? 10) * 60)
-  const blocks = [toBlock(drill, log, seconds)]
+  const blocks = [toBlock(drill, log, seconds, 1, 1, options.profile ?? null)]
   return { blocks, totalSeconds: seconds }
 }
