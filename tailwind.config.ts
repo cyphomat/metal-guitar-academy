@@ -15,6 +15,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        // Wie bei Setlist: unter 900 px ist die schmale Spalte richtig,
+        // darüber wird daraus sonst eine Handy-App mit Leere daneben.
+        wide: "900px",
+      },
       colors: {
         bg: "var(--bg)",
         panel: "var(--panel)",

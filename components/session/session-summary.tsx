@@ -41,7 +41,7 @@ export function SessionSummary({ results, previousLog, log, onExtend }: SessionS
   const gains = gainsFrom(results, previousLog)
 
   return (
-    <div className="mx-auto max-w-[640px] px-4 pb-16">
+    <div className="huelle">
       {/* Erst das Geschaffte, dann der Bericht. */}
       <section className="card mt-6">
         <span className="kicker text-gruen">Feierabend</span>

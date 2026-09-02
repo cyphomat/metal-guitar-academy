@@ -39,6 +39,7 @@ Verschiedenes.
 | `lib/session/progress.ts` | Auswertung des Logs: Tempo-Fortschreibung, Streak, Mastery |
 | `lib/session/builder.ts` | Wählt aus, was heute drankommt |
 | `lib/session/briefing.ts` | Die Ansage: der Ton des Tages, aus dem Log |
+| `lib/session/calendar.ts` | Das Raster für den Übungskalender |
 | `lib/session/merge.ts` | Logs verschmelzen — für Import und später den Abgleich |
 | `lib/storage/practice-log.ts` | localStorage, einziger Zugriffspunkt aufs Log |
 | `components/session/*` | UI der Session |
@@ -65,6 +66,9 @@ Komponente.
 - **Ein AudioContext für alles.** Metronom und Mikrofon müssen auf derselben
   Uhr liegen, sonst ist jede Timing-Messung Rauschen. Nie einen zweiten anlegen.
 - **Theorie gehört an den Drill** (`why`-Feld), nicht in einen eigenen Bereich.
+- **Breit ab 900 px** (`wide:` in Tailwind), wie bei Setlist. Die Reihenfolge im
+  Markup bleibt gleich — `.zwei-spalten` stapelt auf dem Handy einfach. Der
+  Abschluss-Bildschirm bleibt schmal: er ist eine Entscheidung, keine Übersicht.
 - **Die Design-Sprache kommt aus Setlist.** Matte Flächen, Bernstein nur auf
   dem, was zählt, Stahlblau für alles Zweitrangige, harte Kanten mit 2 px.
   Farben stehen als CSS-Variablen in `app/globals.css`, nicht als Hex-Werte in

@@ -82,6 +82,24 @@
     display: none;
   }
 
+  /* Hülle für einen Bildschirm. Auf dem Handy eine schmale Spalte, auf dem
+     Mac breiter — die Reihenfolge im Markup bleibt gleich, sie stapelt sich
+     unten einfach. */
+  .huelle {
+    @apply mx-auto max-w-[640px] px-4 pb-16;
+  }
+  .huelle-breit {
+    @apply huelle wide:max-w-[1080px];
+  }
+  .zwei-spalten {
+    @apply wide:grid wide:grid-cols-2 wide:items-start wide:gap-x-[26px];
+  }
+  /* Erste Überschrift einer Spalte braucht oben keinen Abstand, sonst
+     hängen die Spalten auf verschiedenen Höhen an. */
+  .spalte > :first-child {
+    @apply wide:mt-0;
+  }
+
   .kicker {
     @apply font-mono text-[10.5px] font-bold uppercase tracking-[0.22em] text-muted;
   }

@@ -14,7 +14,7 @@ export function Navigation() {
 
   return (
     <nav className="sticky top-0 z-20 border-b border-line bg-bg pt-[env(safe-area-inset-top)]">
-      <div className="mx-auto flex h-14 max-w-[640px] items-center gap-3 px-4">
+      <div className="mx-auto flex h-14 max-w-[640px] items-center gap-3 px-4 wide:max-w-[1080px]">
         {/* Der Farbwechsel fällt zwischen zweitem und drittem F: "Riffforge"
             ist als Kompositum richtig geschrieben, aber drei gleiche Buchstaben
             in versaler Schrift liest man sonst nicht auseinander. */}

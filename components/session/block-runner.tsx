@@ -199,7 +199,7 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
   }
 
   return (
-    <div className="space-y-5">
+    <div>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="kicker">
@@ -214,6 +214,8 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
         </span>
       </div>
 
+      <div className="zwei-spalten mt-5">
+      <div className="spalte space-y-5">
       <div className="card plain">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -282,6 +284,9 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
         onToggle={toggleMic}
       />
 
+      </div>
+
+      <div className="spalte space-y-5">
       {drill.tab && <TabView tab={drill.tab} />}
 
       <div>
@@ -302,6 +307,8 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
           <p className="px-[15px] pb-[15px] text-[14px] leading-relaxed text-muted">{drill.why}</p>
         </details>
       )}
+      </div>
+      </div>
     </div>
   )
 }

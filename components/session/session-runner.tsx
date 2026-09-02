@@ -89,7 +89,7 @@ export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?:
 
   if (blocks === null || startingLog === null) {
     return (
-      <p className="mx-auto max-w-[640px] px-4 pt-8 font-mono text-[12px] uppercase tracking-[0.18em] text-dim">
+      <p className="huelle pt-8 font-mono text-[12px] uppercase tracking-[0.18em] text-dim">
         Session wird vorbereitet…
       </p>
     )
@@ -100,7 +100,7 @@ export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?:
   }
 
   return (
-    <div className="mx-auto max-w-[640px] px-4 pb-16">
+    <div className="huelle-breit">
       <div className="bar mt-6 h-[3px]">
         <i className="transition-[width] duration-500" style={{ width: `${overallProgress}%` }} />
       </div>

@@ -4,7 +4,7 @@ export const metadata = { title: "Drills · Riffforge" }
 
 export default function DrillsPage() {
   return (
-    <div className="mx-auto max-w-[640px] px-4 pb-16">
+    <div className="huelle-breit">
       <header className="mt-6">
         <span className="kicker">Der Katalog</span>
         <h1 className="display mt-1 text-[38px] text-fg">Drills</h1>

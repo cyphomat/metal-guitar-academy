@@ -27,7 +27,7 @@ export function DrillLibrary() {
           <h2 className="rule mb-1 mt-9">{section.title}</h2>
           <p className="mb-3 text-[12.5px] text-dim">{section.blurb}</p>
 
-          <div className="flex flex-col gap-[9px]">
+          <div className="grid gap-[9px] wide:grid-cols-2">
             {DRILLS.filter((drill) => drill.kind === section.kind).map((drill) => {
               const progress = progressFor(log, drill.id)
               const mastery = masteryOf(drill, progress)

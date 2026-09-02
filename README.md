@@ -35,6 +35,16 @@
 </tr>
 </table>
 
+**Auf dem Mac wird daraus eine Übersicht** — Ansage, Übungskalender, Kennzahlen
+und Tempi nebeneinander statt untereinander:
+
+<img src="assets/screens/heute-desktop.png" alt="Startbildschirm auf dem Mac, breite Ansicht">
+
+**Und im Block liegen Uhr und Tab nebeneinander**, damit beim Spielen nichts
+gescrollt werden muss:
+
+<img src="assets/screens/session-desktop.png" alt="Ein Block auf dem Mac, Uhr links, Tab rechts">
+
 <sub>Echte Bildschirme mit Beispieldaten, aufgenommen über <code>tools/shots.mjs</code>. Keine Mockups — die Timing-Werte oben stammen aus einer echten Messung.</sub>
 
 ---
@@ -79,6 +89,10 @@ heutigen Tag — aus dem Log, nicht aus dem Bauch.
   am Stück — beim Erlernen einer Bewegung ist das die bessere Reihenfolge.
 - **Erst das Geschaffte, dann der Bericht.** Neue Bestwerte stehen nach der
   Session ganz oben.
+- **Der Übungskalender** zeigt sechzehn Wochen am Stück. Bewusst nur geübt oder
+  nicht, ohne Abstufung nach Minuten: eine Session ist per Konstruktion rund
+  eine Viertelstunde: die Minuten pro Tag als Farbverlauf zu zeigen hiesse,
+  Rauschen als Signal auszugeben. Was hier zählt, sind Serien und Lücken.
 
 ## Was das Mikrofon hört
 

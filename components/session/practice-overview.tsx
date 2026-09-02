@@ -12,6 +12,7 @@ import {
   totalMinutes,
 } from "@/lib/session/progress"
 import { loadLog } from "@/lib/storage/practice-log"
+import { PracticeCalendar } from "@/components/session/practice-calendar"
 import { EMPTY_LOG, TECHNIQUE_LABELS, type PracticeLog } from "@/lib/session/types"
 
 const EXTRA_LENGTHS = [10, 25]
@@ -49,7 +50,8 @@ export function PracticeOverview() {
     .sort((a, b) => b.mastery - a.mastery)
 
   return (
-    <div className="mx-auto max-w-[640px] px-4 pb-16">
+    <div className="huelle-breit zwei-spalten">
+      <div className="spalte">
       {/* Die Ansage: was heute ansteht, und woran das festgemacht ist. */}
       <section className="card mt-6">
         <div className="flex items-center gap-3">
@@ -79,6 +81,15 @@ export function PracticeOverview() {
         ))}
       </div>
 
+        {hasHistory && (
+          <>
+            <h2 className="rule mb-3 mt-9">Übungstage</h2>
+            <PracticeCalendar log={log} />
+          </>
+        )}
+      </div>
+
+      <div className="spalte">
       {hasHistory && (
         <>
           <h2 className="rule mt-9 mb-3">Bisher</h2>
@@ -123,6 +134,7 @@ export function PracticeOverview() {
           )}
         </>
       )}
+      </div>
     </div>
   )
 }

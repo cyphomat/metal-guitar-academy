@@ -175,4 +175,19 @@ await page.goto(`${BASE}/daten/`, { waitUntil: 'networkidle' })
 await page.waitForTimeout(600)
 await shot('daten')
 
+// 7 — Auf dem Mac: dieselbe Seite, nur nebeneinander statt untereinander.
+const wide = await ctx.newPage()
+await wide.setViewportSize({ width: 1280, height: 860 })
+await wide.goto(`${BASE}/`, { waitUntil: 'networkidle' })
+await wide.waitForTimeout(700)
+await wide.screenshot({ path: `${OUT}/heute-desktop.png` })
+console.log(`${OUT}/heute-desktop.png`)
+
+await wide.goto(`${BASE}/session/?drill=tech-gallop&minutes=15`, { waitUntil: 'networkidle' })
+await wide.waitForTimeout(700)
+await wide.getByRole('button', { name: /^Los$/ }).click()
+await wide.waitForTimeout(2000)
+await wide.screenshot({ path: `${OUT}/session-desktop.png` })
+console.log(`${OUT}/session-desktop.png`)
+
 await browser.close()

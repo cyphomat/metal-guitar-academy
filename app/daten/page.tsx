@@ -4,7 +4,7 @@ export const metadata = { title: "Daten · Riffforge" }
 
 export default function DatenPage() {
   return (
-    <div className="mx-auto max-w-[640px] px-4 pb-16">
+    <div className="huelle-breit">
       <header className="mt-6">
         <span className="kicker">Sicherung</span>
         <h1 className="display mt-1 text-[38px] text-fg">Daten</h1>
