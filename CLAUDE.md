@@ -81,6 +81,12 @@ Komponente.
 - **Ein Drill über mehrere Runden ist ein Eintrag**, nicht drei. Der
   Session-Runner sammelt die Spielzeit und schreibt nach der letzten Runde.
 
+## Beim Veröffentlichen
+
+Die Testzahl steht als Abzeichen in der README und zieht nicht von selbst mit.
+Wer Tests hinzufügt, zieht sie dort nach — sonst steht dort irgendwann eine
+Zahl, die niemand mehr glaubt.
+
 ## Inhalte und Recht
 
 Alle Drills und Riffs sind **eigene** Übungen im jeweiligen Stil. Keine

@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="App öffnen" src="https://img.shields.io/badge/App-öffnen-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-71%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-100%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-läuft-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Abhängigkeiten" src="https://img.shields.io/badge/Abhängigkeiten-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -213,6 +213,19 @@ greifen sie im Unterverzeichnis daneben.
 
 Alle Drills und Riffs sind **eigene** Übungen im jeweiligen Stil. Keine
 abgeschriebenen Tabs, kein Audio urheberrechtlich geschützter Aufnahmen.
+
+## Was noch kommt
+
+- **Abgleich zwischen Geräten** über ein privates Datenrepo, wie Setlist es
+  macht. Die Verschmelzung dafür steht schon (`lib/session/merge.ts`): der Log
+  ist append-only, also gewinnt keine Seite — beide werden vereinigt.
+- **Stimmgerät.** Autokorrelation reicht dafür, und man braucht es vor jeder
+  Session ohnehin.
+- **Kalibrierung**: den Versatz einmal messen und behalten, statt ihn pro Block
+  neu zu schätzen. `AudioContext.outputLatency` gäbe es dafür — nur Safari
+  liefert es nicht, weder auf dem Mac noch auf dem iPhone.
+- **Der iOS-Klingelschalter.** Es gibt einen bekannten Kniff, um Web-Audio
+  trotz Stummschaltung klingen zu lassen. Ungetestet, deshalb noch nicht drin.
 
 ## Danke
 
