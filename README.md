@@ -11,7 +11,7 @@
 
 <p align="center">
   <b>Eine Übungs-App für eine Person.</b><br>
-  Kein Kurskatalog. Starten, fünfzehn Minuten spielen, fertig — morgen wieder.
+  Kein Kurskatalog, eine Werkbank. Starten, fünfzehn Minuten spielen, fertig — morgen wieder.
 </p>
 
 <p align="center">
