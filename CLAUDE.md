@@ -47,6 +47,9 @@ Verschiedenes.
 | `lib/sync/store.ts` | Abgleich-Logik, unabhängig von GitHub — deshalb testbar |
 | `lib/sync/github.ts` | GitHub-API als Ablageort, einziger Netz-Zugriff |
 | `components/session/*` | UI der Session |
+| `lib/theory/fsrs.ts` | FSRS-6, portiert aus der Referenz. Rein, gegengeprüft. |
+| `lib/theory/types.ts` | Karten, Fragen und der Antwort-Log |
+| `lib/theory/progress.ts` | Kartenstand aus dem Antwort-Log, Auswahl fürs Abfragen |
 | `lib/update/version.ts` | Bau-Stempel vergleichen: eigene Fassung, Server, Original |
 | `lib/update/check.ts` | Holt Stempel und Original-Commits, leert den Cache |
 | `tools/version.mjs` | Schreibt den Bau-Stempel — läuft vor jedem Build |
@@ -85,6 +88,17 @@ Komponente.
 - **Beim Abgleich gewinnt keine Seite.** Konflikt heisst: neu lesen, erneut
   verschmelzen, noch einmal schreiben — und dann aufhören. Genau ein zweiter
   Versuch, sonst hängt es.
+- **Der Kartenstand wird abgespielt, nicht gespeichert.** Stabilität und
+  Schwierigkeit einer Wissenskarte fallen aus dem Antwort-Log, jedes Mal neu.
+  Das ist Bedingung für den Abgleich: ein gespeicherter Zustand wäre
+  veränderlich, und zwei Geräte müssten sich einigen, wer gewinnt. Antworten
+  sind unveränderlich und verschmelzen wie der Übungs-Log.
+- **FSRS wird nicht nachempfunden.** `lib/theory/fsrs.ts` ist ein Port der
+  Referenz und hängt an `__tests__/fsrs-referenz.json` — Prüfwerte, mit
+  py-fsrs erzeugt. Wer eine Formel anfasst, erzeugt die Datei neu, statt die
+  Erwartungen anzupassen. Ohne Lernschritte, weil hier niemand nach zehn
+  Minuten wiederkommt; das entspricht `Scheduler(learning_steps=(),
+  relearning_steps=())`.
 - **Der Bau-Stempel wird nicht von Hand gepflegt.** `tools/version.mjs`
   schreibt ihn zweimal aus einer Quelle: als `public/version.json` (was auf dem
   Server liegt) und als `NEXT_PUBLIC_*` im Bündel (was gerade läuft). Der
