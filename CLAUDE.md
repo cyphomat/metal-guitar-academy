@@ -180,6 +180,11 @@ Komponente.
   deshalb auch fehlen: jede Funktion nimmt `Profile | null`.
 - **Ein Drill über mehrere Runden ist ein Eintrag**, nicht drei. Der
   Session-Runner sammelt die Spielzeit und schreibt nach der letzten Runde.
+- **`pnpm audit` bleibt leer.** Die Werkzeugkette schleppt DoS-Meldungen in
+  ihren Transitiven mit — nichts davon geht an einen Besucher, es läuft kein
+  Server, aber `next dev` läuft auf diesem Rechner. Die geflickten Fassungen
+  stehen als `pnpm.overrides` in `package.json`. Wer eine Abhängigkeit hebt,
+  schaut danach in `pnpm audit` und räumt Overrides weg, die ins Leere zeigen.
 
 ## Beim Veröffentlichen
 
@@ -206,6 +211,7 @@ pnpm dev      # Entwicklung
 pnpm test     # Vitest (Logik in lib/session und lib/audio)
 pnpm check    # tsc --noEmit && vitest run && next lint
 pnpm build    # statischer Export nach out/
+pnpm audit    # muss leer bleiben, siehe Konventionen
 ```
 
 ## Deployment
