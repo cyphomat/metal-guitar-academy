@@ -106,10 +106,6 @@ export function clearLog(): void {
   }
 }
 
-export function exportLog(): string {
-  return JSON.stringify(loadLog(), null, 2)
-}
-
 /** Dateiname mit Datum, damit mehrere Sicherungen nebeneinander liegen können. */
 export function exportFilename(now: Date = new Date()): string {
   const day = `${now.getFullYear()}-${`${now.getMonth() + 1}`.padStart(2, "0")}-${`${now.getDate()}`.padStart(2, "0")}`

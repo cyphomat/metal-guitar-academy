@@ -1,29 +1,57 @@
 "use client"
 
 import { importLog, loadLog } from "@/lib/storage/practice-log"
-import { githubStore } from "./github"
+import { importTheoryLog, loadTheoryLog } from "@/lib/storage/theory-log"
+import { practiceStore, theoryStore } from "./github"
 import { isConfigured, loadSettings, markSynced } from "./settings"
-import { syncLog, type SyncOutcome } from "./store"
+import { syncLog, THEORIE_LOG, UEBUNGS_LOG } from "./store"
+
+export interface SyncSummary {
+  ok: boolean
+  /** Einträge, die von der Gegenseite dazugekommen sind — beide Logs zusammen. */
+  pulled: number
+  /** Einträge, die dieses Gerät hochgeschoben hat. */
+  pushed: number
+  /** Was schiefging, falls etwas schiefging. */
+  reason?: string
+}
 
 /**
- * Einmal abgleichen: Gegenseite lesen, verschmelzen, zurückschreiben und das
- * Ergebnis lokal übernehmen.
+ * Einmal abgleichen: Übungs-Log und Antwort-Log, jeder für sich.
  *
- * Scheitert der Abgleich, bleibt der lokale Log unangetastet — er ist selbst
- * die Warteschlange. Beim nächsten erfolgreichen Lauf geht alles mit hoch.
+ * Getrennt, weil sie getrennt liegen — und weil ein Fehler beim einen den
+ * anderen nichts angeht. Scheitert einer, bleibt der lokale Stand beider
+ * unangetastet; er ist selbst die Warteschlange und geht beim nächsten Lauf
+ * mit hoch.
  */
-export async function runSync(): Promise<SyncOutcome> {
+export async function runSync(): Promise<SyncSummary> {
   const settings = loadSettings()
   if (!isConfigured(settings)) {
-    return { ok: false, reason: "Kein Datenrepo eingerichtet." }
+    return { ok: false, pulled: 0, pushed: 0, reason: "Kein Datenrepo eingerichtet." }
   }
 
-  const outcome = await syncLog(githubStore(settings), loadLog())
-  if (outcome.ok) {
-    importLog(outcome.log)
-    markSynced()
+  const uebung = await syncLog(practiceStore(settings), loadLog(), UEBUNGS_LOG)
+  if (uebung.ok) importLog(uebung.log)
+
+  const theorie = await syncLog(theoryStore(settings), loadTheoryLog(), THEORIE_LOG)
+  if (theorie.ok) importTheoryLog(theorie.log)
+
+  if (!uebung.ok || !theorie.ok) {
+    return {
+      ok: false,
+      pulled: uebung.ok ? uebung.pulled : 0,
+      pushed: uebung.ok ? uebung.pushed : 0,
+      // Der erste echte Fehler; zwei Meldungen übereinander helfen niemandem.
+      reason: (uebung.ok ? null : uebung.reason) ?? (theorie.ok ? undefined : theorie.reason),
+    }
   }
-  return outcome
+
+  markSynced()
+  return {
+    ok: true,
+    pulled: uebung.pulled + theorie.pulled,
+    pushed: uebung.pushed + theorie.pushed,
+  }
 }
 
 /**

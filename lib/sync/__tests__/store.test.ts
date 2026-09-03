@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { ConflictError, syncLog, type RemoteStore } from "../store"
+import { ConflictError, syncLog, UEBUNGS_LOG, type RemoteStore } from "../store"
 import type { DrillResult, PracticeLog } from "@/lib/session/types"
 
 function entry(at: string, drillId = "tech-gallop"): DrillResult {
@@ -18,7 +18,7 @@ function fakeStore(initial: PracticeLog | null = null) {
   /** Beim nächsten Schreiben einen Konflikt werfen und dabei fremd schreiben. */
   let collideWith: PracticeLog | null = null
 
-  const store: RemoteStore = {
+  const store: RemoteStore<PracticeLog> = {
     async read() {
       return state ? { ...state } : null
     },
@@ -48,7 +48,7 @@ function fakeStore(initial: PracticeLog | null = null) {
 describe("syncLog", () => {
   it("creates the file when the other side is empty", async () => {
     const remote = fakeStore(null)
-    const result = await syncLog(remote.store, log(entry("2026-03-01T20:00:00.000Z")))
+    const result = await syncLog(remote.store, log(entry("2026-03-01T20:00:00.000Z")), UEBUNGS_LOG)
 
     expect(result.ok).toBe(true)
     if (!result.ok) return
@@ -59,7 +59,7 @@ describe("syncLog", () => {
 
   it("brings down what the other device played", async () => {
     const remote = fakeStore(log(entry("2026-03-02T20:00:00.000Z")))
-    const result = await syncLog(remote.store, log(entry("2026-03-01T20:00:00.000Z")))
+    const result = await syncLog(remote.store, log(entry("2026-03-01T20:00:00.000Z")), UEBUNGS_LOG)
 
     expect(result.ok && result.pulled).toBe(1)
     expect(result.ok && result.log.results).toHaveLength(2)
@@ -68,7 +68,7 @@ describe("syncLog", () => {
   it("writes nothing when the other side already has everything", async () => {
     const shared = log(entry("2026-03-01T20:00:00.000Z"))
     const remote = fakeStore(shared)
-    const result = await syncLog(remote.store, shared)
+    const result = await syncLog(remote.store, shared, UEBUNGS_LOG)
 
     expect(result.ok && result.pushed).toBe(0)
     expect(remote.writes).toHaveLength(0)
@@ -76,7 +76,7 @@ describe("syncLog", () => {
 
   it("still reports what it pulled even when it writes nothing", async () => {
     const remote = fakeStore(log(entry("2026-03-01T20:00:00.000Z"), entry("2026-03-02T20:00:00.000Z")))
-    const result = await syncLog(remote.store, log(entry("2026-03-01T20:00:00.000Z")))
+    const result = await syncLog(remote.store, log(entry("2026-03-01T20:00:00.000Z")), UEBUNGS_LOG)
 
     expect(result.ok && result.pushed).toBe(0)
     expect(result.ok && result.pulled).toBe(1)
@@ -87,7 +87,7 @@ describe("syncLog", () => {
     const remote = fakeStore(log(entry("2026-03-01T20:00:00.000Z")))
     remote.collide(log(entry("2026-03-01T20:00:00.000Z"), entry("2026-03-03T20:00:00.000Z")))
 
-    const result = await syncLog(remote.store, log(entry("2026-03-02T20:00:00.000Z")))
+    const result = await syncLog(remote.store, log(entry("2026-03-02T20:00:00.000Z")), UEBUNGS_LOG)
 
     expect(result.ok).toBe(true)
     const days = remote.current()!.results.map((r) => r.at)
@@ -97,7 +97,7 @@ describe("syncLog", () => {
   })
 
   it("reports a failure instead of throwing", async () => {
-    const broken: RemoteStore = {
+    const broken: RemoteStore<PracticeLog> = {
       async read() {
         throw new Error("Token ungültig")
       },
@@ -105,7 +105,7 @@ describe("syncLog", () => {
         throw new Error("nie erreicht")
       },
     }
-    const result = await syncLog(broken, log())
+    const result = await syncLog(broken, log(), UEBUNGS_LOG)
     expect(result.ok).toBe(false)
     expect(result.ok === false && result.reason).toContain("Token")
   })
@@ -113,7 +113,7 @@ describe("syncLog", () => {
   it("does not retry forever", async () => {
     // Eine Gegenseite, die immer kollidiert, darf nicht in eine Schleife führen.
     let reads = 0
-    const stubborn: RemoteStore = {
+    const stubborn: RemoteStore<PracticeLog> = {
       async read() {
         reads += 1
         return { log: log(), sha: `sha-${reads}` }
@@ -122,7 +122,7 @@ describe("syncLog", () => {
         throw new ConflictError()
       },
     }
-    const result = await syncLog(stubborn, log(entry("2026-03-01T20:00:00.000Z")))
+    const result = await syncLog(stubborn, log(entry("2026-03-01T20:00:00.000Z")), UEBUNGS_LOG)
     expect(result.ok).toBe(false)
     expect(reads).toBeLessThanOrEqual(2)
   })

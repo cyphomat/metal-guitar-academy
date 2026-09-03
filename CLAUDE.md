@@ -48,6 +48,8 @@ Verschiedenes.
 | `lib/storage/practice-log.ts` | localStorage, einziger Zugriffspunkt aufs Log |
 | `lib/storage/profile.ts` | localStorage, einziger Zugriffspunkt aufs Profil |
 | `lib/sync/store.ts` | Abgleich-Logik, unabhängig von GitHub — deshalb testbar |
+| `lib/theory/merge.ts` | Antwort-Logs verschmelzen — dieselbe Bauart wie der Übungs-Log |
+| `lib/backup.ts` | Die Sicherungsdatei: beide Logs in einem Dokument |
 | `lib/sync/github.ts` | GitHub-API als Ablageort, einziger Netz-Zugriff |
 | `components/session/*` | UI der Session |
 | `lib/theory/fsrs.ts` | FSRS-6, portiert aus der Referenz. Rein, gegengeprüft. |
@@ -101,6 +103,16 @@ Komponente.
   Rechnung fällt in den Tests auf. Und was die Erklärungen an Tönen und
   Abständen behaupten, prüft `__tests__/cards.test.ts` nach — Übungsmaterial,
   das lügt, ist schlimmer als keines.
+- **Zwei Logs, zwei Dateien im Datenrepo.** `uebungen.json` und
+  `theorie.json` liegen getrennt, weil ein Gerät mit älterem Stand ein
+  unbekanntes Feld beim Einlesen abstreift und beim nächsten Abgleich
+  wegschriebe. Die *Sicherungsdatei* ist dagegen eine — dort ist ein
+  abgestreiftes Feld eine einmalige, sichtbare Handlung, und zwei Downloads
+  wären Zumutung.
+- **Die Konfliktbehandlung existiert einmal.** `syncLog` ist über die
+  Log-Form parametrisiert (`LogShape`), nicht kopiert. Das ist die heikelste
+  Stelle der App — zwei Fassungen davon wären zwei Gelegenheiten, Übung zu
+  verlieren.
 - **Die Fragen sitzen zwischen den Blöcken, nicht in ihnen.** Eine Frage hat
   kein Tempo, keine Bewertung und keinen Eintrag im Übungs-Log. Zwei Portionen
   à zwei Fragen, mehr nicht — die Viertelstunde ist das Produkt. Wer keine

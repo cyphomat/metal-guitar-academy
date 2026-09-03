@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="Open the app" src="https://img.shields.io/badge/App-open-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-272%20green-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-286%20green-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-works-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Dependencies" src="https://img.shields.io/badge/Dependencies-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -262,11 +262,12 @@ ordinary websites after seven days without a visit. Home-screen apps are exempt
 Your practice log lives in `localStorage` on the device. No account, no server —
 as long as you set nothing else up, nothing leaves the browser.
 
-Under **Daten** you can pull it out as JSON and put it back in. An import
-**adds rather than replaces**: entries are immutable and carry a drill and a
-timestamp, so the union of both sides is the right answer — two devices that
-practised independently are both right. Before applying, the app shows how much
-of it is actually new.
+Under **Daten** you can pull it out as JSON and put it back in — the practice
+log and the answered knowledge questions in one file. An import **adds rather
+than replaces**: entries are immutable and carry a drill and a timestamp, so the
+union of both sides is the right answer — two devices that practised
+independently are both right. Before applying, the app shows how much of it is
+actually new.
 
 ### Syncing between devices
 
@@ -276,6 +277,11 @@ date — automatically after every session, or by hand.
 
 Neither side wins. On a write conflict it re-reads, merges again and writes once
 more; the same union as on import. A sync with no news produces no commit.
+
+Two files live there: `uebungen.json` and `theorie.json`. Separate for a
+concrete reason — a device on an older build does not know a newer field, strips
+it on read, and would write it away on the next sync. Two files cannot delete
+each other.
 
 What you need: a private repository (say `riffforge-data`) and a
 **fine-grained** token that points at it alone, with *Contents: Read and write*.

@@ -67,7 +67,7 @@ export function SyncPanel({ onChanged }: { onChanged?: () => void }) {
     setLast(lastSynced())
 
     if (!outcome.ok) {
-      setNotice({ tone: "err", text: outcome.reason })
+      setNotice({ tone: "err", text: outcome.reason ?? "Abgleich fehlgeschlagen." })
       return
     }
     setNotice({

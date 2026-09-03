@@ -1,5 +1,6 @@
 "use client"
 
+import { mergeTheoryLogs } from "@/lib/theory/merge"
 import {
   EMPTY_THEORY_LOG,
   theoryLogSchema,
@@ -54,6 +55,16 @@ export function appendAnswers(answers: TheoryAnswer[]): TheoryLog {
   const next: TheoryLog = { ...log, answers: [...log.answers, ...answers] }
   saveTheoryLog(next)
   return next
+}
+
+/**
+ * Übernimmt einen abgeglichenen Log. Vereinigt, nie ersetzt — was auf diesem
+ * Gerät beantwortet wurde, darf ein Abgleich nicht wegräumen.
+ */
+export function importTheoryLog(incoming: TheoryLog): TheoryLog {
+  const merged = mergeTheoryLogs(loadTheoryLog(), incoming)
+  saveTheoryLog(merged)
+  return merged
 }
 
 export function hasStoredTheoryLog(): boolean {

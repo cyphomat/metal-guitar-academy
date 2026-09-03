@@ -1,18 +1,23 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { previewImport, type ImportPreview } from "@/lib/session/merge"
+import { buildBackup, previewBackup, type BackupPreview } from "@/lib/backup"
 import { dayKey, practiceDays, totalMinutes } from "@/lib/session/progress"
 import {
   clearLog,
   exportFilename,
-  exportLog,
   hasStoredLog,
   importLog,
   loadLog,
 } from "@/lib/storage/practice-log"
 import { clearProfile } from "@/lib/storage/profile"
-import { clearTheoryLog, hasStoredTheoryLog } from "@/lib/storage/theory-log"
+import {
+  clearTheoryLog,
+  hasStoredTheoryLog,
+  importTheoryLog,
+  loadTheoryLog,
+} from "@/lib/storage/theory-log"
+import { EMPTY_THEORY_LOG, type TheoryLog } from "@/lib/theory/types"
 import { EMPTY_LOG, type PracticeLog } from "@/lib/session/types"
 import { SyncPanel } from "@/components/session/sync-panel"
 import { UpdatePanel } from "@/components/session/update-panel"
@@ -22,7 +27,8 @@ type Notice = { tone: "ok" | "err"; text: string } | null
 
 export function DataManager() {
   const [log, setLog] = useState<PracticeLog>(EMPTY_LOG)
-  const [pending, setPending] = useState<(ImportPreview & { name: string }) | null>(null)
+  const [theorie, setTheorie] = useState<TheoryLog>(EMPTY_THEORY_LOG)
+  const [pending, setPending] = useState<(BackupPreview & { name: string }) | null>(null)
   const [notice, setNotice] = useState<Notice>(null)
   const [confirmClear, setConfirmClear] = useState(false)
   // Ein Log, der das Schema reisst, zählt null Einträge — der Knopf muss
@@ -32,13 +38,15 @@ export function DataManager() {
 
   useEffect(() => {
     setLog(loadLog())
+    setTheorie(loadTheoryLog())
     setStored(hasStoredLog() || hasStoredTheoryLog())
   }, [])
 
   const days = practiceDays(log)
 
   const download = () => {
-    const blob = new Blob([exportLog()], { type: "application/json" })
+    const inhalt = JSON.stringify(buildBackup(loadLog(), loadTheoryLog()), null, 2)
+    const blob = new Blob([inhalt], { type: "application/json" })
     const url = URL.createObjectURL(blob)
     const link = document.createElement("a")
     link.href = url
@@ -46,7 +54,15 @@ export function DataManager() {
     link.click()
     // Erst freigeben, wenn der Browser den Download übernommen hat.
     setTimeout(() => URL.revokeObjectURL(url), 1000)
-    setNotice({ tone: "ok", text: `${log.results.length} Einträge gesichert.` })
+    const eintraege = `${log.results.length} ${log.results.length === 1 ? "Eintrag" : "Einträge"}`
+    const antworten = `${theorie.answers.length} ${theorie.answers.length === 1 ? "Antwort" : "Antworten"}`
+    setNotice({
+      tone: "ok",
+      text:
+        theorie.answers.length > 0
+          ? `${eintraege} und ${antworten} gesichert.`
+          : `${eintraege} gesichert.`,
+    })
   }
 
   const choose = async (file: File | undefined) => {
@@ -54,7 +70,7 @@ export function DataManager() {
     setPending(null)
     if (!file) return
 
-    const result = previewImport(await file.text(), log)
+    const result = previewBackup(await file.text(), log, theorie)
     if (!result.ok) {
       setNotice({ tone: "err", text: result.reason })
       return
@@ -65,13 +81,19 @@ export function DataManager() {
   const apply = () => {
     if (!pending) return
     setLog(importLog(pending.merged))
+    setTheorie(importTheoryLog(pending.mergedTheory))
     setStored(true)
+    const teile = [
+      pending.added > 0 && `${pending.added} ${pending.added === 1 ? "Eintrag" : "Einträge"}`,
+      pending.addedTheory > 0 &&
+        `${pending.addedTheory} ${pending.addedTheory === 1 ? "Antwort" : "Antworten"}`,
+    ].filter(Boolean)
     setNotice({
       tone: "ok",
       text:
-        pending.added === 0
+        teile.length === 0
           ? "Nichts Neues dabei — der Log war schon vollständig."
-          : `${pending.added} ${pending.added === 1 ? "Eintrag" : "Einträge"} übernommen.`,
+          : `${teile.join(" und ")} übernommen.`,
     })
     setPending(null)
     if (fileRef.current) fileRef.current.value = ""
@@ -148,6 +170,13 @@ export function DataManager() {
               davon <b className="text-akzent">{pending.added} neu</b>. Danach stehen{" "}
               {pending.merged.results.length} im Log.
             </p>
+            {pending.incomingTheory > 0 && (
+              <p className="mt-1 text-[14px] text-muted">
+                Dazu {pending.incomingTheory}{" "}
+                {pending.incomingTheory === 1 ? "Antwort" : "Antworten"} auf Wissensfragen, davon{" "}
+                <b className="text-akzent">{pending.addedTheory} neu</b>.
+              </p>
+            )}
             <div className="mt-3 flex gap-[9px]">
               <button onClick={apply} className="btn flex-1">
                 Übernehmen
@@ -184,6 +213,7 @@ export function DataManager() {
                 clearLog()
                 clearProfile()
                 clearTheoryLog()
+                setTheorie(EMPTY_THEORY_LOG)
                 setLog(EMPTY_LOG)
                 setStored(false)
                 setConfirmClear(false)

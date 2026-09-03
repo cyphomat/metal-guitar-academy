@@ -1,17 +1,25 @@
+import type { ZodType } from "zod"
 import { practiceLogSchema, type PracticeLog } from "@/lib/session/types"
+import { theoryLogSchema, type TheoryLog } from "@/lib/theory/types"
 import { ConflictError, type RemoteStore } from "./store"
 import type { SyncSettings } from "./settings"
 
 const API = "https://api.github.com"
 
 /**
- * Der Log liegt als eine Datei im Wurzelverzeichnis.
+ * Die Logs liegen als je eine Datei im Wurzelverzeichnis.
  *
  * Bewusst nicht in einem Ordner namens `log` — Inhaltsblocker, Netzwerkfilter
  * und Firmen-WLANs verwerfen Adressen mit diesem Wegstück regelmässig, weil
- * dort sonst Telemetrie abfliesst. Der Name ist deshalb neutral.
+ * dort sonst Telemetrie abfliesst. Die Namen sind deshalb neutral.
+ *
+ * Und bewusst **zwei** Dateien statt einer mit zwei Feldern: ein Gerät mit
+ * älterem Stand kennt das jüngere Feld nicht, streift es beim Einlesen ab und
+ * schriebe es beim nächsten Abgleich weg. Getrennte Dateien können sich nicht
+ * gegenseitig löschen.
  */
 export const LOG_PATH = "uebungen.json"
+export const THEORY_PATH = "theorie.json"
 
 function encodeBase64(text: string): string {
   const bytes = new TextEncoder().encode(text)
@@ -97,8 +105,25 @@ export async function repoIsPublic(settings: SyncSettings): Promise<boolean | nu
   }
 }
 
-export function githubStore(settings: SyncSettings): RemoteStore {
-  const base = repoPath(settings, `/contents/${LOG_PATH}`)
+/**
+ * Ein Ablageort im Datenrepo: eine Datei, ein Schema.
+ *
+ * Das Schema ist Pflicht, nicht Zierde — was von der Gegenseite kommt, ist
+ * Fremdinhalt, und über den lokalen Stand gelegt wird nur, was passt.
+ */
+/** Wie viele Einträge in einem Log stecken — nur für die Commit-Meldung. */
+function eintraege(log: unknown): number {
+  if (typeof log !== "object" || log === null) return 0
+  const daten = log as { results?: unknown[]; answers?: unknown[] }
+  return (daten.results ?? daten.answers ?? []).length
+}
+
+export function githubStore<T>(
+  settings: SyncSettings,
+  path: string,
+  schema: ZodType<T>,
+): RemoteStore<T> {
+  const base = repoPath(settings, `/contents/${path}`)
 
   return {
     async read() {
@@ -111,18 +136,18 @@ export function githubStore(settings: SyncSettings): RemoteStore {
       const data = await response.json()
       if (!data?.content) return null
 
-      const parsed = practiceLogSchema.safeParse(JSON.parse(decodeBase64(data.content)))
+      const parsed = schema.safeParse(JSON.parse(decodeBase64(data.content)))
       if (!parsed.success) {
         // Lieber abbrechen als eine kaputte Gegenseite über den lokalen Stand
         // legen. Die Datei bleibt liegen und kann von Hand angesehen werden.
-        throw new Error(`${LOG_PATH} im Datenrepo passt nicht zum Format.`)
+        throw new Error(`${path} im Datenrepo passt nicht zum Format.`)
       }
       return { log: parsed.data, sha: data.sha as string }
     },
 
-    async write(log: PracticeLog, sha?: string) {
+    async write(log: T, sha?: string) {
       const body: Record<string, unknown> = {
-        message: `Übungs-Log: ${log.results.length} Einträge`,
+        message: `${path}: ${eintraege(log)} Einträge`,
         content: encodeBase64(`${JSON.stringify(log, null, 2)}\n`),
         branch: "main",
       }
@@ -139,4 +164,14 @@ export function githubStore(settings: SyncSettings): RemoteStore {
       return { sha: data.content.sha as string }
     },
   }
+}
+
+/** Der Übungs-Log im Datenrepo. */
+export function practiceStore(settings: SyncSettings): RemoteStore<PracticeLog> {
+  return githubStore(settings, LOG_PATH, practiceLogSchema)
+}
+
+/** Die Wissens-Antworten im Datenrepo. */
+export function theoryStore(settings: SyncSettings): RemoteStore<TheoryLog> {
+  return githubStore(settings, THEORY_PATH, theoryLogSchema)
 }

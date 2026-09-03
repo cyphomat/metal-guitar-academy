@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="App öffnen" src="https://img.shields.io/badge/App-öffnen-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-272%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-286%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-läuft-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Abhängigkeiten" src="https://img.shields.io/badge/Abhängigkeiten-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -264,11 +264,12 @@ sie wirklich installierst.
 Der Übungsfortschritt liegt in `localStorage` auf dem Gerät. Kein Konto, kein
 Server — solange du nichts anderes einrichtest, verlässt nichts den Browser.
 
-Unter **Daten** holst du ihn als JSON heraus und wieder herein. Ein Import
-**legt dazu, statt zu ersetzen**: Einträge sind unveränderlich und tragen Drill
-und Zeitstempel, also ist die Vereinigung beider Seiten die richtige Antwort —
-zwei Geräte, die unabhängig geübt haben, haben beide recht. Vor dem Übernehmen
-zeigt die App, wie viel davon wirklich neu ist.
+Unter **Daten** holst du ihn als JSON heraus und wieder herein — Übungs-Log und
+beantwortete Wissensfragen in einer Datei. Ein Import **legt dazu, statt zu
+ersetzen**: Einträge sind unveränderlich und tragen Drill und Zeitstempel, also
+ist die Vereinigung beider Seiten die richtige Antwort — zwei Geräte, die
+unabhängig geübt haben, haben beide recht. Vor dem Übernehmen zeigt die App,
+wie viel davon wirklich neu ist.
 
 ### Abgleich zwischen Geräten
 
@@ -279,6 +280,11 @@ gegenseitig nach — nach jeder Session automatisch, oder von Hand.
 Es gewinnt dabei keine Seite. Beim Schreibkonflikt wird neu gelesen, erneut
 verschmolzen und noch einmal geschrieben; dieselbe Vereinigung wie beim Import.
 Ein Abgleich ohne Neuigkeiten erzeugt keinen Commit.
+
+Zwei Dateien liegen dort: `uebungen.json` und `theorie.json`. Getrennt aus
+einem konkreten Grund — ein Gerät mit älterem Stand kennt ein neueres Feld
+nicht, streift es beim Einlesen ab und schriebe es beim nächsten Abgleich weg.
+Zwei Dateien können sich nicht gegenseitig löschen.
 
 Was du brauchst: ein privates Repo (etwa `riffforge-data`) und einen
 **fein granulierten** Token, der ausschliesslich darauf zeigt, mit

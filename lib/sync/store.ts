@@ -1,17 +1,45 @@
 import { mergeLogs } from "@/lib/session/merge"
-import type { PracticeLog } from "@/lib/session/types"
+import { EMPTY_LOG, type PracticeLog } from "@/lib/session/types"
+import { mergeTheoryLogs } from "@/lib/theory/merge"
+import { EMPTY_THEORY_LOG, type TheoryLog } from "@/lib/theory/types"
 
 /**
- * Ein Ablageort für den Übungs-Log, unabhängig davon, wer ihn führt.
+ * Ein Ablageort für einen Log, unabhängig davon, wer ihn führt.
  *
  * Die Trennung existiert, damit der Konfliktfall geprüft werden kann, ohne
  * GitHub anzufassen — genau dort geht sonst Übung verloren.
  */
-export interface RemoteStore {
+export interface RemoteStore<T> {
   /** null heisst: dort liegt noch nichts. */
-  read(): Promise<{ log: PracticeLog; sha: string } | null>
+  read(): Promise<{ log: T; sha: string } | null>
   /** `sha` weglassen heisst "neu anlegen". Wirft ConflictError bei veraltetem sha. */
-  write(log: PracticeLog, sha?: string): Promise<{ sha: string }>
+  write(log: T, sha?: string): Promise<{ sha: string }>
+}
+
+/**
+ * Was ein Log können muss, damit `syncLog` ihn abgleichen kann.
+ *
+ * Zwei Logs, dieselbe Bauart: append-only, unveränderliche Einträge, über
+ * Kennung plus Zeitstempel identifiziert. Die Konfliktbehandlung ist die
+ * heikelste Stelle der ganzen App — sie existiert deshalb genau einmal, und
+ * beide Logs reichen hier nur ihre Eigenheiten herein.
+ */
+export interface LogShape<T> {
+  leer: T
+  merge(a: T, b: T): T
+  anzahl(log: T): number
+}
+
+export const UEBUNGS_LOG: LogShape<PracticeLog> = {
+  leer: EMPTY_LOG,
+  merge: mergeLogs,
+  anzahl: (log) => log.results.length,
+}
+
+export const THEORIE_LOG: LogShape<TheoryLog> = {
+  leer: EMPTY_THEORY_LOG,
+  merge: mergeTheoryLogs,
+  anzahl: (log) => log.answers.length,
 }
 
 /** Ein anderes Gerät war schneller: neu lesen, verschmelzen, nochmal schreiben. */
@@ -22,14 +50,14 @@ export class ConflictError extends Error {
   }
 }
 
-export type SyncOutcome =
+export type SyncOutcome<T = PracticeLog> =
   | {
       ok: true
       /** Einträge, die von der Gegenseite dazugekommen sind. */
       pulled: number
       /** Einträge, die dieses Gerät hochgeschoben hat. */
       pushed: number
-      log: PracticeLog
+      log: T
     }
   | { ok: false; reason: string }
 
@@ -43,13 +71,17 @@ export type SyncOutcome =
  * Schreibt nur, wenn die Gegenseite tatsächlich etwas nicht hat. Ein Abgleich
  * ohne Neuigkeiten soll keinen Commit erzeugen.
  */
-export async function syncLog(store: RemoteStore, local: PracticeLog): Promise<SyncOutcome> {
+export async function syncLog<T>(
+  store: RemoteStore<T>,
+  local: T,
+  shape: LogShape<T>,
+): Promise<SyncOutcome<T>> {
   try {
     const remote = await store.read()
-    const merged = mergeLogs(remote?.log ?? { version: 1, results: [] }, local)
+    const merged = shape.merge(remote?.log ?? shape.leer, local)
 
-    const pulled = merged.results.length - local.results.length
-    const pushed = merged.results.length - (remote?.log.results.length ?? 0)
+    const pulled = shape.anzahl(merged) - shape.anzahl(local)
+    const pushed = shape.anzahl(merged) - (remote ? shape.anzahl(remote.log) : 0)
 
     if (pushed === 0) {
       // Die Gegenseite ist bereits vollständig — nichts zu schreiben.
@@ -64,13 +96,13 @@ export async function syncLog(store: RemoteStore, local: PracticeLog): Promise<S
       // Genau ein zweiter Versuch. Wer beim Konflikt neu liest und erneut
       // verschmilzt, verliert nichts; wer es endlos versucht, hängt.
       const fresh = await store.read()
-      const combined = mergeLogs(fresh?.log ?? { version: 1, results: [] }, merged)
+      const combined = shape.merge(fresh?.log ?? shape.leer, merged)
       await store.write(combined, fresh?.sha)
 
       return {
         ok: true,
-        pulled: combined.results.length - local.results.length,
-        pushed: combined.results.length - (fresh?.log.results.length ?? 0),
+        pulled: shape.anzahl(combined) - shape.anzahl(local),
+        pushed: shape.anzahl(combined) - (fresh ? shape.anzahl(fresh.log) : 0),
         log: combined,
       }
     }
