@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { cardById, cardsOfStufe, THEORY_CARDS } from "@/lib/theory/cards"
 import { intervalBetween, noteAt } from "@/lib/theory/fretboard"
+import { beatSeconds, figurById, toleranceSeconds } from "@/lib/theory/rhythm"
 import { STUFEN, type Griff } from "@/lib/theory/types"
 
 const g = (saite: number, bund: number) => ({ saite, bund }) as Griff
@@ -82,6 +83,36 @@ describe("Jede Karte", () => {
  * wird nachgerechnet — ein falscher Bund im Fliesstext fällt sonst niemandem
  * auf, und Übungsmaterial, das lügt, ist schlimmer als keines.
  */
+describe("Gespielte Fragen", () => {
+  const gespielt = THEORY_CARDS.filter((card) => card.frage.art === "gespielt")
+
+  it("gibt es", () => {
+    expect(gespielt.length).toBeGreaterThan(0)
+  })
+
+  it.each(gespielt.map((card) => [card.id, card] as const))("%s nennt eine echte Figur", (_id, card) => {
+    const rhythmus = card.frage.rhythmus
+    expect(rhythmus).toBeDefined()
+    expect(figurById(rhythmus!.figurId), rhythmus!.figurId).toBeDefined()
+    expect(rhythmus!.bpm).toBeGreaterThanOrEqual(40)
+    expect(rhythmus!.bpm).toBeLessThanOrEqual(200)
+    expect(rhythmus!.takte).toBeGreaterThan(0)
+  })
+
+  it("bleibt bei einem Tempo, das die Figur noch trennbar macht", () => {
+    // Die Toleranz darf nicht so gross werden, dass eine Nachbarnote
+    // mitgezählt wird — sonst gilt jede Figur als jede andere.
+    for (const card of gespielt) {
+      const figur = figurById(card.frage.rhythmus!.figurId)!
+      const jeSchlag = beatSeconds(card.frage.rhythmus!.bpm)
+      const engster = Math.min(
+        ...figur.offsets.slice(1).map((offset, i) => (offset - figur.offsets[i]) * jeSchlag),
+      )
+      expect(toleranceSeconds(figur, jeSchlag), card.id).toBeLessThan(engster / 2)
+    }
+  })
+})
+
 describe("Fragen nach der Schreibweise", () => {
   it("werden wörtlich verglichen, sonst beantwortet die Frage sich selbst", () => {
     // "Wie heisst dieser Ton in einer Tabulatur" liesse sich mit dem H aus der

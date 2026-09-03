@@ -36,6 +36,12 @@ export type FrageArt =
   | "eingabe"
   /** Eine aus mehreren, wo Tippen Schikane wäre. */
   | "auswahl"
+  /**
+   * Gespielt und gemessen. Die Antwort ist ein Rhythmus, das Mikrofon hört
+   * ihn, und die Bewertung ist gemessen statt geraten — das kann kein
+   * Karteikartenprogramm.
+   */
+  | "gespielt"
 
 /** Eine Stelle auf dem Hals. Saite 1 ist die hohe e-Saite, 6 die tiefe E. */
 export interface Griff {
@@ -68,6 +74,8 @@ export interface Frage {
    * Ton liest.
    */
   woertlich?: boolean
+  /** Nur bei "gespielt": welche Figur, wie schnell, wie lange. */
+  rhythmus?: { figurId: string; bpm: number; takte: number }
 }
 
 export interface TheoryCard {

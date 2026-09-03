@@ -57,6 +57,7 @@ Verschiedenes.
 | `lib/theory/progress.ts` | Kartenstand aus dem Antwort-Log, Auswahl fürs Abfragen |
 | `lib/theory/fretboard.ts` | Griffbrett als Rechnung: Töne, Intervalle, Lagen |
 | `lib/theory/cards.ts` | Der Wissenskatalog (reine Daten) |
+| `lib/theory/rhythm.ts` | Rhythmusfiguren als Zeitpunkte, und ihre Bewertung |
 | `lib/storage/theory-log.ts` | localStorage, einziger Zugriffspunkt auf die Antworten |
 | `components/theory/*` | Griffbrett, Fragekarte, Übersicht |
 | `lib/update/version.ts` | Bau-Stempel vergleichen: eigene Fassung, Server, Original |
@@ -113,6 +114,12 @@ Komponente.
   Log-Form parametrisiert (`LogShape`), nicht kopiert. Das ist die heikelste
   Stelle der App — zwei Fassungen davon wären zwei Gelegenheiten, Übung zu
   verlieren.
+- **Eine gespielte Figur braucht einen Einzähler.** Den Versatz aus der Figur
+  selbst zu schätzen geht nicht: sie ist ungleichmässig, und eine Verzögerung
+  in der Grössenordnung ihrer Abstände sieht aus wie eine andere Figur —
+  nachgemessen passt ein umgekehrter Gallop um 125 ms verschoben zu über
+  achtzig Prozent auf einen Gallop. Auf gleichmässigen Schlägen ist der
+  Versatz dagegen eindeutig. Deshalb zwei Takte zählen, dann spielen.
 - **Die Fragen sitzen zwischen den Blöcken, nicht in ihnen.** Eine Frage hat
   kein Tempo, keine Bewertung und keinen Eintrag im Übungs-Log. Zwei Portionen
   à zwei Fragen, mehr nicht — die Viertelstunde ist das Produkt. Wer keine

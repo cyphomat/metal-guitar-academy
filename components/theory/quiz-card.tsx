@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import { Fretboard } from "@/components/theory/fretboard"
+import { RhythmQuiz } from "@/components/theory/rhythm-quiz"
+import { figurById, type FigurBewertung } from "@/lib/theory/rhythm"
 import { GRADES, type Grade } from "@/lib/theory/fsrs"
 import { noteAt, parseTon, sameGriff, verwechselungshinweis } from "@/lib/theory/fretboard"
 import type { Griff, TheoryCard } from "@/lib/theory/types"
@@ -64,10 +66,16 @@ export function QuizCard({ card, onAnswer, zaehler }: QuizCardProps) {
   const [griff, setGriff] = useState<Griff | null>(null)
   const [text, setText] = useState("")
   const [aufgeloest, setAufgeloest] = useState(false)
+  const [gespielt, setGespielt] = useState<FigurBewertung | null>(null)
 
   const antwort: Griff | string | null = card.frage.art === "griffbrett" ? griff : text
-  const richtig = istRichtig(card, antwort)
-  const bereit = card.frage.art === "griffbrett" ? griff !== null : text.trim() !== ""
+  const richtig = card.frage.art === "gespielt" ? (gespielt?.richtig ?? false) : istRichtig(card, antwort)
+  const bereit =
+    card.frage.art === "griffbrett"
+      ? griff !== null
+      : card.frage.art === "gespielt"
+        ? gespielt !== null
+        : text.trim() !== ""
 
   const loesungen = card.frage.richtig
   const hinweis =
@@ -90,6 +98,20 @@ export function QuizCard({ card, onAnswer, zaehler }: QuizCardProps) {
           gewaehlt={griff}
           loesung={aufgeloest ? (loesungen as Griff[]) : undefined}
           onPick={aufgeloest ? null : (gewaehlt) => setGriff(gewaehlt)}
+        />
+      )}
+
+      {card.frage.art === "gespielt" && card.frage.rhythmus && (
+        <RhythmQuiz
+          figur={figurById(card.frage.rhythmus.figurId)!}
+          bpm={card.frage.rhythmus.bpm}
+          takte={card.frage.rhythmus.takte}
+          onFertig={(ergebnis) => {
+            setGespielt(ergebnis)
+            // Gemessen ist aufgelöst: eine zweite Bestätigung wäre nur ein
+            // Klick zwischen Ergebnis und Erklärung.
+            setAufgeloest(true)
+          }}
         />
       )}
 
@@ -138,9 +160,18 @@ export function QuizCard({ card, onAnswer, zaehler }: QuizCardProps) {
       )}
 
       {!aufgeloest ? (
-        <button onClick={() => setAufgeloest(true)} disabled={!bereit} className="btn w-full">
-          Auflösen
-        </button>
+        card.frage.art === "gespielt" ? (
+          // Ohne Mikrofon — oder ohne Gitarre in der Hand — soll die Karte
+          // trotzdem durchgehen. Blockieren darf hier nichts; die Erklärung
+          // ist auch ohne Messung etwas wert.
+          <button onClick={() => setAufgeloest(true)} className="btn btn-ghost btn-small w-full">
+            Ohne Mikrofon: Auflösung zeigen
+          </button>
+        ) : (
+          <button onClick={() => setAufgeloest(true)} disabled={!bereit} className="btn w-full">
+            Auflösen
+          </button>
+        )
       ) : (
         <div className="space-y-4">
           <div
@@ -149,7 +180,14 @@ export function QuizCard({ card, onAnswer, zaehler }: QuizCardProps) {
             <p className={`kicker ${richtig ? "text-gruen" : "text-rot"}`}>
               {richtig ? "Sitzt" : "Daneben"}
             </p>
-            {!richtig && (
+            {!richtig && card.frage.art === "gespielt" && (
+              <p className="mt-1 text-[15px] text-fg">
+                {gespielt
+                  ? "Nicht genug Anschläge sassen auf der Figur. Die Verzögerung der Signalkette ist dabei schon herausgerechnet — es liegt an der Figur, nicht an der Technik."
+                  : "Nicht gespielt. Die Auflösung steht unten; bewerte selbst, wie sicher du dir bist."}
+              </p>
+            )}
+            {!richtig && card.frage.art !== "gespielt" && (
               <p className="mt-1 text-[15px] text-fg">
                 Richtig ist{" "}
                 <b className="font-mono">

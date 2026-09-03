@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="App öffnen" src="https://img.shields.io/badge/App-öffnen-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-355%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-375%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-läuft-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Abhängigkeiten" src="https://img.shields.io/badge/Abhängigkeiten-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -167,7 +167,7 @@ ein zweiter Bildschirm zum Lesen ist. Deshalb ist hier die **Frage der
 Normalzustand** und der Text das, was danach kommt: Abfragen behält sich
 messbar besser als Nachlesen, und für Musik ist das kaum umgesetzt.
 
-Zweiundsechzig Begriffe in sechs Stufen — vom Halbton bis zum Riff-Bau. Jeder
+Vierundsechzig Begriffe in sechs Stufen — vom Halbton bis zum Riff-Bau. Jeder
 mit zwei, drei Sätzen und einer Frage:
 
 - **Auf dem Griffbrett zeigen**, wo das geht. Antworten produzieren bringt mehr
@@ -201,6 +201,22 @@ aus.
 Die erste Portion **grundiert**: sie fragt zu der Technik, die im nächsten Block
 drankommt. Das ist der Bezug zum Gespielten — Theorie ohne ihn bleibt ein
 eigenes Hobby.
+
+### Eine Frage, die man spielt
+
+Zwei Karten fragen keinen Begriff ab, sondern eine Figur: **Spiel zwei Takte
+Gallop.** Das Mikrofon hört mit, und die Bewertung ist gemessen statt geraten —
+das kann kein Karteikartenprogramm, und es fällt hier heraus, weil die
+Anschlagserkennung ohnehin da ist.
+
+Zuerst zwei Takte Einzähler mit je einem Ton auf den Schlag. Daraus kommt die
+Verzögerung der Signalkette; erst danach zählt die Figur. Ohne diesen Anker
+ginge es nicht: eine Figur ist ungleichmässig, und eine Verzögerung in der
+Grössenordnung ihrer Abstände sieht aus wie eine *andere* Figur — nachgemessen
+passt ein umgekehrter Gallop um 125 ms verschoben zu über achtzig Prozent auf
+einen Gallop. Auf gleichmässigen Schlägen ist der Versatz dagegen eindeutig.
+
+Ohne Mikrofon blockiert nichts: die Auflösung lässt sich auch so zeigen.
 
 ## Was das Mikrofon hört
 

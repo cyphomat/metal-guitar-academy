@@ -768,6 +768,34 @@ export const THEORY_CARDS: TheoryCard[] = [
     technique: "gallop",
   },
   {
+    id: "r-gallop-gespielt",
+    stufe: 5,
+    begriff: "Gallop spielen",
+    erklaerung:
+      "Gewusst ist noch nicht gespielt. Die Figur sitzt erst, wenn die zwei kurzen Töne wirklich kurz sind — im Kopf ist der Unterschied zu geraden Achteln klar, unter den Fingern verwischt er. Das Mikrofon misst genau das und rechnet die Verzögerung der Signalkette vorher heraus.",
+    frage: {
+      art: "gespielt",
+      text: "Spiel zwei Takte Gallop.",
+      richtig: ["gallop"],
+      rhythmus: { figurId: "gallop", bpm: 90, takte: 2 },
+    },
+    technique: "gallop",
+  },
+  {
+    id: "r-gallop-umgekehrt-gespielt",
+    stufe: 5,
+    begriff: "Umgekehrten Gallop spielen",
+    erklaerung:
+      "Dieselben drei Werte in anderer Reihenfolge — und genau deshalb der beste Prüfstein: wer den Unterschied nur denkt, spielt hier den normalen Gallop. Gemessen wird gegen die Figur, nicht gegen das Metronomraster.",
+    frage: {
+      art: "gespielt",
+      text: "Spiel zwei Takte umgekehrten Gallop.",
+      richtig: ["gallop-umgekehrt"],
+      rhythmus: { figurId: "gallop-umgekehrt", bpm: 90, takte: 2 },
+    },
+    technique: "gallop",
+  },
+  {
     id: "r-synkope",
     stufe: 5,
     begriff: "Synkope",

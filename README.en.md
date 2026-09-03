@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="Open the app" src="https://img.shields.io/badge/App-open-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-355%20green-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-375%20green-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-works-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Dependencies" src="https://img.shields.io/badge/Dependencies-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -171,7 +171,7 @@ second screen to read. So here the **question is the normal state** and the text
 is what comes after it: retrieval is measurably better for retention than
 re-reading, and in music it is barely used.
 
-Sixty-two concepts across six levels — from the semitone to how riffs are put
+Sixty-four concepts across six levels — from the semitone to how riffs are put
 together. Each with two or three sentences and a question:
 
 - **Answer on the fretboard** where that is possible. Producing an answer beats
@@ -202,6 +202,21 @@ there, and the cards stay due. If nothing is due, the batch is skipped silently.
 The first batch **primes**: it asks about the technique that comes up in the
 next block. That is the link to what is being played — theory without it stays a
 hobby of its own.
+
+### A question you play
+
+Two cards do not ask for a term but for a figure: **play two bars of gallop.**
+The microphone listens, and the verdict is measured rather than guessed — no
+flashcard program can do that, and it falls out here because the onset detection
+is already there.
+
+Two bars of count-in first, one note per beat. That is where the signal chain's
+delay is measured; only then does the figure count. Without that anchor it would
+not work: a figure is uneven, and a delay in the order of its own spacing looks
+like a *different* figure — measured, a reverse gallop shifted by 125 ms fits a
+gallop to over eighty percent. On evenly spaced beats the delay is unambiguous.
+
+Without a microphone nothing is blocked: the explanation can be shown anyway.
 
 ## What the microphone hears
 
