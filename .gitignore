@@ -25,3 +25,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Bau-Stempel, erzeugt von tools/version.mjs
+/public/version.json

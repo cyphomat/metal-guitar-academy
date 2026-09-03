@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="App öffnen" src="https://img.shields.io/badge/App-öffnen-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-128%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-143%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-läuft-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Abhängigkeiten" src="https://img.shields.io/badge/Abhängigkeiten-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -239,6 +239,24 @@ Seiten einmal eine Lücke hat.
 Steht das Datenrepo auf öffentlich, sagt die App das deutlich: sie funktioniert
 dann genauso, nur liest jeder mit.
 
+### Fassung und Updates
+
+Unter *Daten* steht, welcher Stand gerade läuft — Commit und Datum — und ob auf
+dem Server ein neuerer liegt. Das ist auf einem Handy kein Luxus: eine
+installierte PWA behält ihre Hülle im Speicher, und ohne diesen Vergleich merkt
+niemand, dass er seit Wochen eine alte Fassung startet. **Jetzt aktualisieren**
+leert den Offline-Speicher und lädt neu; Übungs-Log, Profil und Abgleich bleiben
+unberührt.
+
+Der Vergleich braucht kein Netz nach draussen: der Bau-Stempel liegt als
+`version.json` neben der App, und derselbe Stempel steckt im Bündel. Weichen
+sie ab, hält der Browser eine alte Fassung fest.
+
+**Wenn dies ein Fork ist**, sagt die App das — und bietet an, beim Original
+nachzusehen, wie viel sich dort seitdem getan hat. Diese eine Anfrage geht an
+`api.github.com` und läuft nur auf Knopfdruck; die Auslieferung des Originals
+stellt sie nie.
+
 ### Löschen heisst löschen
 
 **Alles löschen** unter *Daten* räumt den Log, eine eventuell beiseitegelegte
@@ -250,9 +268,10 @@ Browser-Speicher.
 
 Keine Analyse-Dienste, keine Schriften von fremden Servern, keine Einbettungen —
 nachgemessen, nicht behauptet: beim Laden aller Seiten und einer vollständigen
-Session geht **keine einzige Anfrage** an einen anderen Host. Der einzige
-mögliche Netzzugriff ist `api.github.com`, und den gibt es nur, wenn du den
-Abgleich selbst eingerichtet hast.
+Session geht **keine einzige Anfrage** an einen anderen Host. `api.github.com`
+ist die einzige fremde Adresse überhaupt, und auch die nur zweimal: beim
+Abgleich, wenn du ihn eingerichtet hast, und auf Knopfdruck beim Blick zum
+Original — Letzteres nur in einem Fork.
 
 Das Mikrofon verlässt den Rechner nicht: der Audio-Thread meldet ausschliesslich
 **Zeitstempel und einen Pegelwert** nach vorne, kein Ton wird aufgenommen,

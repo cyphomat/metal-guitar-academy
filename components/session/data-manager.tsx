@@ -14,6 +14,7 @@ import {
 import { clearProfile } from "@/lib/storage/profile"
 import { EMPTY_LOG, type PracticeLog } from "@/lib/session/types"
 import { SyncPanel } from "@/components/session/sync-panel"
+import { UpdatePanel } from "@/components/session/update-panel"
 import { MdFileDownload, MdFileUpload } from "react-icons/md"
 
 type Notice = { tone: "ok" | "err"; text: string } | null
@@ -101,6 +102,8 @@ export function DataManager() {
           </p>
         )}
       </section>
+
+      <UpdatePanel />
 
       </div>
 

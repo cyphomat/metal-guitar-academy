@@ -47,6 +47,9 @@ Verschiedenes.
 | `lib/sync/store.ts` | Abgleich-Logik, unabhängig von GitHub — deshalb testbar |
 | `lib/sync/github.ts` | GitHub-API als Ablageort, einziger Netz-Zugriff |
 | `components/session/*` | UI der Session |
+| `lib/update/version.ts` | Bau-Stempel vergleichen: eigene Fassung, Server, Original |
+| `lib/update/check.ts` | Holt Stempel und Original-Commits, leert den Cache |
+| `tools/version.mjs` | Schreibt den Bau-Stempel — läuft vor jedem Build |
 | `lib/base-path.ts` | Präfix für Laufzeit-Pfade unter GitHub Pages |
 | `public/sw.js`, `public/manifest.json` | PWA: offline und installierbar |
 
@@ -82,11 +85,19 @@ Komponente.
 - **Beim Abgleich gewinnt keine Seite.** Konflikt heisst: neu lesen, erneut
   verschmelzen, noch einmal schreiben — und dann aufhören. Genau ein zweiter
   Versuch, sonst hängt es.
+- **Der Bau-Stempel wird nicht von Hand gepflegt.** `tools/version.mjs`
+  schreibt ihn zweimal aus einer Quelle: als `public/version.json` (was auf dem
+  Server liegt) und als `NEXT_PUBLIC_*` im Bündel (was gerade läuft). Der
+  Vergleich der beiden *ist* die Update-Erkennung — wer eines von beiden
+  anders befüllt, macht sie blind. Der Service Worker muss `version.json`
+  deshalb ungecacht durchlassen.
 - **Löschen heisst löschen.** Was die App speichert, muss der Löschen-Weg auch
   wieder loswerden — Log, beiseitegelegte Kopie und Profil. Ein neuer
   `localStorage`-Schlüssel gehört deshalb in dieselbe Liste wie sein Löschen.
-- **Kein dritter Host.** Ausser `api.github.com` beim eingerichteten Abgleich
-  spricht die App mit niemandem. Schriften liegen lokal (`next/font` lädt sie
+- **Kein dritter Host.** `api.github.com` ist die einzige fremde Adresse, und
+  auch die nur zweimal: beim eingerichteten Abgleich, und auf Knopfdruck beim
+  Blick zum Original — Letzteres ausschliesslich in einem Fork. Sonst spricht
+  die App mit niemandem. Schriften liegen lokal (`next/font` lädt sie
   beim Build), es gibt keine Analyse-Dienste und keine Einbettungen. Die CSP in
   `app/layout.tsx` schreibt das fest: wer einen Host hinzufügt, muss dort
   `connect-src` erweitern — und sich fragen, warum.

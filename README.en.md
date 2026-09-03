@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="Open the app" src="https://img.shields.io/badge/App-open-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-128%20green-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-143%20green-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-works-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Dependencies" src="https://img.shields.io/badge/Dependencies-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -241,6 +241,23 @@ any of those pages ever has a hole.
 If the data repository is public, the app says so clearly: it works exactly the
 same, only everyone can read along.
 
+### Version and updates
+
+Under *Daten* you can see which build is running — commit and date — and whether
+the server has a newer one. On a phone that is not a luxury: an installed PWA
+keeps its shell in storage, and without this comparison nobody notices they have
+been starting a weeks-old build. **Jetzt aktualisieren** clears the offline
+storage and reloads; the practice log, the profile and the sync settings are
+untouched.
+
+The comparison needs no outside network: the build stamp sits next to the app as
+`version.json`, and the same stamp is baked into the bundle. If they disagree,
+the browser is holding an old build.
+
+**If this is a fork**, the app says so — and offers to check how far the original
+has moved on since. That single request goes to `api.github.com` and only on a
+button press; the original's own deployment never makes it.
+
 ### Deleting means deleting
 
 **Alles löschen** under *Daten* clears the log, any set-aside copy of it and the
@@ -251,8 +268,9 @@ two answers from the first launch. The app is then back to freshly installed.
 
 No analytics, no fonts from someone else's server, no embeds — measured, not
 claimed: loading every page and playing a full session sends **not one request**
-to any other host. The only possible network access is `api.github.com`, and
-only if you set up syncing yourself.
+to any other host. `api.github.com` is the only foreign address at all, and even
+that only twice: for syncing, if you set it up, and on a button press to check
+the original — the latter only in a fork.
 
 The microphone does not leave the machine: the audio thread reports **timestamps
 and a level value**, nothing else. No audio is recorded, stored or sent, and the

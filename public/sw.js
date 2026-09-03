@@ -1,7 +1,7 @@
 // Die App laeuft komplett im Browser: kein Server, keine API, der Uebungs-Log
 // liegt in localStorage. Sie kann also vollstaendig offline laufen — sobald
 // die Huelle einmal im Cache liegt, braucht eine Session kein Netz mehr.
-const CACHE = 'mga-2026-09-02.3'
+const CACHE = 'mga-2026-09-03.1'
 
 // Nur stabile URLs. Die JS-Chunks von Next tragen Hashes im Namen und koennen
 // hier nicht stehen — die kommen beim ersten Online-Besuch ueber den
@@ -40,7 +40,13 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const request = event.request
   if (request.method !== 'GET') return
-  if (new URL(request.url).origin !== location.origin) return
+  const url = new URL(request.url)
+  if (url.origin !== location.origin) return
+
+  // Der Bau-Stempel darf nie aus dem Cache kommen: er ist die Auskunft
+  // darueber, ob der Cache veraltet ist. Aus dem Cache beantwortet wuerde er
+  // jede Fassung fuer aktuell erklaeren.
+  if (url.pathname.endsWith('/version.json')) return
 
   // Netz zuerst, damit ein Deploy sofort ankommt. 'no-cache' erzwingt die
   // Rueckfrage beim Server: sonst beantwortet der HTTP-Cache des Browsers die
