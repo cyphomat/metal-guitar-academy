@@ -98,6 +98,13 @@ Komponente.
   Rechnung fällt in den Tests auf. Und was die Erklärungen an Tönen und
   Abständen behaupten, prüft `__tests__/cards.test.ts` nach — Übungsmaterial,
   das lügt, ist schlimmer als keines.
+- **Tonnamen englisch.** `B` ist der Ton über A, `A#`/`Bb` der darunter — so
+  steht es in jeder Tabulatur, und Metal-Repertoire kommt als Tabulatur.
+  Deutsche Eingaben nimmt `parseTon` trotzdem an, und der Fall wird in der
+  Rückmeldung benannt statt stillschweigend gewertet.
+- **Das Griffbrett verrät die Antwort nicht.** Eine Markierung trägt ihren
+  Tonnamen erst nach dem Auflösen; vorher beantwortete das Antippen die Frage
+  von selbst. Ausnahme ist der gegebene Grundton — der gehört zur Frage.
 - **Nach jeder Antwort steht die richtige da, mit Begründung.** Ohne
   Rückmeldung kehrt sich der Vorteil des Abfragens bei niedriger Trefferquote
   um: wer rät und nichts erfährt, lernt die falsche Antwort. Ein "leider

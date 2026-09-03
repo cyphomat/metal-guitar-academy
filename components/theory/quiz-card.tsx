@@ -27,8 +27,11 @@ function istRichtig(card: TheoryCard, antwort: Griff | string | null): boolean {
   const getippt = String(antwort).trim()
   if (getippt === "") return false
 
-  // Erst wörtlich, dann als Ton gelesen: "f#" und "Fis" sind dasselbe.
   if (erwartet.some((wert) => wert.toLowerCase() === getippt.toLowerCase())) return true
+
+  // Sonst als Ton gelesen: "fis" und "F#" meinen dasselbe. Bei einer Frage
+  // nach der Schreibweise wäre genau das der Fehler — dort zählt das Wort.
+  if (card.frage.woertlich) return false
 
   const alsTon = parseTon(getippt)
   return alsTon !== null && erwartet.some((wert) => parseTon(wert) === alsTon)

@@ -11,18 +11,21 @@
 import type { Griff } from "./types"
 
 /**
- * Deutsche Tonnamen: H, nicht B.
+ * Englische Tonnamen: B, nicht H.
  *
- * Das ist keine Kleinigkeit, sondern die häufigste Verwechslung überhaupt —
- * englische Tabulaturen schreiben B für dasselbe, was hier H heisst, und B
- * bedeutet auf Deutsch den Ton einen Halbton darunter. Eine eigene Karte
- * erklärt genau das, und `verwechselungshinweis` fängt den Fall in der
- * Rückmeldung ab, statt ihn stillschweigend gelten zu lassen.
+ * Metal-Repertoire kommt in Tabulaturen, und die sind praktisch ausnahmslos
+ * englisch beschriftet. Wer hier H läse und dort B, müsste bei jedem Riff
+ * übersetzen — und ausgerechnet an der Stelle, wo die deutsche Schreibweise
+ * ein B für einen ganz anderen Ton vergibt.
+ *
+ * Deutsche Eingaben nimmt `parseTon` trotzdem an, und
+ * `verwechselungshinweis` klärt den Fall in der Rückmeldung auf, statt ihn
+ * stillschweigend gelten zu lassen.
  */
-export const TOENE = ["C", "Cis", "D", "Dis", "E", "F", "Fis", "G", "Gis", "A", "Ais", "H"] as const
+export const TOENE = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"] as const
 
 /** Dieselben Töne als Tiefalterationen — für Tonarten, die sie so schreiben. */
-export const TOENE_B = ["C", "Des", "D", "Es", "E", "F", "Ges", "G", "As", "A", "B", "H"] as const
+export const TOENE_B = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"] as const
 
 export type Ton = (typeof TOENE)[number]
 
@@ -123,25 +126,29 @@ export function intervalBetween(a: Griff, b: Griff): Intervall {
 }
 
 /** Die Namen der Leersaiten, von der hohen zur tiefen. */
-export const SAITENNAMEN = ["e", "h", "g", "d", "A", "E"] as const
+export const SAITENNAMEN = ["e", "B", "G", "D", "A", "E"] as const
 
-/** Grundtöne als Halbtonabstand von C. B ist deutsch: der Ton unter H. */
+/**
+ * Grundtöne als Halbtonabstand von C.
+ *
+ * B ist englisch gemeint, also der Ton über A. H steht daneben, weil deutsche
+ * Notenhefte ihn so schreiben — dieselbe Taste, anderer Buchstabe.
+ */
 const STAMMTOENE: Record<string, number> = {
-  C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 10, H: 11,
+  C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11, H: 11,
 }
 
 /**
  * Nimmt eine getippte Antwort an, wie sie jemand tatsächlich schreibt.
  *
- * `fis`, `Fis`, `F#` sind derselbe Ton, und `Eb` dasselbe wie `Es`. Gerechnet
+ * `f#`, `F#`, `Fis` sind derselbe Ton, und `Eb` dasselbe wie `Es`. Gerechnet
  * wird über Stammton plus Vorzeichen, nicht über Zeichenkettenersatz: aus `Eb`
  * würde sonst `Ees`, und die deutschen Tiefalterationen sind unregelmässig
  * genug (Es, As, B), dass jede Ersetzungsregel irgendwo danebenliegt.
  *
- * **`B` ist hier Ais**, nicht H — so heisst es auf Deutsch. Dass englische
- * Tabulaturen B für H schreiben, ist die häufigste Verwechslung überhaupt;
- * `verwechselungshinweis` erkennt sie, damit die Rückmeldung sie aufklären
- * kann, statt sie stillschweigend durchgehen zu lassen.
+ * **`B` ist hier der Ton über A**, englisch gelesen. Wer aus deutschen Noten
+ * kommt, meint mit `B` womöglich `A#` — `verwechselungshinweis` erkennt den
+ * Fall und klärt ihn auf, statt ihn stillschweigend gelten zu lassen.
  */
 export function parseTon(eingabe: string): Ton | null {
   const roh = eingabe.trim().replace(/\s+/g, "")
@@ -160,19 +167,22 @@ export function parseTon(eingabe: string): Ton | null {
 }
 
 /**
- * Ob jemand über H und B gestolpert ist.
+ * Ob jemand über die deutsche und die englische Schreibweise gestolpert ist.
  *
- * Genau dieser Fall darf nicht als "leider falsch" durchgehen: wer aus
- * englischen Tabulaturen liest, hat den richtigen Ton gemeint und die falsche
- * Sprache getippt. Die Rückmeldung sagt das dann.
+ * Genau dieser Fall darf nicht als blosses "leider falsch" durchgehen: der
+ * richtige Ton war gemeint, nur die falsche Sprache getippt. Die Rückmeldung
+ * sagt das dann.
  */
 export function verwechselungshinweis(eingabe: string, richtig: Ton): string | null {
   const getippt = eingabe.trim().toUpperCase()
-  if (getippt === "B" && richtig === "H") {
-    return "Englische Tabulaturen schreiben B für diesen Ton. Auf Deutsch heisst er H — und B ist der Ton einen Halbton darunter."
+  // Deutsche Noten schreiben H für den Ton, der hier B heisst — richtig
+  // gemeint, nur anders geschrieben.
+  if (getippt === "H" && richtig === "B") {
+    return "Gemeint hast du das Richtige: was deutsche Noten H nennen, heisst in Tabulaturen B. Hier gilt die englische Schreibweise."
   }
-  if (getippt === "H" && richtig === "Ais") {
-    return "Auf Deutsch heisst dieser Ton B (oder Ais). H liegt einen Halbton höher."
+  // Und umgekehrt: deutsches B ist englisches A#.
+  if (getippt === "B" && richtig === "A#") {
+    return "In deutschen Noten heisst dieser Ton B — hier steht er als A# (oder Bb). Das englische B liegt einen Halbton höher."
   }
   return null
 }

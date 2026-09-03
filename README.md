@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="App öffnen" src="https://img.shields.io/badge/App-öffnen-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-261%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-262%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-läuft-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Abhängigkeiten" src="https://img.shields.io/badge/Abhängigkeiten-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -180,9 +180,9 @@ zwei, drei Sätzen und einer Frage:
   unveränderlich; zwei Geräte verschmelzen ihre Antworten und kommen von selbst
   auf denselben Stand.
 
-Ein Beispiel für das, was gemeint ist: eine eigene Karte erklärt, dass
-englische Tabulaturen **B** schreiben, wo es auf Deutsch **H** heisst — und wer
-das verwechselt, bekommt genau diesen Hinweis statt eines „leider falsch".
+Die Töne stehen englisch, wie in jeder Tabulatur: der Ton über A heisst **B**,
+nicht H. Wer aus deutschen Noten kommt und trotzdem H tippt, bekommt genau
+diesen Hinweis statt eines „leider falsch" — gemeint war ja das Richtige.
 
 ## Was das Mikrofon hört
 

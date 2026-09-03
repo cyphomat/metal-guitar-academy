@@ -77,11 +77,21 @@ describe("Jede Karte", () => {
  * wird nachgerechnet — ein falscher Bund im Fliesstext fällt sonst niemandem
  * auf, und Übungsmaterial, das lügt, ist schlimmer als keines.
  */
+describe("Fragen nach der Schreibweise", () => {
+  it("werden wörtlich verglichen, sonst beantwortet die Frage sich selbst", () => {
+    // "Wie heisst dieser Ton in einer Tabulatur" liesse sich mit dem H aus der
+    // Frage beantworten, weil die Eingabe H und B als denselben Ton liest.
+    const karte = cardById("m-h-oder-b")
+    expect(karte?.frage.woertlich).toBe(true)
+    expect(karte?.frage.richtig).toEqual(["B"])
+  })
+})
+
 describe("Was im Text steht, stimmt auch", () => {
-  it("tiefe E-Saite: 3. Bund G, 5. Bund A, 7. Bund H", () => {
+  it("tiefe E-Saite: 3. Bund G, 5. Bund A, 7. Bund B", () => {
     expect(noteAt(g(6, 3))).toBe("G")
     expect(noteAt(g(6, 5))).toBe("A")
-    expect(noteAt(g(6, 7))).toBe("H")
+    expect(noteAt(g(6, 7))).toBe("B")
   })
 
   it("A-Saite: 3. Bund C, 5. Bund D, 7. Bund E", () => {
@@ -94,7 +104,7 @@ describe("Was im Text steht, stimmt auch", () => {
     expect(noteAt(g(4, 5))).toBe("G")
   })
 
-  it("benachbarte Leersaiten sind Quarten — ausser g zu h", () => {
+  it("benachbarte Leersaiten sind Quarten — ausser G zu B", () => {
     expect(intervalBetween(g(6, 0), g(5, 0)).name).toBe("Quarte")
     expect(intervalBetween(g(5, 0), g(4, 0)).name).toBe("Quarte")
     expect(intervalBetween(g(4, 0), g(3, 0)).name).toBe("Quarte")
@@ -116,8 +126,8 @@ describe("Was im Text steht, stimmt auch", () => {
     expect(noteAt(g(2, 8))).toBe(noteAt(g(4, 5)))
   })
 
-  it("Gis und As liegen auf demselben Bund", () => {
+  it("G# und Ab liegen auf demselben Bund", () => {
     // Die Karte "Zwei Namen, ein Bund" behauptet das.
-    expect(noteAt(g(6, 4))).toBe("Gis")
+    expect(noteAt(g(6, 4))).toBe("G#")
   })
 })

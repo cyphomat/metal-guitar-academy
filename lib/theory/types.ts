@@ -59,6 +59,15 @@ export interface Frage {
   richtig: Griff[] | string[]
   /** Nur bei "auswahl": die Möglichkeiten, richtige eingeschlossen. */
   auswahl?: string[]
+  /**
+   * Wörtlich vergleichen, ohne Tonnamen zu normalisieren.
+   *
+   * Für die eine Sorte Frage, bei der die *Schreibweise* die Antwort ist:
+   * "wie heisst dieser Ton in einer Tabulatur" liesse sich sonst mit dem Wort
+   * aus der Frage beantworten, weil die Eingabe H und B ohnehin als denselben
+   * Ton liest.
+   */
+  woertlich?: boolean
 }
 
 export interface TheoryCard {

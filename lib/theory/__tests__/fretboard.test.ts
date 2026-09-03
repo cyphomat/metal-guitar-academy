@@ -19,7 +19,7 @@ const g = (saite: number, bund: number) => ({ saite, bund }) as Griff
 describe("noteAt", () => {
   it("kennt die Leersaiten", () => {
     const leer = [1, 2, 3, 4, 5, 6].map((saite) => noteAt(g(saite, 0)))
-    expect(leer).toEqual(["E", "H", "G", "D", "A", "E"])
+    expect(leer).toEqual(["E", "B", "G", "D", "A", "E"])
   })
 
   it("stimmt mit den angezeigten Saitennamen überein", () => {
@@ -44,9 +44,11 @@ describe("noteAt", () => {
     }
   })
 
-  it("nennt Kreuztöne mit -is", () => {
+  it("schreibt Kreuztöne englisch", () => {
     expect(noteAt(g(6, 1))).toBe("F")
-    expect(noteAt(g(6, 2))).toBe("Fis")
+    expect(noteAt(g(6, 2))).toBe("F#")
+    // Der Ton über A heisst B, nicht H — die Tabulatur-Schreibweise.
+    expect(noteAt(g(6, 7))).toBe("B")
   })
 })
 
@@ -125,35 +127,36 @@ describe("positionsOfInterval", () => {
 })
 
 describe("parseTon", () => {
-  it("nimmt die deutsche Schreibweise", () => {
-    expect(parseTon("Fis")).toBe("Fis")
-    expect(parseTon("fis")).toBe("Fis")
+  it("nimmt die Tabulatur-Schreibweise", () => {
+    expect(parseTon("F#")).toBe("F#")
+    expect(parseTon("f#")).toBe("F#")
     expect(parseTon(" a ")).toBe("A")
   })
 
-  it("nimmt das Kreuz aus englischen Tabulaturen", () => {
-    expect(parseTon("F#")).toBe("Fis")
-    expect(parseTon("c#")).toBe("Cis")
+  it("nimmt auch deutsch getippte Kreuze", () => {
+    expect(parseTon("Fis")).toBe("F#")
+    expect(parseTon("cis")).toBe("C#")
   })
 
-  it("nimmt Tiefalterationen", () => {
-    expect(parseTon("Es")).toBe("Dis")
-    expect(parseTon("Ges")).toBe("Fis")
-    expect(parseTon("Eb")).toBe("Dis")
+  it("nimmt Tiefalterationen in beiden Schreibweisen", () => {
+    expect(parseTon("Eb")).toBe("D#")
+    expect(parseTon("Es")).toBe("D#")
+    expect(parseTon("Gb")).toBe("F#")
+    expect(parseTon("Ges")).toBe("F#")
   })
 
-  it("liest B deutsch, also als Ais", () => {
-    // Auf Deutsch ist B der Ton unter H. Englische Tabulaturen meinen damit
-    // H — das ist eine Verwechslung, kein zweiter gültiger Name, und wird
-    // deshalb nicht stillschweigend durchgewinkt.
-    expect(parseTon("B")).toBe("Ais")
-    expect(parseTon("H")).toBe("H")
+  it("liest B englisch, also als den Ton über A", () => {
+    expect(parseTon("B")).toBe("B")
+    // Deutsches H meint denselben Ton — angenommen, aber englisch benannt.
+    expect(parseTon("H")).toBe("B")
+    // Und das deutsche B liegt einen Halbton tiefer: hier Bb.
+    expect(parseTon("Bb")).toBe("A#")
   })
 
   it("kommt mit unregelmässigen Tiefalterationen klar", () => {
-    expect(parseTon("As")).toBe("Gis")
-    expect(parseTon("Ab")).toBe("Gis")
-    expect(parseTon("Des")).toBe("Cis")
+    expect(parseTon("As")).toBe("G#")
+    expect(parseTon("Ab")).toBe("G#")
+    expect(parseTon("Des")).toBe("C#")
   })
 
   it("gibt bei Unsinn null zurück", () => {
@@ -164,16 +167,16 @@ describe("parseTon", () => {
 })
 
 describe("verwechselungshinweis", () => {
-  it("erkennt das englische B für H", () => {
-    expect(verwechselungshinweis("B", "H")).toMatch(/englische Tabulaturen/i)
+  it("erkennt deutsches H für englisches B", () => {
+    expect(verwechselungshinweis("H", "B")).toMatch(/deutsche Noten H nennen/i)
   })
 
-  it("erkennt den umgekehrten Fall", () => {
-    expect(verwechselungshinweis("H", "Ais")).toMatch(/heisst dieser Ton B/i)
+  it("erkennt deutsches B für englisches A#", () => {
+    expect(verwechselungshinweis("B", "A#")).toMatch(/heisst dieser Ton B/i)
   })
 
   it("schweigt, wenn nichts verwechselt wurde", () => {
-    expect(verwechselungshinweis("H", "H")).toBeNull()
+    expect(verwechselungshinweis("B", "B")).toBeNull()
     expect(verwechselungshinweis("C", "D")).toBeNull()
   })
 })

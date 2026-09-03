@@ -52,24 +52,25 @@ export const THEORY_CARDS: TheoryCard[] = [
     stufe: 1,
     begriff: "Wo die Halbtonschritte sitzen",
     erklaerung:
-      "Die Stammtöne heissen C D E F G A H. Zwischen ihnen liegt überall ein Ganzton — ausser zwischen E und F und zwischen H und C, da ist es nur ein Halbton. Das ist der Grund, warum die weissen Tasten am Klavier ungleich verteilt wirken, und auf dem Griffbrett der Grund, warum manche Töne direkt nebeneinander liegen.",
+      "Die Stammtöne heissen C D E F G A B. Zwischen ihnen liegt überall ein Ganzton — ausser zwischen E und F und zwischen B und C, da ist es nur ein Halbton. Das ist der Grund, warum die weissen Tasten am Klavier ungleich verteilt wirken, und auf dem Griffbrett der Grund, warum manche Töne direkt nebeneinander liegen.",
     frage: {
       art: "auswahl",
       text: "Zwischen welchen beiden Paaren liegt nur ein Halbton?",
-      auswahl: ["E–F und H–C", "C–D und G–A", "F–G und A–H", "D–E und G–A"],
-      richtig: ["E–F und H–C"],
+      auswahl: ["E–F und B–C", "C–D und G–A", "F–G und A–B", "D–E und G–A"],
+      richtig: ["E–F und B–C"],
     },
   },
   {
     id: "m-h-oder-b",
     stufe: 1,
-    begriff: "H oder B",
+    begriff: "B oder H",
     erklaerung:
-      "Auf Deutsch heisst der Ton über A ganz einfach H. Englische Tabulaturen — also fast alle, die du im Netz findest — schreiben dafür B. Und B bedeutet auf Deutsch den Ton einen Halbton darunter. Wer beides mischt, greift irgendwann den falschen Ton und sucht lange nach dem Grund.",
+      "Diese App schreibt die Töne englisch, wie jede Tabulatur: der Ton über A heisst B. Deutsche Notenhefte nennen ihn H und vergeben das B an den Ton einen Halbton darunter — englisch A# oder Bb. Wer beides mischt, greift irgendwann den falschen Ton und sucht lange nach dem Grund.",
     frage: {
       art: "eingabe",
-      text: "Eine englische Tabulatur schreibt „B“. Wie heisst dieser Ton auf Deutsch?",
-      richtig: ["H"],
+      text: "Ein deutsches Notenheft schreibt „H“. Wie heisst dieser Ton in einer Tabulatur?",
+      richtig: ["B"],
+      woertlich: true,
     },
   },
   {
@@ -89,7 +90,7 @@ export const THEORY_CARDS: TheoryCard[] = [
     stufe: 1,
     begriff: "Die sechs Leersaiten",
     erklaerung:
-      "In Standardstimmung heissen die Saiten von der dicksten zur dünnsten E A d g h e. Die tiefe und die hohe heissen beide E — sie liegen zwei Oktaven auseinander. Merken lohnt sich, weil fast jede Bezeichnung auf dem Hals von hier aus gezählt wird.",
+      "In Standardstimmung heissen die Saiten von der dicksten zur dünnsten E A D G B e. Die tiefe und die hohe heissen beide E — sie liegen zwei Oktaven auseinander. Merken lohnt sich, weil fast jede Bezeichnung auf dem Hals von hier aus gezählt wird.",
     frage: {
       art: "eingabe",
       text: "Wie heisst die zweitdickste Saite in Standardstimmung?",
@@ -101,7 +102,7 @@ export const THEORY_CARDS: TheoryCard[] = [
     stufe: 1,
     begriff: "Töne auf der tiefen E-Saite",
     erklaerung:
-      "Auf der tiefen E-Saite liegen die Grundtöne der meisten Powerchords. Drei Marken reichen als Gerüst: 3. Bund G, 5. Bund A, 7. Bund H. Der Rest ergibt sich durch Zählen in Halbtönen.",
+      "Auf der tiefen E-Saite liegen die Grundtöne der meisten Powerchords. Drei Marken reichen als Gerüst: 3. Bund G, 5. Bund A, 7. Bund B. Der Rest ergibt sich durch Zählen in Halbtönen.",
     frage: {
       art: "griffbrett",
       text: "Wo liegt G auf der tiefen E-Saite?",
@@ -128,7 +129,7 @@ export const THEORY_CARDS: TheoryCard[] = [
       "Jeder Bund höher ist genau ein Halbton höher — egal auf welcher Saite, egal an welcher Stelle des Halses. Das klingt banal, ist aber der Grund, warum sich auf der Gitarre jede Form verschieben lässt und dabei richtig bleibt.",
     frage: {
       art: "griffbrett",
-      text: "Die A-Saite leer klingt A. Wo liegt Ais, also einen Halbton höher, auf derselben Saite?",
+      text: "Die A-Saite leer klingt A. Wo liegt A#, also einen Halbton höher, auf derselben Saite?",
       richtig: [griff(5, 1)],
     },
   },
@@ -152,7 +153,7 @@ export const THEORY_CARDS: TheoryCard[] = [
       "Von einem Ton auf der E- oder A-Saite aus liegt derselbe Ton zwei Saiten höher und zwei Bünde weiter. Diese eine Form spart das Auswendiglernen des halben Halses: Grundton finden, Form anwenden, fertig.",
     frage: {
       art: "griffbrett",
-      text: "Auf der A-Saite im 5. Bund liegt D. Zeig dasselbe D auf der D- oder g-Saite.",
+      text: "Auf der A-Saite im 5. Bund liegt D. Zeig dasselbe D auf der D- oder G-Saite.",
       gegeben: [griff(5, 5)],
       richtig: positionsOfInterval(griff(5, 5), 12).filter(
         (stelle) => stelle.saite === 4 || stelle.saite === 3,
@@ -164,12 +165,12 @@ export const THEORY_CARDS: TheoryCard[] = [
     stufe: 1,
     begriff: "Zwei Namen, ein Bund",
     erklaerung:
-      "Fis und Ges sind derselbe Bund. Welcher Name richtig ist, hängt an der Tonart — man will in einer Tonleiter jeden Buchstaben genau einmal verwenden. Fürs Greifen ist es egal, fürs Aufschreiben nicht.",
+      "F# und Gb sind derselbe Bund. Welcher Name richtig ist, hängt an der Tonart — man will in einer Tonleiter jeden Buchstaben genau einmal verwenden. Fürs Greifen ist es egal, fürs Aufschreiben nicht.",
     frage: {
       art: "auswahl",
-      text: "Welcher Ton liegt auf demselben Bund wie Gis?",
-      auswahl: ["As", "Ges", "G", "A"],
-      richtig: ["As"],
+      text: "Welcher Ton liegt auf demselben Bund wie G#?",
+      auswahl: ["Ab", "Gb", "G", "A"],
+      richtig: ["Ab"],
     },
   },
 
@@ -256,10 +257,10 @@ export const THEORY_CARDS: TheoryCard[] = [
     stufe: 2,
     begriff: "Die Quarte",
     erklaerung:
-      "Fünf Halbtöne. Auf der Gitarre ist sie überall dort versteckt, wo zwei benachbarte Leersaiten zusammenklingen — E zu A, A zu d, d zu g sind alle Quarten. Genau deshalb liegen Formen auf diesen Saitenpaaren immer gleich.",
+      "Fünf Halbtöne. Auf der Gitarre ist sie überall dort versteckt, wo zwei benachbarte Leersaiten zusammenklingen — E zu A, A zu D, D zu G sind alle Quarten. Genau deshalb liegen Formen auf diesen Saitenpaaren immer gleich.",
     frage: {
       art: "auswahl",
-      text: "Welches Intervall liegt zwischen der leeren A-Saite und der leeren d-Saite?",
+      text: "Welches Intervall liegt zwischen der leeren A-Saite und der leeren D-Saite?",
       auswahl: ["Quarte", "Quinte", "grosse Terz", "Tritonus"],
       richtig: ["Quarte"],
     },
@@ -293,14 +294,14 @@ export const THEORY_CARDS: TheoryCard[] = [
   {
     id: "i-knick",
     stufe: 2,
-    begriff: "Der Knick zur h-Saite",
+    begriff: "Der Knick zur B-Saite",
     erklaerung:
-      "Fünf der sechs Saiten liegen eine Quarte auseinander — nur zwischen der g- und der h-Saite ist es eine grosse Terz. Deshalb wandert jede Form, die diese beiden Saiten überspannt, um einen Bund. Es ist die einzige Ausnahme auf dem ganzen Hals, und sie erklärt fast jeden Griff, der sich falsch anfühlt.",
+      "Fünf der sechs Saiten liegen eine Quarte auseinander — nur zwischen der G- und der B-Saite ist es eine grosse Terz. Deshalb wandert jede Form, die diese beiden Saiten überspannt, um einen Bund. Es ist die einzige Ausnahme auf dem ganzen Hals, und sie erklärt fast jeden Griff, der sich falsch anfühlt.",
     frage: {
       art: "auswahl",
       text: "Zwischen welchen beiden Saiten liegt keine Quarte?",
-      auswahl: ["g und h", "A und d", "d und g", "h und e"],
-      richtig: ["g und h"],
+      auswahl: ["G und B", "A und D", "D und G", "B und e"],
+      richtig: ["G und B"],
     },
   },
   {
@@ -308,10 +309,10 @@ export const THEORY_CARDS: TheoryCard[] = [
     stufe: 2,
     begriff: "Oktave über den Knick",
     erklaerung:
-      "Die Oktavform von der d-Saite aus liegt zwei Saiten höher und drei Bünde weiter, nicht zwei — weil der Weg über die h-Saite führt. Dieselbe Form, ein Bund verschoben: das ist der Knick in der Praxis.",
+      "Die Oktavform von der D-Saite aus liegt zwei Saiten höher und drei Bünde weiter, nicht zwei — weil der Weg über die B-Saite führt. Dieselbe Form, ein Bund verschoben: das ist der Knick in der Praxis.",
     frage: {
       art: "griffbrett",
-      text: "Auf der d-Saite im 5. Bund liegt G. Zeig dasselbe G auf der h-Saite.",
+      text: "Auf der D-Saite im 5. Bund liegt G. Zeig dasselbe G auf der B-Saite.",
       gegeben: [griff(4, 5)],
       richtig: positionsOf("G").filter((stelle) => stelle.saite === 2 && stelle.bund <= 12),
     },

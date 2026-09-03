@@ -41,7 +41,11 @@ export interface FretboardProps {
   gegeben?: Griff[]
   /** Was angetippt wurde. */
   gewaehlt?: Griff | null
-  /** Wird nach dem Auflösen gezeigt: alle richtigen Stellen. */
+  /**
+   * Wird nach dem Auflösen gesetzt: alle richtigen Stellen. Ihr Vorhandensein
+   * ist zugleich das Zeichen, dass aufgelöst wurde — vorher trägt keine
+   * Markierung einen Tonnamen.
+   */
   loesung?: Griff[]
   /** Null schaltet das Antippen ab — nach dem Auflösen. */
   onPick?: ((griff: Griff) => void) | null
@@ -50,6 +54,15 @@ export interface FretboardProps {
 export function Fretboard({ gegeben = [], gewaehlt, loesung, onPick }: FretboardProps) {
   const breite = RAND_LINKS + BUENDE * BREITE + 12
   const hoehe = RAND_OBEN + 6 * HOEHE + 6
+
+  /**
+   * Vor dem Auflösen steht in einer Markierung kein Tonname.
+   *
+   * Sonst beantwortet das Griffbrett die Frage im Moment des Antippens selbst:
+   * man tippt irgendwohin, liest ab, korrigiert — und hat nichts abgerufen.
+   * Der gegebene Grundton ist die Ausnahme, er gehört zur Frage.
+   */
+  const aufgeloest = loesung !== undefined
   const trifft = (liste: Griff[] | undefined, saite: number, bund: number) =>
     liste?.some((stelle) => stelle.saite === saite && stelle.bund === bund) ?? false
 
@@ -142,7 +155,13 @@ export function Fretboard({ gegeben = [], gewaehlt, loesung, onPick }: Fretboard
                       cx={x(bund)}
                       cy={y(saite)}
                       r={15}
-                      fill={istGegeben ? "var(--akzent)" : istLoesung ? "var(--sunken)" : "var(--sunken)"}
+                      fill={
+                        istGegeben
+                          ? "var(--akzent)"
+                          : istGewaehlt && !aufgeloest
+                            ? "var(--tint-stahl)"
+                            : "var(--sunken)"
+                      }
                       stroke={
                         istGegeben
                           ? "var(--akzent)"
@@ -152,20 +171,22 @@ export function Fretboard({ gegeben = [], gewaehlt, loesung, onPick }: Fretboard
                       }
                       strokeWidth={2}
                     />
-                    <text
-                      x={x(bund)}
-                      y={y(saite) + 4}
-                      textAnchor="middle"
-                      className={`font-mono text-[12px] ${
-                        istGegeben
-                          ? "fill-[--bg] font-bold"
-                          : istLoesung
-                            ? "fill-[--gruen]"
-                            : "fill-[--stahl]"
-                      }`}
-                    >
-                      {noteAt(griff)}
-                    </text>
+                    {(istGegeben || aufgeloest) && (
+                      <text
+                        x={x(bund)}
+                        y={y(saite) + 4}
+                        textAnchor="middle"
+                        className={`font-mono text-[12px] ${
+                          istGegeben
+                            ? "fill-[--bg] font-bold"
+                            : istLoesung
+                              ? "fill-[--gruen]"
+                              : "fill-[--stahl]"
+                        }`}
+                      >
+                        {noteAt(griff)}
+                      </text>
+                    )}
                   </>
                 )}
                 {onPick && (

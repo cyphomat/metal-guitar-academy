@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="Open the app" src="https://img.shields.io/badge/App-open-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-261%20green-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-262%20green-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-works-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Dependencies" src="https://img.shields.io/badge/Dependencies-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -185,9 +185,9 @@ or three sentences and a question:
 - **Card state is replayed, not stored.** Answers are immutable; two devices
   merge their answers and arrive at the same state on their own.
 
-One example of what that means in practice: a card of its own explains that
-English tabs write **B** where German says **H** — and getting that wrong
-returns exactly that explanation instead of a bare "wrong".
+Notes are named the way tabs name them: the note above A is **B**. A German
+sheet-music habit of typing **H** for it gets that explained rather than a bare
+"wrong" — the right note was meant, just written in the other language.
 
 ## What the microphone hears
 
