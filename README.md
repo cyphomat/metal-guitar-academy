@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="App öffnen" src="https://img.shields.io/badge/App-öffnen-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-262%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-272%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-läuft-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Abhängigkeiten" src="https://img.shields.io/badge/Abhängigkeiten-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -73,14 +73,19 @@ mehr.
 Immer dieselbe Form, damit sie keine Entscheidung kostet:
 
 ```
-Warm-up    2 min    Finger wach kriegen
-Technik    ~6 min   eine Sache isoliert, mit Metronom
-Riff       ~6 min   dieselbe Technik im musikalischen Kontext
-Abschluss           Selbsteinschätzung — landet im Log
+Warm-up     2 min    Finger wach kriegen
+2 Fragen    ~40 s    zu dem, was gleich kommt
+Technik     ~3 min   eine Sache isoliert, mit Metronom
+Riff        ~3 min   dieselbe Technik im musikalischen Kontext
+2 Fragen    ~40 s    quer durch alles, was fällig ist
+Technik     ~3 min   zweite Runde, mit Abstand dazwischen
+Riff        ~3 min   zweite Runde
+Abschluss            Selbsteinschätzung — landet im Log
 ```
 
 Am Ende: **Feierabend** oder **+5 Minuten**. Die Form ist fix, der Inhalt passt
-sich an.
+sich an. Die Fragen sind [überspringbar](#in-der-session) und lassen die
+Session nicht wachsen.
 
 ## Was sie dir sagt
 
@@ -183,6 +188,19 @@ zwei, drei Sätzen und einer Frage:
 Die Töne stehen englisch, wie in jeder Tabulatur: der Ton über A heisst **B**,
 nicht H. Wer aus deutschen Noten kommt und trotzdem H tippt, bekommt genau
 diesen Hinweis statt eines „leider falsch" — gemeint war ja das Richtige.
+
+### In der Session
+
+Die Fragen warten nicht auf dem Wissens-Bildschirm, sie kommen mitten im Üben —
+in den Übergängen, wo das Plektrum ohnehin abgesetzt wird. Vier Stück, rund
+achtzig Sekunden. Die Session wächst dadurch nicht, und
+blockieren kann sie nichts: **Überspringen, weiterspielen** steht immer da, und
+die Karten bleiben fällig. Ist gerade nichts fällig, fällt die Portion lautlos
+aus.
+
+Die erste Portion **grundiert**: sie fragt zu der Technik, die im nächsten Block
+drankommt. Das ist der Bezug zum Gespielten — Theorie ohne ihn bleibt ein
+eigenes Hobby.
 
 ## Was das Mikrofon hört
 

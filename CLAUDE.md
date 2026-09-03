@@ -8,12 +8,14 @@ starten, ~15 Minuten üben, fertig, morgen wieder.
 Eine Session ist immer gleich aufgebaut, damit sie keine Entscheidung kostet:
 
 ```
-Warm-up    2 min    Finger wach kriegen
-Technik    ~3 min   eine Sache isoliert, mit Metronom
-Riff       ~3 min   dieselbe Technik im musikalischen Kontext
-Technik    ~3 min   zweite Runde, mit Abstand dazwischen
-Riff       ~3 min   zweite Runde
-Abschluss           Selbsteinschätzung → landet im Log
+Warm-up     2 min    Finger wach kriegen
+2 Fragen    ~40 s    Wissen, grundiert auf den nächsten Block
+Technik     ~3 min   eine Sache isoliert, mit Metronom
+Riff        ~3 min   dieselbe Technik im musikalischen Kontext
+2 Fragen    ~40 s    Wissen, quer durch alles Fällige
+Technik     ~3 min   zweite Runde, mit Abstand dazwischen
+Riff        ~3 min   zweite Runde
+Abschluss            Selbsteinschätzung → landet im Log
 ```
 
 Am Ende: *Feierabend* oder *+5 Minuten*. Was in den Blöcken steckt, entscheidet
@@ -40,6 +42,7 @@ Verschiedenes.
 | `lib/session/builder.ts` | Wählt aus, was heute drankommt |
 | `lib/session/profile.ts` | Die zwei Antworten vom ersten Start: Starttempo und Gewichtung |
 | `lib/session/briefing.ts` | Die Ansage: der Ton des Tages, aus dem Log |
+| `lib/session/theory-slots.ts` | Wo die Wissensfragen zwischen die Blöcke gehören |
 | `lib/session/calendar.ts` | Das Raster für den Übungskalender |
 | `lib/session/merge.ts` | Logs verschmelzen — für Import und später den Abgleich |
 | `lib/storage/practice-log.ts` | localStorage, einziger Zugriffspunkt aufs Log |
@@ -98,6 +101,14 @@ Komponente.
   Rechnung fällt in den Tests auf. Und was die Erklärungen an Tönen und
   Abständen behaupten, prüft `__tests__/cards.test.ts` nach — Übungsmaterial,
   das lügt, ist schlimmer als keines.
+- **Die Fragen sitzen zwischen den Blöcken, nicht in ihnen.** Eine Frage hat
+  kein Tempo, keine Bewertung und keinen Eintrag im Übungs-Log. Zwei Portionen
+  à zwei Fragen, mehr nicht — die Viertelstunde ist das Produkt. Wer keine
+  Lust hat, überspringt; die Karten bleiben fällig. Ist nichts fällig, fällt
+  die Portion lautlos aus statt einen leeren Bildschirm zu zeigen.
+- **Die Karten werden erst an der Stelle gewählt**, nicht beim Bauen des
+  Plans. Sonst käme in der zweiten Portion wieder, was in der ersten schon
+  beantwortet wurde.
 - **Tonnamen englisch.** `B` ist der Ton über A, `A#`/`Bb` der darunter — so
   steht es in jeder Tabulatur, und Metal-Repertoire kommt als Tabulatur.
   Deutsche Eingaben nimmt `parseTon` trotzdem an, und der Fall wird in der

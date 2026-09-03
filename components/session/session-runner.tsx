@@ -3,9 +3,18 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { BlockRunner, type BlockOutcome } from "@/components/session/block-runner"
 import { SessionSummary } from "@/components/session/session-summary"
+import { TheoryBreak } from "@/components/session/theory-break"
 import { buildDrillSession, buildSession, nextExtraBlock } from "@/lib/session/builder"
+import {
+  FRAGEN_JE_PORTION,
+  theorieEinschuebe,
+  type TheorieEinschub,
+} from "@/lib/session/theory-slots"
 import { appendResults, loadLog } from "@/lib/storage/practice-log"
 import { loadProfile } from "@/lib/storage/profile"
+import { loadTheoryLog } from "@/lib/storage/theory-log"
+import { THEORY_CARDS } from "@/lib/theory/cards"
+import { pickCards } from "@/lib/theory/progress"
 import { EMPTY_LOG, type DrillResult, type PracticeLog, type SessionBlock } from "@/lib/session/types"
 
 export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?: string }) {
@@ -25,13 +34,28 @@ export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?:
   const [current, setCurrent] = useState(0)
   const [results, setResults] = useState<DrillResult[]>([])
 
+  /**
+   * Wo die Fragen sitzen — einmal aus dem ursprünglichen Plan bestimmt.
+   *
+   * Bewusst nicht aus `blocks` abgeleitet: "+5 Minuten" hängt einen Block an,
+   * und eine mitgerechnete Stelle würde daraus eine fünfte und sechste Frage
+   * machen. Wer verlängert, will spielen.
+   */
+  const [einschuebe, setEinschuebe] = useState<TheorieEinschub[]>([])
+
+  /** Welche Fragen-Portionen schon durch sind — nach Blockindex. */
+  const [erledigteEinschuebe, setErledigteEinschuebe] = useState<number[]>([])
+  const [beantworteteFragen, setBeantworteteFragen] = useState(0)
+
   useEffect(() => {
     const initial = loadLog()
     const profile = loadProfile()
     const single = drillId ? buildDrillSession(initial, drillId, { minutes, profile }) : null
     setStartingLog(initial)
     setLog(initial)
-    setBlocks((single ?? buildSession(initial, { minutes, profile })).blocks)
+    const plan = (single ?? buildSession(initial, { minutes, profile })).blocks
+    setBlocks(plan)
+    setEinschuebe(theorieEinschuebe(plan, { fokussiert: drillId !== undefined }))
   }, [drillId, minutes])
 
   /**
@@ -42,6 +66,40 @@ export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?:
 
   const block = blocks?.[current]
   const done = blocks !== null && current >= blocks.length
+
+  /**
+   * Steht hier eine Portion Fragen an?
+   *
+   * Die Karten werden erst gewählt, wenn die Stelle erreicht ist — und aus dem
+   * Log, wie er *jetzt* aussieht. Vorher gewählt hiesse: was in der ersten
+   * Portion beantwortet wurde, käme in der zweiten nochmal.
+   */
+  const offenerEinschub = einschuebe.find(
+    (einschub) => einschub.vorIndex === current && !erledigteEinschuebe.includes(einschub.vorIndex),
+  )
+  const fragen = useMemo(() => {
+    if (!offenerEinschub) return []
+    return pickCards(THEORY_CARDS, loadTheoryLog(), FRAGEN_JE_PORTION, {
+      technique: offenerEinschub.technique ?? undefined,
+    })
+    // Die Auswahl hängt an der Stelle, nicht am Rendern: derselbe Einschub
+    // soll dieselben Karten behalten, solange er offen ist.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offenerEinschub?.vorIndex])
+
+  const einschubFertig = (beantwortet: number) => {
+    if (!offenerEinschub) return
+    setBeantworteteFragen((zahl) => zahl + beantwortet)
+    setErledigteEinschuebe((bisher) => [...bisher, offenerEinschub.vorIndex])
+  }
+
+  // Nichts fällig: die Portion fällt lautlos aus, statt einen leeren
+  // Bildschirm zwischen zwei Blöcke zu schieben.
+  useEffect(() => {
+    if (offenerEinschub && fragen.length === 0) {
+      setErledigteEinschuebe((bisher) => [...bisher, offenerEinschub.vorIndex])
+    }
+  }, [offenerEinschub, fragen.length])
 
   // Runde zwei startet mit dem Tempo, das in Runde eins tatsächlich lief —
   // nicht mit dem, das der Plan vor der Session vorgesehen hatte.
@@ -98,7 +156,15 @@ export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?:
   }
 
   if (done || !active) {
-    return <SessionSummary results={results} previousLog={startingLog} log={log} onExtend={extend} />
+    return (
+      <SessionSummary
+        results={results}
+        previousLog={startingLog}
+        log={log}
+        fragen={beantworteteFragen}
+        onExtend={extend}
+      />
+    )
   }
 
   return (
@@ -107,6 +173,14 @@ export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?:
         <i className="transition-[width] duration-500" style={{ width: `${overallProgress}%` }} />
       </div>
       <div className="mt-5" />
+      {offenerEinschub && fragen.length > 0 ? (
+        <TheoryBreak
+          key={`fragen-${offenerEinschub.vorIndex}`}
+          karten={fragen}
+          grundiert={offenerEinschub.technique !== null}
+          onDone={einschubFertig}
+        />
+      ) : (
       <BlockRunner
         key={`${active.drill.id}-${current}`}
         block={active}
@@ -114,6 +188,7 @@ export function SessionRunner({ minutes, drillId }: { minutes: number; drillId?:
         total={blocks.length}
         onComplete={completeBlock}
       />
+      )}
     </div>
   )
 }

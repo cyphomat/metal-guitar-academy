@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="Open the app" src="https://img.shields.io/badge/App-open-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-262%20green-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-272%20green-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-works-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Dependencies" src="https://img.shields.io/badge/Dependencies-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -86,8 +86,10 @@ Riff       ~3 min    second round
 Wrap-up              how did it go — goes into the log
 ```
 
-At the end: **call it a day** or **+5 minutes**. The shape is fixed, the content
-adapts.
+Two batches of two knowledge questions sit in the transitions, roughly forty
+seconds each. At the end: **call it a day** or **+5 minutes**. The shape is
+fixed, the content adapts, and the questions are
+[skippable](#inside-a-session) — they never make the session longer.
 
 ## What it tells you
 
@@ -188,6 +190,18 @@ or three sentences and a question:
 Notes are named the way tabs name them: the note above A is **B**. A German
 sheet-music habit of typing **H** for it gets that explained rather than a bare
 "wrong" — the right note was meant, just written in the other language.
+
+### Inside a session
+
+The questions do not wait on the knowledge screen; they arrive mid-practice, in
+the transitions where the pick gets put down anyway — four of them, around
+eighty seconds. The session does not grow because of
+them, and nothing is blocked by them: **Überspringen, weiterspielen** is always
+there, and the cards stay due. If nothing is due, the batch is skipped silently.
+
+The first batch **primes**: it asks about the technique that comes up in the
+next block. That is the link to what is being played — theory without it stays a
+hobby of its own.
 
 ## What the microphone hears
 

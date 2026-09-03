@@ -13,6 +13,8 @@ export interface SessionSummaryProps {
   /** Der Stand *vor* dieser Session, für den Vergleich. */
   previousLog: PracticeLog
   log: PracticeLog
+  /** Wie viele Wissensfragen unterwegs beantwortet wurden. */
+  fragen?: number
   onExtend: () => void
 }
 
@@ -37,7 +39,7 @@ function gainsFrom(results: DrillResult[], previousLog: PracticeLog): Gain[] {
   })
 }
 
-export function SessionSummary({ results, previousLog, log, onExtend }: SessionSummaryProps) {
+export function SessionSummary({ results, previousLog, log, fragen = 0, onExtend }: SessionSummaryProps) {
   const minutes = Math.max(1, Math.round(results.reduce((sum, r) => sum + r.seconds, 0) / 60))
   const streak = streakDays(log)
   const gains = gainsFrom(results, previousLog)
@@ -58,6 +60,7 @@ export function SessionSummary({ results, previousLog, log, onExtend }: SessionS
         <p className="num mt-1 text-[13px] text-muted">
           {minutes === 1 ? "1 Minute" : `${minutes} Minuten`} ·{" "}
           {results.length === 1 ? "1 Block" : `${results.length} Blöcke`}
+          {fragen > 0 && ` · ${fragen === 1 ? "1 Frage" : `${fragen} Fragen`}`}
           {streak > 1 && ` · ${streak} Tage in Folge`}
         </p>
 
