@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="Open the app" src="https://img.shields.io/badge/App-open-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-180%20green-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-261%20green-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-works-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Dependencies" src="https://img.shields.io/badge/Dependencies-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -157,6 +157,33 @@ you play.
 All original patterns in the idiom — no transcribed tabs. Every drill carries
 its own cues and a collapsible **why it works this way** that explains the theory
 behind it in two sentences.
+
+## Knowledge
+
+Fifteen minutes of playing and some theory go badly together if the theory is a
+second screen to read. So here the **question is the normal state** and the text
+is what comes after it: retrieval is measurably better for retention than
+re-reading, and in music it is barely used.
+
+Twenty-four concepts so far — the raw material and the intervals. Each with two
+or three sentences and a question:
+
+- **Answer on the fretboard** where that is possible. Producing an answer beats
+  picking one of four boxes, and the guitar is the instrument where theory can
+  be shown rather than written down. The same note sits in several places: hit
+  any of them and you are right.
+- **After every answer the right one is shown**, with the sentence that explains
+  why. Without feedback, the benefit of retrieval practice actually reverses at
+  low success rates.
+- **When something comes back** is decided by [FSRS-6](https://github.com/open-spaced-repetition/free-spaced-repetition-scheduler) —
+  three numbers per card rather than a rule of thumb. Ported from the reference
+  implementation and checked against 76 of its results, not reinvented.
+- **Card state is replayed, not stored.** Answers are immutable; two devices
+  merge their answers and arrive at the same state on their own.
+
+One example of what that means in practice: a card of its own explains that
+English tabs write **B** where German says **H** — and getting that wrong
+returns exactly that explanation instead of a bare "wrong".
 
 ## What the microphone hears
 

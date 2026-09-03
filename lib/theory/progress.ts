@@ -85,10 +85,20 @@ export function pickCards(
   return [...passend, ...rest].slice(0, anzahl).map((eintrag) => eintrag.card)
 }
 
+/**
+ * Ab welcher Stabilität eine Karte als "sitzt" gilt: sie würde eine Woche
+ * überstehen.
+ *
+ * Nicht über die Abrufbarkeit gemessen — die ist direkt nach dem Antworten
+ * immer nahe 100 %, auch bei einer Karte, die man gerade nicht wusste. Eine
+ * Anzeige, die nach fünf Reinfällen "sitzt: 5" meldet, misst nichts.
+ */
+export const SITZT_AB_TAGEN = 7
+
 export interface TheorieStand {
   /** Karten, die schon mindestens einmal beantwortet wurden. */
   angefangen: number
-  /** Davon solche, die gerade sitzen: Abrufbarkeit über 90 %. */
+  /** Davon solche, die eine Woche überstehen würden. */
   sitzen: number
   /** Wie viele heute dran wären. */
   faellig: number
@@ -104,7 +114,9 @@ export function theorieStand(
   const stand = cardStates(log)
   const bekannt = cards.filter((card) => stand.has(card.id))
 
-  const sitzen = bekannt.filter((card) => retrievability(stand.get(card.id)!, now) >= 0.9).length
+  const sitzen = bekannt.filter(
+    (card) => (stand.get(card.id)!.stability ?? 0) >= SITZT_AB_TAGEN,
+  ).length
   const faellig = bekannt.filter((card) => isDue(stand.get(card.id)!, now)).length
   const richtig = log.answers.filter((antwort) => antwort.correct).length
 

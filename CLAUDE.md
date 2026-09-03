@@ -50,6 +50,10 @@ Verschiedenes.
 | `lib/theory/fsrs.ts` | FSRS-6, portiert aus der Referenz. Rein, gegengeprüft. |
 | `lib/theory/types.ts` | Karten, Fragen und der Antwort-Log |
 | `lib/theory/progress.ts` | Kartenstand aus dem Antwort-Log, Auswahl fürs Abfragen |
+| `lib/theory/fretboard.ts` | Griffbrett als Rechnung: Töne, Intervalle, Lagen |
+| `lib/theory/cards.ts` | Der Wissenskatalog (reine Daten) |
+| `lib/storage/theory-log.ts` | localStorage, einziger Zugriffspunkt auf die Antworten |
+| `components/theory/*` | Griffbrett, Fragekarte, Übersicht |
 | `lib/update/version.ts` | Bau-Stempel vergleichen: eigene Fassung, Server, Original |
 | `lib/update/check.ts` | Holt Stempel und Original-Commits, leert den Cache |
 | `tools/version.mjs` | Schreibt den Bau-Stempel — läuft vor jedem Build |
@@ -88,6 +92,20 @@ Komponente.
 - **Beim Abgleich gewinnt keine Seite.** Konflikt heisst: neu lesen, erneut
   verschmelzen, noch einmal schreiben — und dann aufhören. Genau ein zweiter
   Versuch, sonst hängt es.
+- **Antworten auf dem Griffbrett sind gerechnet, nicht getippt.** Der Katalog
+  holt jede richtige Stelle aus `lib/theory/fretboard.ts`. Ein Tippfehler in
+  einer Tabelle mit hundert Tönen fällt niemandem auf; ein Fehler in der
+  Rechnung fällt in den Tests auf. Und was die Erklärungen an Tönen und
+  Abständen behaupten, prüft `__tests__/cards.test.ts` nach — Übungsmaterial,
+  das lügt, ist schlimmer als keines.
+- **Nach jeder Antwort steht die richtige da, mit Begründung.** Ohne
+  Rückmeldung kehrt sich der Vorteil des Abfragens bei niedriger Trefferquote
+  um: wer rät und nichts erfährt, lernt die falsche Antwort. Ein "leider
+  falsch" ohne Auflösung gehört deshalb nicht in diese App.
+- **Anzeigen müssen etwas messen.** Die Abrufbarkeit steht direkt nach dem
+  Antworten immer nahe 100 % — als Anzeige taugt sie nichts, sie meldete sonst
+  nach fünf Reinfällen "sitzt: 5". Was angezeigt wird, ist die Stabilität in
+  Tagen.
 - **Der Kartenstand wird abgespielt, nicht gespeichert.** Stabilität und
   Schwierigkeit einer Wissenskarte fallen aus dem Antwort-Log, jedes Mal neu.
   Das ist Bedingung für den Abgleich: ein gespeicherter Zustand wäre

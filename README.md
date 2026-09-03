@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="App öffnen" src="https://img.shields.io/badge/App-öffnen-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-180%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-261%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-läuft-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Abhängigkeiten" src="https://img.shields.io/badge/Abhängigkeiten-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -150,6 +150,35 @@ spielst.
 Alles eigene Patterns im jeweiligen Stil — keine abgeschriebenen Tabs. Jeder
 Drill bringt seine eigenen Cues mit und ein aufklappbares **Warum das so ist**,
 das die Theorie dahinter in zwei Sätzen erklärt.
+
+## Wissen
+
+Fünfzehn Minuten Spielen und Theorie schlagen sich schlecht, wenn die Theorie
+ein zweiter Bildschirm zum Lesen ist. Deshalb ist hier die **Frage der
+Normalzustand** und der Text das, was danach kommt: Abfragen behält sich
+messbar besser als Nachlesen, und für Musik ist das kaum umgesetzt.
+
+Vierundzwanzig Begriffe bisher — das Material und die Intervalle. Jeder mit
+zwei, drei Sätzen und einer Frage:
+
+- **Auf dem Griffbrett zeigen**, wo das geht. Antworten produzieren bringt mehr
+  als aus vier Kästchen wählen, und die Gitarre ist das Instrument, auf dem
+  sich Theorie zeigen lässt, ohne sie aufzuschreiben. Derselbe Ton liegt an
+  mehreren Stellen: wer eine davon trifft, hat recht.
+- **Nach jeder Antwort steht die richtige da**, mit dem Satz, warum sie richtig
+  ist. Ohne Rückmeldung kehrt sich der Vorteil des Abfragens bei niedriger
+  Trefferquote sogar um.
+- **Wann etwas wiederkommt**, entscheidet [FSRS-6](https://github.com/open-spaced-repetition/free-spaced-repetition-scheduler) —
+  drei Zahlen je Karte statt einer Faustregel. Portiert aus der
+  Referenzimplementierung und gegen 76 ihrer Ergebnisse geprüft, nicht
+  nachempfunden.
+- **Der Kartenstand wird abgespielt, nicht gespeichert.** Antworten sind
+  unveränderlich; zwei Geräte verschmelzen ihre Antworten und kommen von selbst
+  auf denselben Stand.
+
+Ein Beispiel für das, was gemeint ist: eine eigene Karte erklärt, dass
+englische Tabulaturen **B** schreiben, wo es auf Deutsch **H** heisst — und wer
+das verwechselt, bekommt genau diesen Hinweis statt eines „leider falsch".
 
 ## Was das Mikrofon hört
 

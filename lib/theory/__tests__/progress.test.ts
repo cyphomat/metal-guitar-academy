@@ -136,19 +136,37 @@ describe("theorieStand", () => {
     })
   })
 
-  it("zählt Angefangenes, Sitzendes und Fälliges", () => {
+  it("zählt Angefangenes und Fälliges", () => {
     const stand = theorieStand(
       karten,
-      log(
-        antwort("a", 3, JETZT.toISOString()),
-        antwort("b", 3, "2026-07-01T10:00:00Z"),
-      ),
+      log(antwort("a", 3, JETZT.toISOString()), antwort("b", 3, "2026-07-01T10:00:00Z")),
       JETZT,
     )
     expect(stand.angefangen).toBe(2)
-    // a wurde gerade beantwortet, sitzt also; b liegt Monate zurück.
-    expect(stand.sitzen).toBe(1)
     expect(stand.faellig).toBe(1)
+  })
+
+  it("nennt eine gerade danebengegangene Karte nicht 'sitzt'", () => {
+    // Der Fehler, den die Abrufbarkeit gemacht hätte: unmittelbar nach dem
+    // Antworten ist sie immer nahe 100 %, auch nach fünf Reinfällen.
+    const gerade = JETZT.toISOString()
+    const stand = theorieStand(karten, log(antwort("a", 1, gerade, false)), JETZT)
+    expect(stand.angefangen).toBe(1)
+    expect(stand.sitzen).toBe(0)
+  })
+
+  it("zählt als 'sitzt', was eine Woche überstehen würde", () => {
+    // Mehrfach mit Leicht beantwortet, mit wachsenden Abständen.
+    const stand = theorieStand(
+      karten,
+      log(
+        antwort("a", 4, "2026-08-01T10:00:00Z"),
+        antwort("a", 4, "2026-08-10T10:00:00Z"),
+        antwort("a", 4, "2026-08-28T10:00:00Z"),
+      ),
+      JETZT,
+    )
+    expect(stand.sitzen).toBe(1)
   })
 
   it("rechnet die Trefferquote aus den Antworten, nicht aus den Noten", () => {

@@ -12,6 +12,7 @@ import {
   loadLog,
 } from "@/lib/storage/practice-log"
 import { clearProfile } from "@/lib/storage/profile"
+import { clearTheoryLog, hasStoredTheoryLog } from "@/lib/storage/theory-log"
 import { EMPTY_LOG, type PracticeLog } from "@/lib/session/types"
 import { SyncPanel } from "@/components/session/sync-panel"
 import { UpdatePanel } from "@/components/session/update-panel"
@@ -31,7 +32,7 @@ export function DataManager() {
 
   useEffect(() => {
     setLog(loadLog())
-    setStored(hasStoredLog())
+    setStored(hasStoredLog() || hasStoredTheoryLog())
   }, [])
 
   const days = practiceDays(log)
@@ -172,8 +173,8 @@ export function DataManager() {
       <section>
         <h2 className="rule mb-1 mt-9">Löschen</h2>
         <p className="mb-3 text-[13px] leading-relaxed text-dim">
-          Setzt alles zurück: Tempi, Serien, Bestwerte — und die beiden Antworten vom
-          ersten Start. Danach ist die App wieder wie frisch installiert. Vorher
+          Setzt alles zurück: Tempi, Serien, Bestwerte, die beantworteten
+          Wissensfragen — und die beiden Antworten vom ersten Start. Danach ist die App wieder wie frisch installiert. Vorher
           exportieren.
         </p>
         {confirmClear ? (
@@ -182,6 +183,7 @@ export function DataManager() {
               onClick={() => {
                 clearLog()
                 clearProfile()
+                clearTheoryLog()
                 setLog(EMPTY_LOG)
                 setStored(false)
                 setConfirmClear(false)

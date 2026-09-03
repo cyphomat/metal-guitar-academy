@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 const navItems = [
   { href: "/", label: "Heute" },
   { href: "/drills", label: "Drills" },
+  { href: "/wissen", label: "Wissen" },
   { href: "/daten", label: "Daten" },
 ]
 
@@ -14,13 +15,16 @@ export function Navigation() {
 
   return (
     <nav className="sticky top-0 z-20 border-b border-line bg-bg pt-[env(safe-area-inset-top)]">
-      <div className="mx-auto flex h-14 max-w-[640px] items-center gap-3 px-4 wide:max-w-[1080px]">
+      {/* Vier Knöpfe und ein Schriftzug werden auf schmalen Geräten eng.
+          Enger gesetzt statt gekürzt — "RIF…" ist kein Name —, und unter
+          360 px weicht der Schriftzug ganz. "Heute" führt ohnehin nach Hause. */}
+      <div className="mx-auto flex h-14 max-w-[640px] items-center justify-end gap-2 px-3 sm:gap-3 sm:px-4 wide:max-w-[1080px]">
         {/* Der Farbwechsel fällt zwischen zweitem und drittem F: "Riffforge"
             ist als Kompositum richtig geschrieben, aber drei gleiche Buchstaben
             in versaler Schrift liest man sonst nicht auseinander. */}
         <Link
           href="/"
-          className="display flex-1 truncate text-[19px] tracking-[0.06em] text-fg"
+          className="display hidden flex-1 truncate text-[16px] tracking-[0.04em] text-fg min-[360px]:block sm:text-[19px] sm:tracking-[0.06em]"
         >
           Riff<span className="text-akzent">forge</span>
         </Link>
@@ -32,7 +36,7 @@ export function Navigation() {
               key={item.href}
               href={item.href}
               aria-current={active ? "page" : undefined}
-              className={`flex-none border px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors ${
+              className={`flex-none border px-2 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] transition-colors sm:px-2.5 sm:text-[11px] sm:tracking-[0.14em] ${
                 active
                   ? "border-akzent bg-[--tint-akzent] text-akzent"
                   : "border-line text-muted hover:border-stahl hover:text-stahl"
