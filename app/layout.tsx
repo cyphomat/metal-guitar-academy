@@ -11,6 +11,39 @@ import { asset } from "@/lib/base-path"
 // die App offline genauso aussieht wie online.
 const oswald = Oswald({ subsets: ["latin"], weight: ["400", "600", "700"], variable: "--font-display" })
 
+/**
+ * Content-Security-Policy als Meta-Tag.
+ *
+ * GitHub Pages liefert keine eigenen Kopfzeilen aus, ein Meta-Tag ist also der
+ * einzige Weg. Das wichtigste Stück ist `connect-src`: im Speicher dieses
+ * Browsers liegt ein GitHub-Token, und alle Seiten unter github.io teilen sich
+ * denselben Speicher. Käme über irgendeinen Weg fremdes Skript in die Seite,
+ * könnte es Token und Log damit nirgendwohin schicken — ausser zu GitHub
+ * selbst.
+ *
+ * `unsafe-inline` bei Skripten ist unvermeidbar: Next legt die Hydrationsdaten
+ * als Inline-Skript in die Seite. Die Sperre liegt deshalb bewusst auf dem
+ * Abfluss, nicht auf der Ausführung.
+ *
+ * `frame-ancestors` fehlt, weil es in einem Meta-Tag laut Spezifikation
+ * ignoriert wird — dagegen hilft nur eine echte Kopfzeile, die Pages nicht
+ * anbietet.
+ */
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "media-src 'self'",
+  "manifest-src 'self'",
+  "worker-src 'self'",
+  "connect-src 'self' https://api.github.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join("; ")
+
 export const metadata: Metadata = {
   title: "Riffforge",
   description: "15 Minuten Metal-Gitarre am Tag — aufwärmen, eine Technik, ein Riff.",
@@ -43,6 +76,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de" className={`dark ${oswald.variable}`}>
+      <head>
+        <meta httpEquiv="Content-Security-Policy" content={CSP} />
+      </head>
       <body className="min-h-screen">
         <ServiceWorker />
         <Navigation />

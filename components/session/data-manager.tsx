@@ -7,9 +7,11 @@ import {
   clearLog,
   exportFilename,
   exportLog,
+  hasStoredLog,
   importLog,
   loadLog,
 } from "@/lib/storage/practice-log"
+import { clearProfile } from "@/lib/storage/profile"
 import { EMPTY_LOG, type PracticeLog } from "@/lib/session/types"
 import { SyncPanel } from "@/components/session/sync-panel"
 import { MdFileDownload, MdFileUpload } from "react-icons/md"
@@ -21,10 +23,14 @@ export function DataManager() {
   const [pending, setPending] = useState<(ImportPreview & { name: string }) | null>(null)
   const [notice, setNotice] = useState<Notice>(null)
   const [confirmClear, setConfirmClear] = useState(false)
+  // Ein Log, der das Schema reisst, zählt null Einträge — der Knopf muss
+  // trotzdem angehen, sonst kommt man an genau diese Daten nicht mehr heran.
+  const [stored, setStored] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setLog(loadLog())
+    setStored(hasStoredLog())
   }, [])
 
   const days = practiceDays(log)
@@ -57,6 +63,7 @@ export function DataManager() {
   const apply = () => {
     if (!pending) return
     setLog(importLog(pending.merged))
+    setStored(true)
     setNotice({
       tone: "ok",
       text:
@@ -162,16 +169,20 @@ export function DataManager() {
       <section>
         <h2 className="rule mb-1 mt-9">Löschen</h2>
         <p className="mb-3 text-[13px] leading-relaxed text-dim">
-          Setzt alles zurück: Tempi, Serien, Bestwerte. Vorher exportieren.
+          Setzt alles zurück: Tempi, Serien, Bestwerte — und die beiden Antworten vom
+          ersten Start. Danach ist die App wieder wie frisch installiert. Vorher
+          exportieren.
         </p>
         {confirmClear ? (
           <div className="flex gap-[9px]">
             <button
               onClick={() => {
                 clearLog()
+                clearProfile()
                 setLog(EMPTY_LOG)
+                setStored(false)
                 setConfirmClear(false)
-                setNotice({ tone: "ok", text: "Log gelöscht." })
+                setNotice({ tone: "ok", text: "Alles gelöscht." })
               }}
               className="btn flex-1 border-rot bg-transparent text-rot"
             >
@@ -184,10 +195,10 @@ export function DataManager() {
         ) : (
           <button
             onClick={() => setConfirmClear(true)}
-            disabled={log.results.length === 0}
+            disabled={!stored}
             className="btn btn-ghost w-full"
           >
-            Log löschen
+            Alles löschen
           </button>
         )}
       </section>

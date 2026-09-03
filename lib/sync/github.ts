@@ -25,6 +25,18 @@ function decodeBase64(base64: string): string {
   return new TextDecoder().decode(Uint8Array.from(binary, (c) => c.charCodeAt(0)))
 }
 
+/**
+ * Konto und Repo kommen aus einem Textfeld und dürfen den Pfad nicht
+ * verlassen. Ohne Kodierung landet ein Wert wie `repo/../..` auf einem ganz
+ * anderen Endpunkt — mit dem Token im Kopf der Anfrage —, und ein `#` schneidet
+ * den Rest des Pfades einfach ab.
+ */
+function repoPath(settings: SyncSettings, suffix = ""): string {
+  const owner = encodeURIComponent(settings.owner)
+  const repo = encodeURIComponent(settings.repo)
+  return `/repos/${owner}/${repo}${suffix}`
+}
+
 async function call(
   settings: SyncSettings,
   path: string,
@@ -76,7 +88,7 @@ async function call(
  */
 export async function repoIsPublic(settings: SyncSettings): Promise<boolean | null> {
   try {
-    const response = await call(settings, `/repos/${settings.owner}/${settings.repo}`)
+    const response = await call(settings, repoPath(settings))
     if (!response.ok) return null
     const data = await response.json()
     return typeof data.private === "boolean" ? !data.private : null
@@ -86,7 +98,7 @@ export async function repoIsPublic(settings: SyncSettings): Promise<boolean | nu
 }
 
 export function githubStore(settings: SyncSettings): RemoteStore {
-  const base = `/repos/${settings.owner}/${settings.repo}/contents/${LOG_PATH}`
+  const base = repoPath(settings, `/contents/${LOG_PATH}`)
 
   return {
     async read() {

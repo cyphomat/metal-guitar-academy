@@ -82,6 +82,14 @@ Komponente.
 - **Beim Abgleich gewinnt keine Seite.** Konflikt heisst: neu lesen, erneut
   verschmelzen, noch einmal schreiben — und dann aufhören. Genau ein zweiter
   Versuch, sonst hängt es.
+- **Löschen heisst löschen.** Was die App speichert, muss der Löschen-Weg auch
+  wieder loswerden — Log, beiseitegelegte Kopie und Profil. Ein neuer
+  `localStorage`-Schlüssel gehört deshalb in dieselbe Liste wie sein Löschen.
+- **Kein dritter Host.** Ausser `api.github.com` beim eingerichteten Abgleich
+  spricht die App mit niemandem. Schriften liegen lokal (`next/font` lädt sie
+  beim Build), es gibt keine Analyse-Dienste und keine Einbettungen. Die CSP in
+  `app/layout.tsx` schreibt das fest: wer einen Host hinzufügt, muss dort
+  `connect-src` erweitern — und sich fragen, warum.
 - **Der Log ist append-only.** Einträge sind unveränderlich und über
   `drillId` plus `at` identifiziert. Deshalb ist Verschmelzen die richtige
   Antwort auf zwei Stände, nicht "der neuere gewinnt" — nie überschreiben.

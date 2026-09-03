@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="Open the app" src="https://img.shields.io/badge/App-open-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-123%20green-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-128%20green-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-works-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Dependencies" src="https://img.shields.io/badge/Dependencies-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -240,6 +240,28 @@ any of those pages ever has a hole.
 
 If the data repository is public, the app says so clearly: it works exactly the
 same, only everyone can read along.
+
+### Deleting means deleting
+
+**Alles löschen** under *Daten* clears the log, any set-aside copy of it and the
+two answers from the first launch. The app is then back to freshly installed.
+**Trennen** removes the account, repository and token from browser storage.
+
+### What the app does not do
+
+No analytics, no fonts from someone else's server, no embeds — measured, not
+claimed: loading every page and playing a full session sends **not one request**
+to any other host. The only possible network access is `api.github.com`, and
+only if you set up syncing yourself.
+
+The microphone does not leave the machine: the audio thread reports **timestamps
+and a level value**, nothing else. No audio is recorded, stored or sent, and the
+capture is released again after every block.
+
+Since GitHub Pages serves no headers of its own, the Content Security Policy
+sits in the page as a meta tag. The part that matters is `connect-src`: requests
+may only go to the site itself and to GitHub. If foreign script ever got into
+the page, it would have nowhere to send the token or the log.
 
 ---
 

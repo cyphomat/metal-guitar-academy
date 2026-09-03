@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="App öffnen" src="https://img.shields.io/badge/App-öffnen-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-123%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-128%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-läuft-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Abhängigkeiten" src="https://img.shields.io/badge/Abhängigkeiten-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -238,6 +238,32 @@ Seiten einmal eine Lücke hat.
 
 Steht das Datenrepo auf öffentlich, sagt die App das deutlich: sie funktioniert
 dann genauso, nur liest jeder mit.
+
+### Löschen heisst löschen
+
+**Alles löschen** unter *Daten* räumt den Log, eine eventuell beiseitegelegte
+Kopie davon und die beiden Antworten vom ersten Start weg. Danach ist die App
+wieder wie frisch installiert. **Trennen** löscht Konto, Repo und Token aus dem
+Browser-Speicher.
+
+### Was die App nicht tut
+
+Keine Analyse-Dienste, keine Schriften von fremden Servern, keine Einbettungen —
+nachgemessen, nicht behauptet: beim Laden aller Seiten und einer vollständigen
+Session geht **keine einzige Anfrage** an einen anderen Host. Der einzige
+mögliche Netzzugriff ist `api.github.com`, und den gibt es nur, wenn du den
+Abgleich selbst eingerichtet hast.
+
+Das Mikrofon verlässt den Rechner nicht: der Audio-Thread meldet ausschliesslich
+**Zeitstempel und einen Pegelwert** nach vorne, kein Ton wird aufgenommen,
+gespeichert oder verschickt. Nach jedem Block wird die Aufnahme wieder
+freigegeben.
+
+Weil auf GitHub Pages keine eigenen Kopfzeilen gehen, steht die
+Content-Security-Policy als Meta-Tag in der Seite. Der wichtige Teil ist
+`connect-src`: Anfragen dürfen nur an die eigene Adresse und an GitHub gehen.
+Käme über irgendeinen Weg fremdes Skript in die Seite, könnte es Token und Log
+nirgendwohin schicken.
 
 ---
 
