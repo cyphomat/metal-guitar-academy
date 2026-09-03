@@ -15,6 +15,22 @@ import type { Griff, TheoryCard } from "@/lib/theory/types"
  * da, und darunter, warum sie richtig ist.
  */
 
+/**
+ * Vergleichsform für getippte Antworten.
+ *
+ * Stufenfolgen schreibt jeder anders — "1 b2 3" und "1♭2 3" meinen dasselbe.
+ * Abstände, Vorzeichen und Gross-/Kleinschreibung sollen keine Rolle spielen;
+ * geprüft wird Wissen, nicht Tippgenauigkeit.
+ */
+function vergleichsform(wert: string): string {
+  return wert
+    .trim()
+    .toLowerCase()
+    .replace(/♭/g, "b")
+    .replace(/♯/g, "#")
+    .replace(/[\s,]+/g, " ")
+}
+
 function istRichtig(card: TheoryCard, antwort: Griff | string | null): boolean {
   if (antwort === null) return false
 
@@ -27,7 +43,7 @@ function istRichtig(card: TheoryCard, antwort: Griff | string | null): boolean {
   const getippt = String(antwort).trim()
   if (getippt === "") return false
 
-  if (erwartet.some((wert) => wert.toLowerCase() === getippt.toLowerCase())) return true
+  if (erwartet.some((wert) => vergleichsform(wert) === vergleichsform(getippt))) return true
 
   // Sonst als Ton gelesen: "fis" und "F#" meinen dasselbe. Bei einer Frage
   // nach der Schreibweise wäre genau das der Fehler — dort zählt das Wort.

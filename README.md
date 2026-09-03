@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="App öffnen" src="https://img.shields.io/badge/App-öffnen-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-286%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-355%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-läuft-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Abhängigkeiten" src="https://img.shields.io/badge/Abhängigkeiten-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -167,8 +167,8 @@ ein zweiter Bildschirm zum Lesen ist. Deshalb ist hier die **Frage der
 Normalzustand** und der Text das, was danach kommt: Abfragen behält sich
 messbar besser als Nachlesen, und für Musik ist das kaum umgesetzt.
 
-Vierundzwanzig Begriffe bisher — das Material und die Intervalle. Jeder mit
-zwei, drei Sätzen und einer Frage:
+Zweiundsechzig Begriffe in sechs Stufen — vom Halbton bis zum Riff-Bau. Jeder
+mit zwei, drei Sätzen und einer Frage:
 
 - **Auf dem Griffbrett zeigen**, wo das geht. Antworten produzieren bringt mehr
   als aus vier Kästchen wählen, und die Gitarre ist das Instrument, auf dem

@@ -16,10 +16,15 @@ describe("Katalog", () => {
     for (const card of THEORY_CARDS) expect(bekannt).toContain(card.stufe)
   })
 
-  it("deckt vorerst Stufe 1 und 2 ab", () => {
-    expect(cardsOfStufe(1).length).toBeGreaterThanOrEqual(10)
-    expect(cardsOfStufe(2).length).toBeGreaterThanOrEqual(10)
-    expect(THEORY_CARDS).toHaveLength(cardsOfStufe(1).length + cardsOfStufe(2).length)
+  it("hat in jeder Stufe etwas", () => {
+    for (const stufe of STUFEN) {
+      expect(cardsOfStufe(stufe.nummer).length, `Stufe ${stufe.nummer}`).toBeGreaterThan(0)
+    }
+  })
+
+  it("ordnet jede Karte genau einer Stufe zu", () => {
+    const summe = STUFEN.reduce((zahl, stufe) => zahl + cardsOfStufe(stufe.nummer).length, 0)
+    expect(summe).toBe(THEORY_CARDS.length)
   })
 
   it("findet eine Karte über ihre Kennung", () => {
@@ -129,5 +134,10 @@ describe("Was im Text steht, stimmt auch", () => {
   it("G# und Ab liegen auf demselben Bund", () => {
     // Die Karte "Zwei Namen, ein Bund" behauptet das.
     expect(noteAt(g(6, 4))).toBe("G#")
+  })
+
+  it("der Tritonus zur Quinte liegt einen Bund tiefer — die Blue Note", () => {
+    expect(intervalBetween(g(6, 5), g(5, 6)).name).toBe("Tritonus")
+    expect(intervalBetween(g(6, 5), g(5, 7)).name).toBe("Quinte")
   })
 })

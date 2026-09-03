@@ -330,7 +330,551 @@ export const THEORY_CARDS: TheoryCard[] = [
       richtig: ["Quinte"],
     },
   },
+  // ─────────────────────────────────────────────────── Stufe 3: Tonleitern
+  {
+    id: "s-dur",
+    stufe: 3,
+    begriff: "Die Dur-Tonleiter",
+    erklaerung:
+      "Sieben Töne in einem festen Muster aus Ganz- und Halbtonschritten: Ganz Ganz Halb Ganz Ganz Ganz Halb. Das ist keine willkürliche Auswahl, sondern das Raster, aus dem fast alles Weitere folgt — Tonarten, Akkorde, Stufen. Wer es einmal auf dem Hals abzählen kann, braucht es nie wieder auswendig.",
+    frage: {
+      art: "auswahl",
+      text: "Wie lautet das Schrittmuster der Dur-Tonleiter?",
+      auswahl: ["G G H G G G H", "G H G G H G G", "G G G H G G H", "H G G G H G G"],
+      richtig: ["G G H G G G H"],
+    },
+  },
+  {
+    id: "s-stufen",
+    stufe: 3,
+    begriff: "Stufenzahlen",
+    erklaerung:
+      "Statt Tonnamen zählen Musiker Stufen: 1 ist der Grundton, 5 die Quinte, ♭3 die kleine Terz. Der Vorteil ist, dass die Beschreibung in jeder Tonart gilt — eine Moll-Tonleiter ist immer 1 2 ♭3 4 5 ♭6 ♭7, egal ob sie auf A oder auf F# steht.",
+    frage: {
+      art: "eingabe",
+      text: "Wie schreibt man die kleine Terz als Stufe?",
+      richtig: ["b3", "♭3"],
+    },
+  },
+  {
+    id: "s-moll",
+    stufe: 3,
+    begriff: "Natürliches Moll",
+    erklaerung:
+      "1 2 ♭3 4 5 ♭6 ♭7 — dieselben sieben Töne wie eine Dur-Tonleiter, nur von einer anderen Stufe aus gezählt. Drei Töne liegen tiefer als in Dur, und die ♭3 trägt den grössten Teil der düsteren Farbe.",
+    frage: {
+      art: "eingabe",
+      text: "Wie ist natürliches Moll in Stufen gebaut?",
+      richtig: ["1 2 b3 4 5 b6 b7", "1 2 ♭3 4 5 ♭6 ♭7"],
+    },
+  },
+  {
+    id: "s-parallel",
+    stufe: 3,
+    begriff: "Paralleltonart",
+    erklaerung:
+      "Jede Dur-Tonart hat eine Moll-Tonart mit genau denselben Tönen, drei Halbtöne tiefer: C-Dur und a-Moll, G-Dur und e-Moll. Was sie unterscheidet, ist nur, welcher Ton sich wie ein Zuhause anfühlt.",
+    frage: {
+      art: "eingabe",
+      text: "Welche Moll-Tonart hat dieselben Töne wie C-Dur?",
+      richtig: ["a", "a-moll", "am", "A", "A-Moll"],
+    },
+  },
+  {
+    id: "s-pentatonik",
+    stufe: 3,
+    begriff: "Moll-Pentatonik",
+    erklaerung:
+      "Fünf Töne: 1 ♭3 4 5 ♭7. Es ist natürliches Moll ohne die zwei Stufen, an denen man sich vergreifen kann — deshalb klingt fast alles daraus brauchbar, und deshalb steht sie unter neunzig Prozent aller Rock- und Metal-Soli.",
+    frage: {
+      art: "eingabe",
+      text: "Welche Stufen bilden die Moll-Pentatonik?",
+      richtig: ["1 b3 4 5 b7", "1 ♭3 4 5 ♭7"],
+    },
+    technique: "pentatonic",
+  },
+  {
+    id: "s-blue-note",
+    stufe: 3,
+    begriff: "Die Blue Note",
+    erklaerung:
+      "Legt man den Tritonus (♭5) in die Moll-Pentatonik, wird daraus die Blues-Tonleiter. Der Ton trägt keine eigene Ruhe — er funktioniert im Vorbeigehen, zwischen 4 und 5, und klingt festgehalten schnell schief.",
+    frage: {
+      art: "auswahl",
+      text: "Welche Stufe kommt zur Moll-Pentatonik dazu, damit eine Blues-Tonleiter entsteht?",
+      auswahl: ["♭5", "2", "6", "7"],
+      richtig: ["♭5"],
+    },
+  },
+  {
+    id: "s-harmonisch",
+    stufe: 3,
+    begriff: "Harmonisch Moll",
+    erklaerung:
+      "Natürliches Moll mit erhöhter siebter Stufe: 1 2 ♭3 4 5 ♭6 7. Zwischen ♭6 und 7 entsteht dadurch ein Schritt von anderthalb Tönen — der grösste in einer Tonleiter, und der Grund für den orientalisch-klassischen Klang, den Neoklassik und Melodic Death Metal ausgiebig nutzen.",
+    frage: {
+      art: "auswahl",
+      text: "Was unterscheidet harmonisch Moll von natürlichem Moll?",
+      auswahl: [
+        "Die siebte Stufe ist erhöht",
+        "Die dritte Stufe ist erhöht",
+        "Die sechste Stufe ist erhöht",
+        "Die zweite Stufe ist erniedrigt",
+      ],
+      richtig: ["Die siebte Stufe ist erhöht"],
+    },
+  },
+  {
+    id: "s-phrygisch",
+    stufe: 3,
+    begriff: "Phrygisch",
+    erklaerung:
+      "1 ♭2 ♭3 4 5 ♭6 ♭7 — Moll mit zusätzlich erniedrigter zweiter Stufe. Der ♭2 sitzt einen Halbton über dem Grundton und drückt permanent dagegen; genau diese Reibung ist der Klang, den man mit Metal verbindet, sobald ein Riff um einen Ton kreist.",
+    frage: {
+      art: "eingabe",
+      text: "Welche Stufe trennt Phrygisch von natürlichem Moll?",
+      richtig: ["b2", "♭2"],
+    },
+  },
+  {
+    id: "s-phrygisch-dominant",
+    stufe: 3,
+    begriff: "Phrygisch dominant",
+    erklaerung:
+      "1 ♭2 3 4 5 ♭6 ♭7 — wie Phrygisch, aber mit grosser Terz. Aus der Reibung des ♭2 und der Härte der grossen Terz entsteht der Klang, den man aus unzähligen Metal-Soli kennt. Es ist die fünfte Stufe von harmonisch Moll: wer A harmonisch Moll spielt und E zum Grundton erklärt, ist da.",
+    frage: {
+      art: "auswahl",
+      text: "Die wievielte Stufe von harmonisch Moll ist Phrygisch dominant?",
+      auswahl: ["die fünfte", "die dritte", "die vierte", "die siebte"],
+      richtig: ["die fünfte"],
+    },
+  },
+  {
+    id: "s-modi",
+    stufe: 3,
+    begriff: "Modi sind Verschiebungen",
+    erklaerung:
+      "Ein Modus ist dieselbe Tonleiter von einem anderen Ton aus gezählt. Die weissen Tasten ab D ergeben Dorisch, ab E Phrygisch, ab G Mixolydisch. Die Töne bleiben, der Schwerpunkt wandert — und mit ihm die Farbe.",
+    frage: {
+      art: "auswahl",
+      text: "Von welcher Stufe der Dur-Tonleiter aus gezählt entsteht Phrygisch?",
+      auswahl: ["der dritten", "der zweiten", "der vierten", "der sechsten"],
+      richtig: ["der dritten"],
+    },
+  },
+  {
+    id: "s-quintenzirkel",
+    stufe: 3,
+    begriff: "Der Quintenzirkel",
+    erklaerung:
+      "Geht man von einer Tonart eine Quinte höher, kommt genau ein Kreuz dazu: C ohne Vorzeichen, G mit einem, D mit zwei. Nach zwölf Schritten ist man wieder am Anfang. Für die Gitarre praktisch, weil eine Quinte auf dem Hals eine feste Form ist — der Zirkel ist eine Bewegung, keine Tabelle.",
+    frage: {
+      art: "auswahl",
+      text: "Wie viele Kreuze hat die Tonart eine Quinte über C-Dur?",
+      auswahl: ["eins", "keins", "zwei", "vier"],
+      richtig: ["eins"],
+    },
+  },
+  {
+    id: "s-lagen",
+    stufe: 3,
+    begriff: "Die fünf Pentatonik-Lagen",
+    erklaerung:
+      "Dieselben fünf Töne lassen sich in fünf zusammenhängenden Griffmustern über den ganzen Hals spielen. Jede Lage endet dort, wo die nächste beginnt — wer eine kann, kann eine Fünftel des Halses. Lage 1 zu A-Moll beginnt im 5. Bund.",
+    frage: {
+      art: "griffbrett",
+      text: "Wo beginnt die erste Pentatonik-Lage von A-Moll auf der tiefen E-Saite?",
+      richtig: [griff(6, 5)],
+    },
+    technique: "pentatonic",
+  },
+  {
+    id: "s-vorzeichen",
+    stufe: 3,
+    begriff: "Vorzeichen einer Tonart",
+    erklaerung:
+      "Welche Töne in einer Tonart erhöht oder erniedrigt sind, steht fest, sobald der Grundton feststeht — sonst ergäbe das Schrittmuster nicht auf. E-Moll etwa braucht genau ein Kreuz, das F#, und deshalb steht in fast jedem Metal-Riff in E-Moll ein F# statt eines F.",
+    frage: {
+      art: "eingabe",
+      text: "Welcher Ton ist in E-Moll erhöht?",
+      richtig: ["F#", "Fis"],
+    },
+  },
+
+  // ───────────────────────────────────────────────────── Stufe 4: Akkorde
+  {
+    id: "a-dreiklang",
+    stufe: 4,
+    begriff: "Der Dreiklang",
+    erklaerung:
+      "Grundton, Terz, Quinte — mehr ist ein Akkord im Kern nicht. Alles Weitere, von Septimen bis zu weit gegriffenen Voicings, sind Zutaten zu diesen drei Tönen.",
+    frage: {
+      art: "auswahl",
+      text: "Aus welchen drei Stufen besteht ein Dreiklang?",
+      auswahl: ["1 3 5", "1 4 5", "1 3 7", "1 5 8"],
+      richtig: ["1 3 5"],
+    },
+  },
+  {
+    id: "a-dur-moll",
+    stufe: 4,
+    begriff: "Dur oder Moll",
+    erklaerung:
+      "Ein einziger Halbton entscheidet: grosse Terz ergibt Dur, kleine Terz ergibt Moll. Grundton und Quinte bleiben in beiden Fällen dieselben — deshalb liegt die ganze Stimmung eines Akkords auf einem einzigen Finger.",
+    frage: {
+      art: "auswahl",
+      text: "Welcher Ton macht aus einem Dur-Akkord einen Moll-Akkord?",
+      auswahl: ["die Terz", "die Quinte", "der Grundton", "die Septime"],
+      richtig: ["die Terz"],
+    },
+  },
+  {
+    id: "a-powerchord",
+    stufe: 4,
+    begriff: "Der Powerchord",
+    erklaerung:
+      "Grundton und Quinte, keine Terz. Damit ist er weder Dur noch Moll — er passt überall hin, und genau das macht ihn im Metal so brauchbar. Geschrieben wird er als 5, etwa E5.",
+    frage: {
+      art: "griffbrett",
+      text: "Der Grundton G liegt auf der tiefen E-Saite im 3. Bund. Zeig die Quinte des Powerchords auf der A-Saite.",
+      gegeben: [griff(6, 3)],
+      richtig: positionsOfInterval(griff(6, 3), 7).filter((stelle) => stelle.saite === 5),
+    },
+    technique: "power-chords",
+  },
+  {
+    id: "a-verzerrung",
+    stufe: 4,
+    begriff: "Warum Verzerrung Terzen frisst",
+    erklaerung:
+      "Verzerrung erzeugt Summen- und Differenztöne zwischen allem, was gleichzeitig klingt. Bei Grundton und Quinte fallen diese Zusatztöne grösstenteils mit den gespielten zusammen; kommt eine Terz dazu, entstehen Frequenzen dazwischen, und der Akkord wird matschig. Deshalb spielt Metal Powerchords und keine vollen Dreiklänge.",
+    frage: {
+      art: "auswahl",
+      text: "Warum klingen volle Dreiklänge mit viel Verzerrung matschig?",
+      auswahl: [
+        "Die Terz erzeugt zusätzliche Frequenzen dazwischen",
+        "Die Quinte ist zu laut",
+        "Der Grundton verschwindet",
+        "Die Saiten schwingen ungleich",
+      ],
+      richtig: ["Die Terz erzeugt zusätzliche Frequenzen dazwischen"],
+    },
+    technique: "power-chords",
+  },
+  {
+    id: "a-stufen-dur",
+    stufe: 4,
+    begriff: "Stufenakkorde in Dur",
+    erklaerung:
+      "Baut man auf jeder Stufe der Dur-Tonleiter einen Dreiklang aus den Tönen derselben Tonart, ergibt sich immer dasselbe Muster: I ii iii IV V vi vii°. Grossbuchstaben sind Dur, kleine Moll, das ° vermindert. Das gilt in jeder Dur-Tonart.",
+    frage: {
+      art: "auswahl",
+      text: "Welches Geschlecht hat die sechste Stufe in Dur?",
+      auswahl: ["Moll", "Dur", "vermindert", "übermässig"],
+      richtig: ["Moll"],
+    },
+  },
+  {
+    id: "a-stufen-moll",
+    stufe: 4,
+    begriff: "Stufenakkorde in Moll",
+    erklaerung:
+      "In natürlichem Moll lautet die Reihe i ii° III iv v VI VII. Die fünfte Stufe ist hier Moll — und weil ein Moll-Akkord weniger Zug nach Hause hat, greift klassische Musik dort zur erhöhten Septime aus harmonisch Moll und macht Dur daraus.",
+    frage: {
+      art: "auswahl",
+      text: "Welches Geschlecht hat die dritte Stufe in natürlichem Moll?",
+      auswahl: ["Dur", "Moll", "vermindert", "übermässig"],
+      richtig: ["Dur"],
+    },
+  },
+  {
+    id: "a-roemisch",
+    stufe: 4,
+    begriff: "Römische Ziffern lesen",
+    erklaerung:
+      "I–V–vi–IV beschreibt eine Akkordfolge ohne Tonart: in C wären das C, G, a, F. Der Vorteil ist, dass sich dieselbe Folge überallhin verschieben lässt — auf der Gitarre heisst das schlicht, dieselbe Form ein paar Bünde weiter zu greifen.",
+    frage: {
+      art: "eingabe",
+      text: "Welcher Akkord ist die V. Stufe in C-Dur?",
+      richtig: ["G"],
+    },
+  },
+  {
+    id: "a-kadenz",
+    stufe: 4,
+    begriff: "Kadenz und Auflösung",
+    erklaerung:
+      "Die fünfte Stufe zieht zurück zur ersten — das ist der stärkste Zug, den tonale Musik kennt, und der Grund, warum ein Stück am Ende zu Hause klingt. Metal umgeht ihn oft absichtlich und bleibt auf der ♭VII oder ♭VI stehen, damit nichts sich auflöst.",
+    frage: {
+      art: "auswahl",
+      text: "Welche Stufe zieht am stärksten zurück zum Grundton?",
+      auswahl: ["die fünfte", "die vierte", "die zweite", "die sechste"],
+      richtig: ["die fünfte"],
+    },
+  },
+  {
+    id: "a-umkehrung",
+    stufe: 4,
+    begriff: "Umkehrungen",
+    erklaerung:
+      "Liegt statt des Grundtons die Terz oder die Quinte unten, ist es immer noch derselbe Akkord — nur mit anderem Fundament. Auf der Gitarre entsteht das oft von selbst, sobald man eine Form in eine andere Lage schiebt.",
+    frage: {
+      art: "auswahl",
+      text: "Was liegt bei der ersten Umkehrung eines Dreiklangs unten?",
+      auswahl: ["die Terz", "die Quinte", "der Grundton", "die Septime"],
+      richtig: ["die Terz"],
+    },
+  },
+  {
+    id: "a-septakkord",
+    stufe: 4,
+    begriff: "Septakkorde",
+    erklaerung:
+      "Ein vierter Ton über dem Dreiklang: die Septime. Die kleine Septime auf einem Dur-Akkord ergibt den Dominantseptakkord, der stark nach Auflösung verlangt; auf einem Moll-Akkord klingt sie einfach offener.",
+    frage: {
+      art: "auswahl",
+      text: "Welche Stufe kommt zum Dreiklang dazu, damit ein Septakkord entsteht?",
+      auswahl: ["die Septime", "die Sexte", "die None", "die Quarte"],
+      richtig: ["die Septime"],
+    },
+  },
+  {
+    id: "a-barre",
+    stufe: 4,
+    begriff: "Barré: E-Form und A-Form",
+    erklaerung:
+      "Ein Barré ist ein Sattel aus Zeigefinger. Die E-Form hat ihren Grundton auf der tiefen E-Saite, die A-Form auf der A-Saite — zwei Formen, und damit jeder Dur- und Moll-Akkord in jeder Lage. Die Töne der beiden tiefen Saiten zu kennen reicht deshalb aus, um jeden Akkord zu finden.",
+    frage: {
+      art: "griffbrett",
+      text: "Wo liegt der Grundton eines G-Dur-Barrés in der E-Form?",
+      richtig: [griff(6, 3)],
+    },
+  },
+  {
+    id: "a-caged",
+    stufe: 4,
+    begriff: "CAGED",
+    erklaerung:
+      "Die fünf offenen Akkordformen C, A, G, E und D lassen sich verschieben und decken zusammen den ganzen Hals ab. Sie greifen ineinander wie die Pentatonik-Lagen: wo eine endet, beginnt die nächste. Der Name ist die Reihenfolge, in der sie den Hals hinaufwandern.",
+    frage: {
+      art: "eingabe",
+      text: "Wofür stehen die fünf Buchstaben in CAGED?",
+      richtig: ["Akkordformen", "die fünf offenen Akkordformen", "Akkordform", "offene Akkordformen"],
+    },
+  },
+  {
+    id: "a-vermindert",
+    stufe: 4,
+    begriff: "Der verminderte Dreiklang",
+    erklaerung:
+      "Kleine Terz und Tritonus über dem Grundton: 1 ♭3 ♭5. Er hat keine Ruhe, weil der Tritonus keine hat — in Dur steht er auf der siebten Stufe, und in Metal-Riffs taucht er auf, wenn Spannung ohne Auflösung gewollt ist.",
+    frage: {
+      art: "auswahl",
+      text: "Welches Intervall trennt einen verminderten von einem Moll-Dreiklang?",
+      auswahl: ["die Quinte ist erniedrigt", "die Terz ist erhöht", "der Grundton ist erniedrigt", "die Septime fehlt"],
+      richtig: ["die Quinte ist erniedrigt"],
+    },
+  },
+
+  // ──────────────────────────────────────────────────── Stufe 5: Rhythmus
+  {
+    id: "r-notenwerte",
+    stufe: 5,
+    begriff: "Notenwerte",
+    erklaerung:
+      "Jeder Wert ist die Hälfte des vorigen: ganze, halbe, Viertel, Achtel, Sechzehntel. Als Verhältnis gedacht statt als Symbol wird das Zählen leichter — vier Sechzehntel dauern so lange wie eine Viertel, egal bei welchem Tempo.",
+    frage: {
+      art: "auswahl",
+      text: "Wie viele Sechzehntel passen in eine Viertelnote?",
+      auswahl: ["4", "2", "8", "16"],
+      richtig: ["4"],
+    },
+  },
+  {
+    id: "r-taktart",
+    stufe: 5,
+    begriff: "Taktarten",
+    erklaerung:
+      "Die obere Zahl sagt, wie viele Schläge ein Takt hat, die untere, welcher Notenwert ein Schlag ist. 4/4 sind vier Viertel — das Mass der allermeisten Riffs. Ungerade Taktarten wie 7/8 sind im Metal kein Selbstzweck, sondern ein Mittel, den Fuss aus dem Tritt zu bringen.",
+    frage: {
+      art: "auswahl",
+      text: "Was sagt die untere Zahl einer Taktangabe?",
+      auswahl: [
+        "welcher Notenwert ein Schlag ist",
+        "wie viele Schläge ein Takt hat",
+        "wie schnell gespielt wird",
+        "wie viele Takte eine Phrase hat",
+      ],
+      richtig: ["welcher Notenwert ein Schlag ist"],
+    },
+  },
+  {
+    id: "r-punktierung",
+    stufe: 5,
+    begriff: "Punktierung",
+    erklaerung:
+      "Ein Punkt hinter einer Note verlängert sie um die Hälfte ihres eigenen Werts. Eine punktierte Viertel dauert also so lange wie drei Achtel — das ist der Grund, warum punktierte Rhythmen gegen den Grundschlag laufen und dabei trotzdem aufgehen.",
+    frage: {
+      art: "auswahl",
+      text: "Wie lange dauert eine punktierte Viertelnote?",
+      auswahl: ["drei Achtel", "zwei Achtel", "vier Achtel", "eineinhalb Sechzehntel"],
+      richtig: ["drei Achtel"],
+    },
+  },
+  {
+    id: "r-triole",
+    stufe: 5,
+    begriff: "Triole",
+    erklaerung:
+      "Drei Noten im Platz von zweien. Das Ergebnis ist ein anderes Raster als das übliche Zweier-Gefühl, und genau deshalb klingt eine Triolenpassage nach Rollen statt nach Marschieren.",
+    frage: {
+      art: "auswahl",
+      text: "Wie viele Noten spielt eine Achteltriole im Platz von zwei Achteln?",
+      auswahl: ["3", "2", "4", "6"],
+      richtig: ["3"],
+    },
+  },
+  {
+    id: "r-gallop",
+    stufe: 5,
+    begriff: "Die Gallop-Figur",
+    erklaerung:
+      "Achtel, Sechzehntel, Sechzehntel — auf einen Schlag. Der lange Ton vorn und die zwei kurzen hinterher ergeben genau den Vorwärtsdruck, den Thrash und die NWOBHM zum Markenzeichen gemacht haben. Gespielt wird sie üblicherweise Abschlag, Abschlag, Aufschlag.",
+    frage: {
+      art: "auswahl",
+      text: "Aus welchen Notenwerten besteht ein Gallop auf einem Schlag?",
+      auswahl: [
+        "Achtel, Sechzehntel, Sechzehntel",
+        "Sechzehntel, Sechzehntel, Achtel",
+        "Viertel, Achtel, Achtel",
+        "drei Achteltriolen",
+      ],
+      richtig: ["Achtel, Sechzehntel, Sechzehntel"],
+    },
+    technique: "gallop",
+  },
+  {
+    id: "r-gallop-umgekehrt",
+    stufe: 5,
+    begriff: "Umgekehrter Gallop",
+    erklaerung:
+      "Dieselben drei Werte, andere Reihenfolge: Sechzehntel, Sechzehntel, Achtel. Die zwei kurzen Töne kommen zuerst, der lange trägt den Schlag aus — das zieht statt zu schieben und klingt schwerer als das Original.",
+    frage: {
+      art: "auswahl",
+      text: "Womit beginnt ein umgekehrter Gallop?",
+      auswahl: ["zwei Sechzehnteln", "einer Achtel", "einer Viertel", "einer Pause"],
+      richtig: ["zwei Sechzehnteln"],
+    },
+    technique: "gallop",
+  },
+  {
+    id: "r-synkope",
+    stufe: 5,
+    begriff: "Synkope",
+    erklaerung:
+      "Eine Betonung, die neben dem Grundschlag liegt. Der Reiz entsteht nur, weil der Grundschlag im Kopf weiterläuft — ohne ihn ist eine Synkope einfach ein Ton. Deshalb ist das Metronom kein Gegner, sondern die Voraussetzung.",
+    frage: {
+      art: "auswahl",
+      text: "Was ist eine Synkope?",
+      auswahl: [
+        "eine Betonung neben dem Grundschlag",
+        "ein Wechsel der Taktart",
+        "eine Pause auf der Eins",
+        "eine Verzögerung des Tempos",
+      ],
+      richtig: ["eine Betonung neben dem Grundschlag"],
+    },
+  },
+
+  // ──────────────────────────────────────── Stufe 6: Metal im Besonderen
+  {
+    id: "x-drop",
+    stufe: 6,
+    begriff: "Drop-Stimmungen",
+    erklaerung:
+      "In Drop D wird die tiefe E-Saite auf D heruntergestimmt. Dadurch liegen Grundton und Quinte des Powerchords auf demselben Bund zweier Nachbarsaiten — ein Finger reicht, und Riffs lassen sich in einem Tempo verschieben, das mit zwei Fingern nicht ginge. Drop C und tiefer folgen demselben Prinzip.",
+    frage: {
+      art: "auswahl",
+      text: "Warum reicht in Drop D ein Finger für den Powerchord?",
+      auswahl: [
+        "Grundton und Quinte liegen auf demselben Bund",
+        "Die Saiten sind lockerer",
+        "Die Quinte entfällt",
+        "Der Grundton liegt leer",
+      ],
+      richtig: ["Grundton und Quinte liegen auf demselben Bund"],
+    },
+  },
+  {
+    id: "x-orgelpunkt",
+    stufe: 6,
+    begriff: "Orgelpunkt",
+    erklaerung:
+      "Ein Ton bleibt liegen, während sich darüber alles ändert — im Metal meist die leere tiefe Saite zwischen den Akzenten. Der stehende Ton gibt dem Riff einen Boden, gegen den alles andere arbeitet, und macht Bewegung hörbar, die sonst untergehen würde.",
+    frage: {
+      art: "auswahl",
+      text: "Was ist ein Orgelpunkt in einem Riff?",
+      auswahl: [
+        "ein liegender Ton, über dem sich alles ändert",
+        "die lauteste Stelle",
+        "ein Wechsel der Tonart",
+        "eine Pause vor dem Refrain",
+      ],
+      richtig: ["ein liegender Ton, über dem sich alles ändert"],
+    },
+  },
+  {
+    id: "x-palm-mute",
+    stufe: 6,
+    begriff: "Palm Mute in der Tabulatur",
+    erklaerung:
+      "P.M. mit gestrichelter Linie über den Noten heisst: Handballen auf die Saiten am Steg. Der Ton wird kürzer und perkussiver, ohne stumm zu sein. Wie stark gedämpft wird, steht nirgends — das ist die Entscheidung, die den Chug ausmacht.",
+    frage: {
+      art: "eingabe",
+      text: "Wofür steht P.M. über einer Tabulatur?",
+      richtig: ["Palm Mute", "Palm Muting", "Handballendämpfung", "palm mute"],
+    },
+    technique: "palm-mute",
+  },
+  {
+    id: "x-abschlag",
+    stufe: 6,
+    begriff: "Abschlag gegen Wechselschlag",
+    erklaerung:
+      "Reiner Abschlag klingt anders, nicht nur anstrengender: jeder Anschlag trifft die Saite aus derselben Richtung, also sind alle Töne gleich betont und gleich hart. Wechselschlag ist schneller, erzeugt aber zwangsläufig eine leichte Ungleichheit zwischen Ab und Auf — genau die, die man bei Thrash nicht will.",
+    frage: {
+      art: "auswahl",
+      text: "Warum klingt reiner Abschlag härter als Wechselschlag?",
+      auswahl: [
+        "Jeder Anschlag trifft die Saite aus derselben Richtung",
+        "Er ist automatisch lauter",
+        "Er trifft mehr Saiten",
+        "Er dämpft die Saite mit",
+      ],
+      richtig: ["Jeder Anschlag trifft die Saite aus derselben Richtung"],
+    },
+    technique: "downpicking",
+  },
+  {
+    id: "x-riffbau",
+    stufe: 6,
+    begriff: "Riff-Bau: Motiv und Antwort",
+    erklaerung:
+      "Die meisten Riffs bestehen aus einer kurzen Figur und einer Variante davon, die anders endet — Frage und Antwort über zwei oder vier Takte. Wer das hört, kann ein fremdes Riff nach zweimal Hören mitspielen, weil die zweite Hälfte fast immer die erste mit anderem Schluss ist.",
+    frage: {
+      art: "auswahl",
+      text: "Wie sind die meisten Riffs über vier Takte gebaut?",
+      auswahl: [
+        "eine Figur und eine Variante mit anderem Schluss",
+        "vier verschiedene Figuren",
+        "dieselbe Figur viermal",
+        "eine Figur und eine Pause",
+      ],
+      richtig: ["eine Figur und eine Variante mit anderem Schluss"],
+    },
+  },
 ]
+
 
 /** Karten einer Stufe. */
 export function cardsOfStufe(stufe: number): TheoryCard[] {

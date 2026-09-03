@@ -169,8 +169,8 @@ export function KnowledgeOverview() {
         )}
 
         <p className="mt-6 text-[13px] leading-relaxed text-dim">
-          Der Katalog wächst noch: Tonleitern, Akkorde, Rhythmus und die
-          Metal-Eigenheiten kommen dazu.{" "}
+          Vier der Fragen kommen ohnehin in jeder Session vor — hier ist nur der
+          Rest.{" "}
           <Link href="/" className="text-stahl underline-offset-2 hover:underline">
             Zurück zur Session
           </Link>
