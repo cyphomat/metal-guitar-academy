@@ -160,6 +160,10 @@ behind it in two sentences.
 
 ## Knowledge
 
+<p align="center">
+  <img src="assets/screens/wissen.png" alt="A fretboard question, answered, with its explanation" width="300">
+</p>
+
 Fifteen minutes of playing and some theory go badly together if the theory is a
 second screen to read. So here the **question is the normal state** and the text
 is what comes after it: retrieval is measurably better for retention than

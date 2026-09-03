@@ -153,6 +153,10 @@ das die Theorie dahinter in zwei Sätzen erklärt.
 
 ## Wissen
 
+<p align="center">
+  <img src="assets/screens/wissen.png" alt="Eine aufgelöste Griffbrett-Frage mit Erklärung" width="300">
+</p>
+
 Fünfzehn Minuten Spielen und Theorie schlagen sich schlecht, wenn die Theorie
 ein zweiter Bildschirm zum Lesen ist. Deshalb ist hier die **Frage der
 Normalzustand** und der Text das, was danach kommt: Abfragen behält sich

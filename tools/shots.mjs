@@ -190,7 +190,36 @@ await wide.waitForTimeout(2000)
 await wide.screenshot({ path: `${OUT}/session-desktop.png` })
 console.log(`${OUT}/session-desktop.png`)
 
-// 8 — Der erste Start. Braucht einen eigenen Kontext: die Ersteinrichtung
+// 8 — Wissen: eine aufgelöste Frage auf dem Griffbrett. Eigener Kontext mit
+// vorbelegtem Antwort-Log, damit die Griffbrett-Karte zuerst drankommt statt
+// der ersten Karte des Katalogs.
+const wissen = await browser.newContext({ viewport: PHONE, deviceScaleFactor: 2 })
+await wissen.addInitScript(() => {
+  const beantwortet = [
+    'm-halbton', 'm-chromatisch', 'm-stammtoene', 'm-h-oder-b', 'm-oktave',
+    'm-leersaiten', 'm-a-saite', 'm-bund-halbton', 'm-zwoelfter', 'm-oktavform',
+    'm-enharmonik',
+  ]
+  localStorage.setItem('mga.theory-log.v1', JSON.stringify({
+    version: 1,
+    answers: beantwortet.map((cardId) => ({
+      cardId, grade: 4, correct: true, at: new Date().toISOString(),
+    })),
+  }))
+})
+const wissenSeite = await wissen.newPage()
+await wissenSeite.goto(`${BASE}/wissen/`, { waitUntil: 'networkidle' })
+await wissenSeite.waitForTimeout(700)
+await wissenSeite.getByRole('button', { name: /Fragen$/ }).click()
+await wissenSeite.waitForTimeout(500)
+await wissenSeite.locator('rect[aria-label="Saite E, Bund 3"]').click()
+await wissenSeite.getByRole('button', { name: /^Auflösen$/ }).click()
+await wissenSeite.waitForTimeout(500)
+await wissenSeite.screenshot({ path: `${OUT}/wissen.png` })
+console.log(`${OUT}/wissen.png`)
+await wissen.close()
+
+// 9 — Der erste Start. Braucht einen eigenen Kontext: die Ersteinrichtung
 // zeigt sich nur, solange weder Profil noch Log existieren — der Kontext oben
 // hat beides.
 const frisch = await browser.newContext({ viewport: PHONE, deviceScaleFactor: 2 })
