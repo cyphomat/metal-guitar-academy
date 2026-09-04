@@ -813,6 +813,184 @@ export const THEORY_CARDS: TheoryCard[] = [
       richtig: ["eine Betonung neben dem Grundschlag"],
     },
   },
+  {
+    id: "r-sechzehntel",
+    stufe: 5,
+    begriff: "Sechzehntel",
+    erklaerung:
+      "Vier Töne auf einen Schlag, das feinste Raster, das im Riff-Spiel regelmässig vorkommt. Fast jede Metal-Figur ist ein Ausschnitt daraus: der Gallop nimmt den ersten, dritten und vierten, die Dreiergruppe jeden dritten. Wer das Raster im Kopf hat, muss Figuren nicht auswendig lernen, sondern nur abzählen.",
+    frage: {
+      art: "auswahl",
+      text: "Wie viele Sechzehntel liegen auf einem Schlag?",
+      auswahl: ["4", "2", "3", "8"],
+      richtig: ["4"],
+    },
+  },
+  {
+    id: "r-haltebogen",
+    stufe: 5,
+    begriff: "Haltebogen",
+    erklaerung:
+      "Ein Bogen zwischen zwei gleichen Tönen macht aus ihnen einen einzigen, der über die Grenze hinweg klingt. Angeschlagen wird nur der erste. Über einen Taktstrich gezogen ist das die einfachste Art, eine Betonung von der Eins wegzuschieben — deshalb steht am Anfang fast jeder Synkope ein Haltebogen.",
+    frage: {
+      art: "auswahl",
+      text: "Wie oft wird ein Ton angeschlagen, der mit einem Haltebogen an den nächsten gebunden ist?",
+      auswahl: ["einmal, am Anfang", "zweimal", "einmal, am Ende", "gar nicht"],
+      richtig: ["einmal, am Anfang"],
+    },
+  },
+  {
+    id: "r-pause",
+    stufe: 5,
+    begriff: "Pausen zählen",
+    erklaerung:
+      "Eine Pause ist kein Nichts, sondern ein Wert mit derselben Dauer wie die Note, die dort stehen könnte. Auf der Gitarre ist sie ausserdem Arbeit: eine Saite hört nicht von selbst auf zu klingen, das Abdämpfen mit Handballen oder Greifhand gehört zur Pause dazu. Bei Verzerrung fällt jede ungedämpfte Pause sofort auf.",
+    frage: {
+      art: "auswahl",
+      text: "Was gehört auf der E-Gitarre zu einer sauber gespielten Pause?",
+      auswahl: [
+        "die Saiten abdämpfen",
+        "das Tempo kurz anhalten",
+        "leiser weiterspielen",
+        "auf die nächste Saite wechseln",
+      ],
+      richtig: ["die Saiten abdämpfen"],
+    },
+  },
+  {
+    id: "r-akzent",
+    stufe: 5,
+    begriff: "Akzent",
+    erklaerung:
+      "Ein Akzent ist ein Ton, der lauter angeschlagen wird als seine Nachbarn. Er verschiebt, wo eine Figur ihren Schwerpunkt hat, ohne eine einzige Note zu ändern. Bei hoher Verzerrung wird er allerdings stark zusammengedrückt — deshalb arbeitet Metal öfter mit Dämpfung als mit Lautstärke, wenn etwas hervorstechen soll.",
+    frage: {
+      art: "auswahl",
+      text: "Warum trägt ein Akzent bei starker Verzerrung weniger weit?",
+      auswahl: [
+        "Verzerrung drückt laute und leise Anschläge zusammen",
+        "Verzerrung verschiebt die Tonhöhe",
+        "Akzente sind nur auf Akustikgitarren notiert",
+        "das Metronom übertönt sie",
+      ],
+      richtig: ["Verzerrung drückt laute und leise Anschläge zusammen"],
+    },
+  },
+  {
+    id: "r-dreiergruppe",
+    stufe: 5,
+    begriff: "Dreiergruppen",
+    erklaerung:
+      "Töne im Abstand von drei Sechzehnteln — also punktierte Achtel. Weil drei nicht in vier aufgeht, wandert der Anfang der Gruppe über den Schlag und findet erst nach drei Schlägen zurück. Genau diese Verschiebung erzeugt den Eindruck, das Riff laufe gegen das Schlagzeug, obwohl beide dasselbe Tempo halten.",
+    frage: {
+      art: "auswahl",
+      text: "Nach wie vielen Schlägen fällt eine Dreiergruppe aus Sechzehnteln wieder auf den Schlag?",
+      auswahl: ["3", "2", "4", "gar nicht"],
+      richtig: ["3"],
+    },
+  },
+  {
+    id: "r-dreiergruppe-gespielt",
+    stufe: 5,
+    begriff: "Dreiergruppen spielen",
+    erklaerung:
+      "Der Prüfstein ist nicht die Gruppe selbst, sondern das Weiterzählen: wer bei der zweiten Gruppe anfängt, den Schlag zu suchen, verliert sie. Drei Takte sind vier Gruppen — genau eine Runde, bis der Anfang wieder auf der Eins liegt. Das Metronom klickt dabei weiter Viertel, und das soll es auch.",
+    frage: {
+      art: "gespielt",
+      text: "Spiel drei Takte Dreiergruppen — punktierte Achtel, durchgehend.",
+      richtig: ["dreiergruppe"],
+      rhythmus: { figurId: "dreiergruppe", bpm: 80, takte: 3 },
+    },
+  },
+  {
+    id: "r-shuffle",
+    stufe: 5,
+    begriff: "Shuffle",
+    erklaerung:
+      "Zwei Töne je Schlag, aber ungleich lang: der erste dauert zwei Drittel, der zweite ein Drittel. Gedacht wird es als Triole, bei der die mittlere Note wegfällt. Im Hardrock trägt das ganze Riffs, im Metal taucht es vor allem dort auf, wo die Wurzeln im Blues liegen.",
+    frage: {
+      art: "auswahl",
+      text: "Wie entsteht das Shuffle-Gefühl aus einer Triole?",
+      auswahl: [
+        "die mittlere Note fällt weg",
+        "die erste Note fällt weg",
+        "alle drei werden gleich lang",
+        "die Triole wird verdoppelt",
+      ],
+      richtig: ["die mittlere Note fällt weg"],
+    },
+  },
+  {
+    id: "r-shuffle-gespielt",
+    stufe: 5,
+    begriff: "Shuffle spielen",
+    erklaerung:
+      "Der häufigste Fehler ist die Mitte: wer den zweiten Ton zu früh setzt, landet bei geraden Achteln, wer ihn zu spät setzt, bei punktierten. Das Mikrofon misst genau diesen Abstand — zwei Drittel zu einem Drittel, nichts dazwischen.",
+    frage: {
+      art: "gespielt",
+      text: "Spiel zwei Takte im Shuffle.",
+      richtig: ["shuffle"],
+      rhythmus: { figurId: "shuffle", bpm: 90, takte: 2 },
+    },
+  },
+  {
+    id: "r-dead-note",
+    stufe: 5,
+    begriff: "Dead Note",
+    erklaerung:
+      "Ein Anschlag ohne Tonhöhe: die Greifhand liegt lose auf den Saiten, sodass nur ein perkussives Klacken übrig bleibt. Im Riff füllt das die Lücken zwischen den klingenden Tönen und hält die Anschlaghand in Bewegung, ohne den Klang zu verwässern. Notiert wird es als Kreuz statt einer Bundzahl.",
+    frage: {
+      art: "auswahl",
+      text: "Wie wird eine Dead Note erzeugt?",
+      auswahl: [
+        "die Greifhand liegt lose auf den Saiten",
+        "die Saite wird gar nicht angeschlagen",
+        "der Verstärker wird kurz stummgeschaltet",
+        "die Saite wird über den Sattel gedrückt",
+      ],
+      richtig: ["die Greifhand liegt lose auf den Saiten"],
+    },
+    technique: "palm-mute",
+  },
+  {
+    id: "r-dead-note-gespielt",
+    stufe: 5,
+    begriff: "Dead Notes spielen",
+    erklaerung:
+      "Vier Sechzehntel, aber nur der erste und der dritte klingen — die beiden dazwischen sind abgedämpft. Im Zeitraster ist das von geraden Sechzehnteln nicht zu unterscheiden; der Unterschied steckt allein darin, wie laut die gedämpften Anschläge sind. Genau das misst das Mikrofon hier.",
+    frage: {
+      art: "gespielt",
+      text: "Spiel zwei Takte Sechzehntel, dabei die Nachschläge abgedämpft.",
+      richtig: ["dead-notes"],
+      rhythmus: { figurId: "dead-notes", bpm: 80, takte: 2 },
+    },
+    technique: "palm-mute",
+  },
+  {
+    id: "r-synkope-gespielt",
+    stufe: 5,
+    begriff: "Eine Synkope spielen",
+    erklaerung:
+      "Eins, und — und: auf der Zwei liegt kein Anschlag, der Ton davor wird über sie hinweg gehalten. Schwer ist daran nicht das Treffen, sondern das Aushalten; die Hand will auf der Zwei zuschlagen, weil das Metronom dort klickt.",
+    frage: {
+      art: "gespielt",
+      text: "Spiel zwei Takte mit Achtelsynkope — auf der Zwei kein Anschlag.",
+      richtig: ["synkope"],
+      rhythmus: { figurId: "synkope", bpm: 90, takte: 2 },
+    },
+  },
+  {
+    id: "r-triole-gespielt",
+    stufe: 5,
+    begriff: "Eine Triole spielen",
+    erklaerung:
+      "Drei gleich lange Töne auf einen Schlag. Der Fehler, der am häufigsten passiert, ist ein Gallop daraus zu machen — drei Töne sind es dann auch, aber ungleich verteilt. Gemessen wird der Abstand, und der verzeiht die Verwechslung nicht.",
+    frage: {
+      art: "gespielt",
+      text: "Spiel zwei Takte Achteltriolen.",
+      richtig: ["triole"],
+      rhythmus: { figurId: "triole", bpm: 90, takte: 2 },
+    },
+  },
 
   // ──────────────────────────────────────── Stufe 6: Metal im Besonderen
   {

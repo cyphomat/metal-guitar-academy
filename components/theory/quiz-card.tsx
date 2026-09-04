@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Fretboard } from "@/components/theory/fretboard"
 import { RhythmQuiz } from "@/components/theory/rhythm-quiz"
-import { figurById, type FigurBewertung } from "@/lib/theory/rhythm"
+import { DAEMPFUNG_MINDESTENS, figurById, type FigurBewertung } from "@/lib/theory/rhythm"
 import { GRADES, type Grade } from "@/lib/theory/fsrs"
 import { noteAt, parseTon, sameGriff, verwechselungshinweis } from "@/lib/theory/fretboard"
 import type { Griff, TheoryCard } from "@/lib/theory/types"
@@ -70,6 +70,10 @@ export function QuizCard({ card, onAnswer, zaehler }: QuizCardProps) {
 
   const antwort: Griff | string | null = card.frage.art === "griffbrett" ? griff : text
   const richtig = card.frage.art === "gespielt" ? (gespielt?.richtig ?? false) : istRichtig(card, antwort)
+  // Wer ohne Mikrofon auflöst, hat nicht danebengespielt — er hat gar nicht
+  // gespielt. Das ist ein dritter Zustand, kein Fehlversuch, und er bekommt
+  // deshalb weder das Rot noch eine Notenempfehlung.
+  const ungemessen = card.frage.art === "gespielt" && gespielt === null && aufgeloest
   const bereit =
     card.frage.art === "griffbrett"
       ? griff !== null
@@ -175,19 +179,33 @@ export function QuizCard({ card, onAnswer, zaehler }: QuizCardProps) {
       ) : (
         <div className="space-y-4">
           <div
-            className={`border-l-2 py-2 pl-3 ${richtig ? "border-gruen" : "border-rot"}`}
+            className={`border-l-2 py-2 pl-3 ${
+              ungemessen ? "border-line" : richtig ? "border-gruen" : "border-rot"
+            }`}
           >
-            <p className={`kicker ${richtig ? "text-gruen" : "text-rot"}`}>
-              {richtig ? "Sitzt" : "Daneben"}
+            <p
+              className={`kicker ${
+                ungemessen ? "text-muted" : richtig ? "text-gruen" : "text-rot"
+              }`}
+            >
+              {ungemessen ? "Nicht gemessen" : richtig ? "Sitzt" : "Daneben"}
             </p>
-            {!richtig && card.frage.art === "gespielt" && (
+            {ungemessen && (
               <p className="mt-1 text-[15px] text-fg">
-                {gespielt
-                  ? "Nicht genug Anschläge sassen auf der Figur. Die Verzögerung der Signalkette ist dabei schon herausgerechnet — es liegt an der Figur, nicht an der Technik."
-                  : "Nicht gespielt. Die Auflösung steht unten; bewerte selbst, wie sicher du dir bist."}
+                Ohne Mikrofon gibt es keine Messung. Die Auflösung steht unten — bewerte selbst,
+                wie sicher du dir bist.
               </p>
             )}
-            {!richtig && card.frage.art !== "gespielt" && (
+            {!richtig && !ungemessen && card.frage.art === "gespielt" && (
+              <p className="mt-1 text-[15px] text-fg">
+                {gespielt?.daempfung !== null &&
+                gespielt !== null &&
+                gespielt.daempfung < DAEMPFUNG_MINDESTENS
+                  ? "Die Anschläge sassen, aber die gedämpften waren kaum leiser als die übrigen. Es fehlt die Dämpfung, nicht das Timing."
+                  : "Nicht genug Anschläge sassen auf der Figur. Die Verzögerung der Signalkette ist dabei schon herausgerechnet — es liegt an der Figur, nicht an der Technik."}
+              </p>
+            )}
+            {!richtig && !ungemessen && card.frage.art !== "gespielt" && (
               <p className="mt-1 text-[15px] text-fg">
                 Richtig ist{" "}
                 <b className="font-mono">
@@ -215,7 +233,9 @@ export function QuizCard({ card, onAnswer, zaehler }: QuizCardProps) {
               {GRADES.map((note) => {
                 // Vorschlag, keine Vorgabe: falsch beantwortet heisst
                 // "Nochmal", richtig heisst "Gut". Überschreiben geht immer.
-                const empfohlen = richtig ? note.value === 3 : note.value === 1
+                // Ohne Messung wird nichts vorgeschlagen — dafür weiss die App
+                // schlicht zu wenig.
+                const empfohlen = ungemessen ? false : richtig ? note.value === 3 : note.value === 1
                 return (
                   <button
                     key={note.value}
