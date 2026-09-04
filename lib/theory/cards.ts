@@ -1,4 +1,4 @@
-import { positionsOf, positionsOfInterval } from "./fretboard"
+import { positionsOf, positionsOfInterval, stufeInLage } from "./fretboard"
 import type { Griff, TheoryCard } from "./types"
 
 /**
@@ -489,6 +489,93 @@ export const THEORY_CARDS: TheoryCard[] = [
     technique: "pentatonic",
   },
   {
+    id: "s-lage-grundton",
+    stufe: 3,
+    begriff: "Der Grundton in der Lage",
+    erklaerung:
+      "In jeder Lage liegt der Grundton mehrfach — bei Lage 1 von A-Moll auf der tiefen E-Saite, auf der D-Saite und wieder auf der hohen E-Saite. Wer ihn im Muster findet, weiss jederzeit, wo er ist; wer ihn nicht findet, spielt Muster statt Musik.",
+    frage: {
+      art: "griffbrett",
+      text: "A-Moll-Pentatonik, Lage 1 im 5. bis 8. Bund: tippe einen Grundton an.",
+      richtig: stufeInLage("A", 1, 0),
+    },
+    technique: "pentatonic",
+  },
+  {
+    id: "s-lage-quinte",
+    stufe: 3,
+    begriff: "Die Quinte in der Lage",
+    erklaerung:
+      "Nach dem Grundton ist die Quinte der Ton, auf dem sich eine Phrase am ruhigsten ablegen lässt — sie ist auch der zweite Ton jedes Powerchords. In Lage 1 von A-Moll liegt sie auf der A-Saite und noch einmal auf der B-Saite.",
+    frage: {
+      art: "griffbrett",
+      text: "A-Moll-Pentatonik, Lage 1 im 5. bis 8. Bund: tippe eine Quinte an.",
+      richtig: stufeInLage("A", 1, 7),
+    },
+    technique: "pentatonic",
+  },
+  {
+    id: "s-lage-anker",
+    stufe: 3,
+    begriff: "Woran die Lagen sich unterscheiden",
+    erklaerung:
+      "Die fünf Lagen sind dasselbe Tonmaterial, nur an verschiedenen Stellen gegriffen. Was sie auseinanderhält, ist die Stufe, die auf der tiefen E-Saite zuunterst liegt: Lage 1 der Grundton, Lage 2 die kleine Terz, Lage 3 die Quarte, Lage 4 die Quinte, Lage 5 die kleine Septime.",
+    frage: {
+      art: "auswahl",
+      text: "Welche Stufe liegt in Lage 2 auf der tiefen E-Saite zuunterst?",
+      auswahl: ["die kleine Terz", "der Grundton", "die Quinte", "die Quarte"],
+      richtig: ["die kleine Terz"],
+    },
+    technique: "pentatonic",
+  },
+  {
+    id: "s-lage-zwei-toene",
+    stufe: 3,
+    begriff: "Zwei Töne je Saite",
+    erklaerung:
+      "Jede Pentatonik-Lage hat auf jeder Saite genau zwei Töne — zwölf insgesamt. Deshalb passt eine Lage unter eine Hand, ohne dass sie wandert, und deshalb lässt sich eine ganze Tonleiter spielen, ohne die Lage zu wechseln.",
+    frage: {
+      art: "auswahl",
+      text: "Wie viele Töne der Pentatonik liegen in einer Lage auf jeder Saite?",
+      auswahl: ["2", "1", "3", "je nach Saite verschieden"],
+      richtig: ["2"],
+    },
+    technique: "pentatonic",
+  },
+  {
+    id: "s-lage-kreis",
+    stufe: 3,
+    begriff: "Die Lagen laufen im Kreis",
+    erklaerung:
+      "Nach Lage 5 kommt wieder Lage 1, eine Oktave höher. Welche Lage am Hals zuunterst liegt, hängt deshalb am Grundton: bei A-Moll ist es Lage 4, weil deren Anker die Quinte E ist — und die liegt auf der leeren tiefen E-Saite. Wer 1 bis 5 von unten nach oben erwartet, erwartet das Falsche.",
+    frage: {
+      art: "auswahl",
+      text: "Welche Lage der A-Moll-Pentatonik liegt am Hals ganz unten?",
+      auswahl: ["Lage 4", "Lage 1", "Lage 5", "Lage 2"],
+      richtig: ["Lage 4"],
+    },
+    technique: "pentatonic",
+  },
+  {
+    id: "s-lage-verbinden",
+    stufe: 3,
+    begriff: "Lagen verbinden",
+    erklaerung:
+      "Zwei benachbarte Lagen teilen sich Töne: die oberen einer Lage sind die unteren der nächsten. Genau deshalb lässt sich zwischen ihnen wechseln, ohne dass eine Lücke entsteht — und deshalb lohnt es sich, eine neue Lage sofort mit der bekannten zu verzahnen, statt sie für sich zu üben.",
+    frage: {
+      art: "auswahl",
+      text: "Was haben zwei benachbarte Pentatonik-Lagen gemeinsam?",
+      auswahl: [
+        "sie teilen sich Töne an denselben Stellen",
+        "sie haben denselben Grundton auf der E-Saite",
+        "sie liegen im selben Bund",
+        "gar nichts — sie sind getrennte Muster",
+      ],
+      richtig: ["sie teilen sich Töne an denselben Stellen"],
+    },
+    technique: "pentatonic",
+  },
+  {
     id: "s-vorzeichen",
     stufe: 3,
     begriff: "Vorzeichen einer Tonart",
@@ -674,6 +761,81 @@ export const THEORY_CARDS: TheoryCard[] = [
       auswahl: ["die Quinte ist erniedrigt", "die Terz ist erhöht", "der Grundton ist erniedrigt", "die Septime fehlt"],
       richtig: ["die Quinte ist erniedrigt"],
     },
+  },
+  {
+    id: "a-quartpowerchord",
+    stufe: 4,
+    begriff: "Quartpowerchord",
+    erklaerung:
+      "Statt Grundton und Quinte greift man Grundton und Quarte — fünf Halbtöne statt sieben. Der Griff ist derselbe, nur eine Saite tiefer angesetzt, und er klingt offener und weniger fest als der gewöhnliche Powerchord. Im Hardrock der Achtziger steht er überall dort, wo ein Riff schweben soll statt zu stehen.",
+    frage: {
+      art: "auswahl",
+      text: "Wie viele Halbtöne liegen zwischen den beiden Tönen eines Quartpowerchords?",
+      auswahl: ["5", "7", "6", "4"],
+      richtig: ["5"],
+    },
+    technique: "power-chords",
+  },
+  {
+    id: "a-powerchord-umkehrung",
+    stufe: 4,
+    begriff: "Powerchord-Umkehrung",
+    erklaerung:
+      "Legt man die Quinte nach unten und den Grundton darüber, wird aus dem Quintabstand ein Quartabstand — dieselben zwei Töne, andere Reihenfolge. Der Akkord heisst weiter nach seinem Grundton, klingt aber leichter, weil der tiefste Ton nicht mehr der Namensgeber ist.",
+    frage: {
+      art: "auswahl",
+      text: "Welcher Ton liegt bei der Umkehrung eines Powerchords unten?",
+      auswahl: ["die Quinte", "der Grundton", "die Terz", "die Oktave"],
+      richtig: ["die Quinte"],
+    },
+    technique: "power-chords",
+  },
+  {
+    id: "a-powerchord-b5",
+    stufe: 4,
+    begriff: "Der b5-Powerchord",
+    erklaerung:
+      "Die Quinte einen Bund tiefer, und aus sieben Halbtönen werden sechs — der Tritonus. Das Ergebnis ist kein Akkord, auf dem sich etwas ablegen liesse; er drängt weiter. Genau deshalb steht er im Metal überall dort, wo Spannung ohne Auflösung gewollt ist.",
+    frage: {
+      art: "auswahl",
+      text: "Welches Intervall bleibt übrig, wenn man die Quinte eines Powerchords um einen Halbton senkt?",
+      auswahl: ["der Tritonus", "die Quarte", "die grosse Terz", "die kleine Sexte"],
+      richtig: ["der Tritonus"],
+    },
+    technique: "power-chords",
+  },
+  {
+    id: "a-powerchord-kreuz5",
+    stufe: 4,
+    begriff: "Der #5-Powerchord",
+    erklaerung:
+      "Die Quinte einen Bund höher: acht Halbtöne, also eine kleine Sexte. Auch das ist kein Ruhepunkt, aber ein anderer als der Tritonus — er zieht nach oben statt zu kippen. Wer beide gegeneinander hört, hat den Unterschied zwischen Drohung und Aufbruch im Ohr.",
+    frage: {
+      art: "auswahl",
+      text: "Welches Intervall entsteht, wenn man die Quinte eines Powerchords um einen Halbton erhöht?",
+      auswahl: ["die kleine Sexte", "die grosse Sexte", "die kleine Septime", "der Tritonus"],
+      richtig: ["die kleine Sexte"],
+    },
+    technique: "power-chords",
+  },
+  {
+    id: "a-powerchord-hoch",
+    stufe: 4,
+    begriff: "Powerchords auf den hohen Saiten",
+    erklaerung:
+      "Derselbe Griff funktioniert auf jedem Saitenpaar, nur wandert er beim Sprung auf die B-Saite einen Bund weiter — der Knick in der Stimmung. Höher gegriffen klingt ein Powerchord dünner, weil die Verzerrung weniger Grundton zum Arbeiten hat; deshalb tragen Riffs auf den hohen Saiten selten allein.",
+    frage: {
+      art: "auswahl",
+      text: "Was ändert sich am Powerchord-Griff, sobald die B-Saite beteiligt ist?",
+      auswahl: [
+        "der obere Ton wandert einen Bund höher",
+        "der obere Ton wandert einen Bund tiefer",
+        "nichts, der Griff bleibt gleich",
+        "man braucht eine dritte Saite",
+      ],
+      richtig: ["der obere Ton wandert einen Bund höher"],
+    },
+    technique: "power-chords",
   },
 
   // ──────────────────────────────────────────────────── Stufe 5: Rhythmus

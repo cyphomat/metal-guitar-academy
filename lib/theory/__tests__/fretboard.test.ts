@@ -6,11 +6,16 @@ import {
   midiAt,
   noteAt,
   parseTon,
+  PENTATONIK,
+  pentatonikLage,
   positionsOf,
   positionsOfInterval,
   sameGriff,
   SAITENNAMEN,
+  stufeInLage,
+  TOENE,
   verwechselungshinweis,
+  type Lage,
 } from "@/lib/theory/fretboard"
 import type { Griff } from "@/lib/theory/types"
 
@@ -186,5 +191,92 @@ describe("sameGriff", () => {
     expect(sameGriff(g(5, 5), g(5, 5))).toBe(true)
     expect(sameGriff(g(5, 5), g(4, 5))).toBe(false)
     expect(sameGriff(g(5, 5), g(5, 7))).toBe(false)
+  })
+})
+
+describe("Pentatonik-Lagen", () => {
+  /** Die Lage als Bünde je Saite, wie man sie in einem Diagramm läse. */
+  const form = (grundton: Parameters<typeof pentatonikLage>[0], lage: Lage) => {
+    const nach: Record<number, number[]> = {}
+    for (const griff of pentatonikLage(grundton, lage)) (nach[griff.saite] ??= []).push(griff.bund)
+    return nach
+  }
+
+  it("rechnet Lage 1 von A-Moll auf die Form, die im Lehrbuch steht", () => {
+    // Der Prüfstein für das ganze Verfahren: diese Form kennt jeder
+    // Gitarrist auswendig, und sie fällt hier aus der Rechnung.
+    expect(form("A", 1)).toEqual({ 6: [5, 8], 5: [5, 7], 4: [5, 7], 3: [5, 7], 2: [5, 8], 1: [5, 8] })
+  })
+
+  it("rechnet Lage 2 auf die Form direkt darüber", () => {
+    expect(form("A", 2)).toEqual({ 6: [8, 10], 5: [7, 10], 4: [7, 10], 3: [7, 9], 2: [8, 10], 1: [8, 10] })
+  })
+
+  it("gibt jeder Lage zwei Töne je Saite", () => {
+    for (const grundton of TOENE) {
+      for (const lage of [1, 2, 3, 4, 5] as const) {
+        const griffe = pentatonikLage(grundton, lage)
+        expect(griffe, `${grundton} Lage ${lage}`).toHaveLength(12)
+        for (const saite of [1, 2, 3, 4, 5, 6]) {
+          expect(griffe.filter((g) => g.saite === saite), `${grundton} Lage ${lage} Saite ${saite}`).toHaveLength(2)
+        }
+      }
+    }
+  })
+
+  it("nimmt nur Töne der Pentatonik", () => {
+    const erlaubt = new Set(PENTATONIK.map((h) => TOENE[(TOENE.indexOf("A") + h) % 12]))
+    for (const lage of [1, 2, 3, 4, 5] as const) {
+      for (const griff of pentatonikLage("A", lage)) {
+        expect(erlaubt.has(noteAt(griff)), `${noteAt(griff)} in Lage ${lage}`).toBe(true)
+      }
+    }
+  })
+
+  it("setzt auf der tiefen E-Saite die Stufe an, die die Lage benennt", () => {
+    // Genau das unterscheidet die fünf Lagen voneinander.
+    const stufen = [0, 3, 5, 7, 10]
+    for (const lage of [1, 2, 3, 4, 5] as const) {
+      const tiefste = pentatonikLage("A", lage).filter((g) => g.saite === 6)[0]
+      const abstand = (midiAt(tiefste) - TOENE.indexOf("A") + 120) % 12
+      expect(abstand, `Lage ${lage}`).toBe(stufen[lage - 1])
+    }
+  })
+
+  it("laufen im Kreis — welche zuunterst liegt, hängt am Grundton", () => {
+    // Bei A-Moll ist es Lage 4: ihr Anker ist die Quinte E, und die liegt auf
+    // der leeren E-Saite. Wer hier 1-2-3-4-5 von unten nach oben erwartet,
+    // erwartet das Falsche.
+    const tiefster = (lage: Lage) => Math.min(...pentatonikLage("A", lage).map((g) => g.bund))
+    const reihenfolge = ([1, 2, 3, 4, 5] as const)
+      .map((lage) => ({ lage, bund: tiefster(lage) }))
+      .sort((a, b) => a.bund - b.bund)
+      .map((eintrag) => eintrag.lage)
+    expect(reihenfolge).toEqual([4, 5, 1, 2, 3])
+  })
+
+  it("schliessen lückenlos aneinander an", () => {
+    // Jede Lage ab dem Anker der vorigen gesucht: dann liegt sie darüber und
+    // teilt sich mit ihr Töne. Ohne diese Überschneidung wären es fünf Inseln
+    // statt eines Griffbretts — und genau deshalb bringt der Kurs nie eine
+    // neue Lage, ohne sie sofort mit der bekannten zu verzahnen.
+    for (const lage of [1, 2, 3, 4, 5] as const) {
+      const hier = pentatonikLage("A", lage)
+      const ankerHier = Math.min(...hier.filter((g) => g.saite === 6).map((g) => g.bund))
+      const naechsteNummer = ((lage % 5) + 1) as Lage
+      const naechste = pentatonikLage("A", naechsteNummer, ankerHier)
+
+      const ankerDort = Math.min(...naechste.filter((g) => g.saite === 6).map((g) => g.bund))
+      expect(ankerDort, `Lage ${naechsteNummer} über ${lage}`).toBeGreaterThan(ankerHier)
+
+      const gemeinsam = hier.filter((a) => naechste.some((b) => sameGriff(a, b)))
+      expect(gemeinsam.length, `Lage ${lage} und ${naechsteNummer}`).toBeGreaterThanOrEqual(3)
+    }
+  })
+
+  it("findet die Stufen innerhalb einer Lage", () => {
+    const grundtoene = stufeInLage("A", 1, 0)
+    expect(grundtoene.length).toBeGreaterThan(0)
+    for (const griff of grundtoene) expect(noteAt(griff)).toBe("A")
   })
 })

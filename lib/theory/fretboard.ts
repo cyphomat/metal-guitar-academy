@@ -191,3 +191,80 @@ export function verwechselungshinweis(eingabe: string, richtig: Ton): string | n
 export function sameGriff(a: Griff, b: Griff): boolean {
   return a.saite === b.saite && a.bund === b.bund
 }
+
+/**
+ * Die Moll-Pentatonik in Halbtönen über dem Grundton.
+ * Grundton, kleine Terz, Quarte, Quinte, kleine Septime.
+ */
+export const PENTATONIK = [0, 3, 5, 7, 10] as const
+
+/** Die fünf Lagen, in der Reihenfolge, in der sie am Hals aufeinander folgen. */
+export type Lage = 1 | 2 | 3 | 4 | 5
+
+/**
+ * Eine Lage der Moll-Pentatonik, gerechnet statt getippt.
+ *
+ * Die fünf Lagen unterscheiden sich nur darin, welche Stufe auf der tiefen
+ * E-Saite den untersten Ton stellt: Lage 1 den Grundton, Lage 2 die kleine
+ * Terz, Lage 3 die Quarte, Lage 4 die Quinte, Lage 5 die kleine Septime. Von
+ * dort nimmt jede Saite die zwei tiefsten Pentatoniktöne, die noch in die Lage
+ * fallen — zwei je Saite, zwölf insgesamt.
+ *
+ * Der Boden liegt einen Bund unter dem Anker und gilt für alle Saiten gleich.
+ * Dieser eine Bund Spielraum ist es, der den Knick zur B-Saite und die
+ * verschobenen Lagen überhaupt aufgehen lässt; ohne ihn fiele Lage 2 auseinander.
+ *
+ * Die fünf Lagen laufen im Kreis: welche am Hals zuunterst liegt, hängt am
+ * Grundton. Bei A-Moll ist es Lage 4, weil deren Anker — die Quinte E — auf der
+ * leeren E-Saite liegt. `abBund` sucht den Anker deshalb erst ab einem Bund,
+ * und genau damit lässt sich nachweisen, dass zwei Lagen aneinander anschliessen.
+ *
+ * Eine Tabelle mit fünf Lagen mal zwölf Grundtönen wäre die Sorte Datenmenge,
+ * in der ein falscher Bund niemandem auffiele.
+ */
+export function pentatonikLage(grundton: Ton, lage: Lage, abBund = 0, bisBund = 24): Griff[] {
+  const wurzel = TOENE.indexOf(grundton)
+  const gehoert = (griff: Griff) =>
+    PENTATONIK.includes(((midiAt(griff) - wurzel) % 12 + 12) % 12 as (typeof PENTATONIK)[number])
+
+  const frets = (saite: number) => {
+    const treffer: number[] = []
+    for (let bund = 0; bund <= bisBund; bund += 1) {
+      if (gehoert({ saite, bund } as Griff)) treffer.push(bund)
+    }
+    return treffer
+  }
+
+  // Der Anker: die tiefste Stelle auf der E-Saite, an der die Stufe dieser
+  // Lage liegt.
+  const stufe = PENTATONIK[lage - 1]
+  const anker = frets(6).find(
+    (bund) =>
+      bund >= abBund &&
+      ((midiAt({ saite: 6, bund } as Griff) - wurzel) % 12 + 12) % 12 === stufe,
+  )
+  if (anker === undefined) return []
+
+  const boden = Math.max(0, anker - 1)
+  const griffe: Griff[] = []
+  for (let saite = 6; saite >= 1; saite -= 1) {
+    for (const bund of frets(saite).filter((b) => b >= boden).slice(0, 2)) {
+      griffe.push({ saite, bund } as Griff)
+    }
+  }
+  return griffe
+}
+
+/** Die Stellen einer Lage, an denen eine bestimmte Stufe liegt. */
+export function stufeInLage(
+  grundton: Ton,
+  lage: Lage,
+  halbtoene: number,
+  abBund = 0,
+  bisBund = 24,
+): Griff[] {
+  const wurzel = TOENE.indexOf(grundton)
+  return pentatonikLage(grundton, lage, abBund, bisBund).filter(
+    (griff) => ((midiAt(griff) - wurzel) % 12 + 12) % 12 === halbtoene,
+  )
+}

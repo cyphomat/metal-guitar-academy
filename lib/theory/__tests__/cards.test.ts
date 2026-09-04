@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest"
 import { cardById, cardsOfStufe, THEORY_CARDS } from "@/lib/theory/cards"
-import { intervalBetween, noteAt } from "@/lib/theory/fretboard"
+import {
+  intervalBetween,
+  intervallOf,
+  noteAt,
+  pentatonikLage,
+  sameGriff,
+  type Lage,
+} from "@/lib/theory/fretboard"
 import {
   beatSeconds,
   beatsFor,
@@ -176,6 +183,81 @@ describe("Gespielte Fragen", () => {
         expect(urteil.richtig, `${card.id} ← ${andere.id}`).toBe(false)
       }
     }
+  })
+})
+
+describe("Was die Lagen-Karten behaupten, stimmt auch", () => {
+  it("nennt für Lage 1 von A-Moll nur echte Grundtöne", () => {
+    const karte = cardById("s-lage-grundton")!
+    const stellen = karte.frage.richtig as Griff[]
+    expect(stellen.length).toBeGreaterThan(1)
+    for (const stelle of stellen) expect(noteAt(stelle)).toBe("A")
+    // Und sie liegen wirklich in der Lage, nicht irgendwo auf dem Hals.
+    for (const stelle of stellen) {
+      expect(pentatonikLage("A", 1).some((g) => sameGriff(g, stelle)), JSON.stringify(stelle)).toBe(true)
+    }
+  })
+
+  it("nennt für die Quinte in Lage 1 nur echte Quinten", () => {
+    const stellen = cardById("s-lage-quinte")!.frage.richtig as Griff[]
+    expect(stellen.length).toBeGreaterThan(1)
+    // Die Quinte über A ist E — sieben Halbtöne.
+    for (const stelle of stellen) expect(noteAt(stelle)).toBe("E")
+  })
+
+  it("bestätigt, dass in Lage 2 die kleine Terz zuunterst liegt", () => {
+    const tiefste = pentatonikLage("A", 2).filter((g) => g.saite === 6)[0]
+    expect(noteAt(tiefste)).toBe("C") // kleine Terz über A
+    expect(cardById("s-lage-anker")!.frage.richtig).toEqual(["die kleine Terz"])
+  })
+
+  it("bestätigt die zwei Töne je Saite", () => {
+    for (const saite of [1, 2, 3, 4, 5, 6]) {
+      expect(pentatonikLage("A", 1).filter((g) => g.saite === saite)).toHaveLength(2)
+    }
+    expect(cardById("s-lage-zwei-toene")!.frage.richtig).toEqual(["2"])
+  })
+
+  it("bestätigt, dass bei A-Moll Lage 4 zuunterst liegt", () => {
+    const tiefster = (lage: Lage) => Math.min(...pentatonikLage("A", lage).map((g) => g.bund))
+    const unterste = ([1, 2, 3, 4, 5] as const).reduce((a, b) => (tiefster(a) <= tiefster(b) ? a : b))
+    expect(unterste).toBe(4)
+    expect(cardById("s-lage-kreis")!.frage.richtig).toEqual(["Lage 4"])
+  })
+})
+
+describe("Was die Powerchord-Karten behaupten, stimmt auch", () => {
+  // Die Intervallnamen kommen aus derselben Rechnung, die auch das Griffbrett
+  // benutzt — abgeschrieben wäre hier ein Halbton schnell verrutscht.
+  const nachNamen: Array<[string, number, string]> = [
+    ["a-powerchord-b5", 6, "Tritonus"],
+    ["a-powerchord-kreuz5", 8, "kleine Sexte"],
+  ]
+
+  it.each(nachNamen)("%s nennt bei %i Halbtönen das richtige Intervall", (id, halbtoene, name) => {
+    expect(intervallOf(halbtoene).name).toBe(name)
+    expect((cardById(id)!.frage.richtig as string[])[0].toLowerCase()).toContain(name.toLowerCase())
+  })
+
+  it("zählt die Halbtöne des Quartpowerchords richtig", () => {
+    // Diese Karte fragt die Zahl statt den Namen — geprüft wird also die Zahl.
+    expect(intervallOf(5).name).toBe("Quarte")
+    expect(cardById("a-quartpowerchord")!.frage.richtig).toEqual(["5"])
+  })
+
+  it("misst den gewöhnlichen Powerchord bei sieben Halbtönen", () => {
+    // Der Bezugspunkt, gegen den die drei Varianten überhaupt Varianten sind.
+    expect(intervallOf(7).name).toBe("Quinte")
+  })
+
+  it("bestätigt den Knick zur B-Saite an echten Griffen", () => {
+    // Auf jedem anderen Saitenpaar liegt die Quinte zwei Bünde höher; über die
+    // B-Saite hinweg sind es drei. Genau das behauptet die Karte.
+    expect(intervalBetween(g(5, 5), g(4, 7)).name).toBe("Quinte")
+    expect(intervalBetween(g(3, 5), g(2, 8)).name).toBe("Quinte")
+    expect(cardById("a-powerchord-hoch")!.frage.richtig).toEqual([
+      "der obere Ton wandert einen Bund höher",
+    ])
   })
 })
 
