@@ -1,11 +1,14 @@
 import { describe, expect, it } from "vitest"
 import {
   beatSeconds,
+  beatsFor,
   bewerteFigur,
   EINZAEHLER_SCHLAEGE,
-  figurById,
   FIGUREN,
+  figurById,
+  GENAUIGKEIT_RICHTIG,
   patternTimes,
+  periodeOf,
   toleranceSeconds,
   TREFFERQUOTE_RICHTIG,
 } from "@/lib/theory/rhythm"
@@ -17,11 +20,32 @@ describe("Figuren", () => {
     for (const figur of FIGUREN) expect(figur.offsets[0]).toBe(0)
   })
 
-  it("bleiben innerhalb eines Schlags", () => {
+  it("wiederholen sich nach ganzen Schlägen", () => {
+    // Ganzzahlig, weil jeder Anschlag an einem gemessenen Klick hängt: eine
+    // Periode von zweieinhalb Schlägen hätte für die zweite Wiederholung
+    // keinen Klick mehr, an den sie sich hängen könnte.
+    for (const figur of FIGUREN) {
+      const periode = periodeOf(figur)
+      expect(Number.isInteger(periode), figur.id).toBe(true)
+      expect(periode, figur.id).toBeGreaterThanOrEqual(1)
+    }
+  })
+
+  it("bleiben innerhalb ihrer Periode", () => {
     for (const figur of FIGUREN) {
       for (const offset of figur.offsets) {
         expect(offset, figur.id).toBeGreaterThanOrEqual(0)
-        expect(offset, figur.id).toBeLessThan(1)
+        expect(offset, figur.id).toBeLessThan(periodeOf(figur))
+      }
+    }
+  })
+
+  it("sind aufsteigend und ohne Dopplung", () => {
+    // Zwei gleiche Offsets machten den engsten Abstand null — und damit die
+    // Toleranz null, womit gar nichts mehr träfe.
+    for (const figur of FIGUREN) {
+      for (let i = 1; i < figur.offsets.length; i += 1) {
+        expect(figur.offsets[i], figur.id).toBeGreaterThan(figur.offsets[i - 1])
       }
     }
   })
@@ -32,6 +56,47 @@ describe("Figuren", () => {
 
   it("kehren ihn richtig um", () => {
     expect(figurById("gallop-umgekehrt")!.offsets).toEqual([0, 0.25, 0.5])
+  })
+})
+
+describe("mehrschlägige Figuren", () => {
+  const drei = figurById("dreiergruppe")!
+
+  it("legt die Dreiergruppe quer über drei Schläge", () => {
+    expect(periodeOf(drei)).toBe(3)
+    expect(patternTimes([0, 1, 2, 3, 4, 5], drei, 1)).toEqual([0, 0.75, 1.5, 2.25, 3, 3.75, 4.5, 5.25])
+  })
+
+  it("hängt jede Note an ihren eigenen gemessenen Schlag", () => {
+    // Der zweite Schlag kam 20 ms zu spät. Die Note bei Offset 1,5 gehört zu
+    // ihm — sie muss mitwandern, statt aus dem ersten Schlag hochgerechnet zu
+    // werden.
+    const zeiten = patternTimes([0, 1.02, 2, 3, 4, 5], drei, 1)
+    expect(zeiten[2]).toBeCloseTo(1.52, 10)
+  })
+
+  it("lässt eine angebrochene Periode weg, statt sie halb zu verlangen", () => {
+    // Fünf Schläge tragen eine Dreiergruppe, nicht zwei.
+    expect(patternTimes([0, 1, 2, 3, 4], drei, 1)).toHaveLength(4)
+  })
+
+  it("rundet die Länge auf ganze Perioden auf", () => {
+    // Zwei Takte sind acht Schläge — die dritte Gruppe wäre angefangen und
+    // nie zu Ende gespielt.
+    expect(beatsFor(drei, 2)).toBe(9)
+    expect(beatsFor(drei, 3)).toBe(12)
+    expect(beatsFor(gallop, 2)).toBe(8)
+  })
+
+  it("sieht bei der Toleranz auch über die Periodengrenze", () => {
+    // Bei der Synkope ist der Abstand von der letzten Note einer Periode zur
+    // ersten der nächsten der engste überhaupt. Mit nur einer Periode bliebe
+    // er ungesehen und die Toleranz fiele zu grosszügig aus.
+    const synkope = figurById("synkope")!
+    const jeSchlag = beatSeconds(120)
+    expect(synkope.offsets).toEqual([0, 0.5, 1.5])
+    // Innerhalb: 0,5 und 1,0 Schläge. Über die Grenze: 1,5 → 2,0, also 0,5.
+    expect(toleranceSeconds(synkope, jeSchlag)).toBeLessThan((0.5 * jeSchlag) / 2)
   })
 })
 
@@ -138,6 +203,22 @@ describe("bewerteFigur", () => {
     expect(ergebnis.richtig).toBe(false)
   })
 
+  it("lässt stures Sechzehntel-Dauerspiel nicht als Gallop durchgehen", () => {
+    // Die erwarteten Zeitpunkte des Gallops — 0, ½, ¾ — liegen alle auf dem
+    // Sechzehntelraster. Wer einfach durchspielt, trifft sie deshalb restlos.
+    // Treffer allein können das nicht auffangen; es braucht die Gegenfrage,
+    // wie viel vom Gehörten überhaupt verlangt war.
+    const dauerspiel = {
+      id: "sechzehntel-test",
+      name: "Sechzehntel",
+      offsets: [0, 0.25, 0.5, 0.75],
+      beschreibung: "Vier gleich lange Töne auf jeden Schlag.",
+    }
+    const ergebnis = bewerteFigur({ onsets: spiele(dauerspiel), einzaehler, erwartet, toleranz })
+    expect(ergebnis.trefferquote).toBe(1)
+    expect(ergebnis.richtig).toBe(false)
+  })
+
   it("bewertet ohne Einzähler streng statt eine Verzögerung zu erfinden", () => {
     const nurFigur = patternTimes(schlaege, gallop, jeSchlag).map((zeit) => zeit + 0.22)
     const ergebnis = bewerteFigur({ onsets: nurFigur, einzaehler, erwartet, toleranz })
@@ -147,5 +228,90 @@ describe("bewerteFigur", () => {
   it("meldet ohne Anschläge nichts Erfundenes", () => {
     const ergebnis = bewerteFigur({ onsets: [], einzaehler, erwartet, toleranz })
     expect(ergebnis).toMatchObject({ treffer: 0, trefferquote: 0, richtig: false, versatzMs: 0 })
+  })
+
+  it("lässt eine mitklingende Saite eine saubere Figur nicht kippen", () => {
+    // Die Genauigkeit darf nicht so scharf sein, dass ein einzelner
+    // Fremdanschlag eine gespielte Figur zunichte macht.
+    const daneben = figurStart + 2.5 * jeSchlag + 0.03
+    const ergebnis = bewerteFigur({
+      onsets: [...spiele(), daneben].sort((a, b) => a - b),
+      einzaehler,
+      erwartet,
+      toleranz,
+    })
+    expect(ergebnis.richtig).toBe(true)
+  })
+})
+
+describe("bewerteFigur, mehrschlägig", () => {
+  const drei = figurById("dreiergruppe")!
+  const jeSchlag = beatSeconds(90)
+  const einzaehler = Array.from({ length: EINZAEHLER_SCHLAEGE }, (_, i) => i * jeSchlag)
+  const figurStart = EINZAEHLER_SCHLAEGE * jeSchlag
+  // Zwölf Schläge: vier volle Dreiergruppen, drei volle Takte.
+  const schlaege = Array.from({ length: 12 }, (_, i) => figurStart + i * jeSchlag)
+  const erwartet = patternTimes(schlaege, drei, jeSchlag)
+  const toleranz = toleranceSeconds(drei, jeSchlag)
+
+  const spiele = (figur: typeof drei) => [
+    ...einzaehler,
+    ...patternTimes(schlaege, figur, jeSchlag),
+  ]
+
+  it("erkennt eine sauber gespielte Dreiergruppe", () => {
+    expect(erwartet).toHaveLength(16)
+    const ergebnis = bewerteFigur({ onsets: spiele(drei), einzaehler, erwartet, toleranz })
+    expect(ergebnis.treffer).toBe(16)
+    expect(ergebnis.richtig).toBe(true)
+  })
+
+  it("lässt durchgespielte Sechzehntel nicht als Dreiergruppe durchgehen", () => {
+    // Der eigentliche Prüfstein für die Periode: die vier verlangten
+    // Zeitpunkte liegen alle auf dem Sechzehntelraster, wer durchspielt trifft
+    // sie also restlos. Nur die Genauigkeit trennt hier noch.
+    const ergebnis = bewerteFigur({
+      onsets: spiele(figurById("sechzehntel")!),
+      einzaehler,
+      erwartet,
+      toleranz,
+    })
+    expect(ergebnis.trefferquote).toBe(1)
+    expect(ergebnis.genauigkeit).toBeLessThan(GENAUIGKEIT_RICHTIG)
+    expect(ergebnis.richtig).toBe(false)
+  })
+
+  it("lässt einen Gallop nicht als Dreiergruppe durchgehen", () => {
+    const ergebnis = bewerteFigur({ onsets: spiele(gallop), einzaehler, erwartet, toleranz })
+    expect(ergebnis.richtig).toBe(false)
+  })
+})
+
+describe("Warum Sechzehntel keine gespielte Frage sein können", () => {
+  // Umgekehrt greift keine der beiden Zahlen: die Sechzehntel sind das
+  // *feinste* Raster, jede andere Figur ist eine Teilmenge davon. Wer einen
+  // Gallop spielt, trifft drei von vier Sechzehnteln — Trefferquote genau an
+  // der Schwelle — und hat dabei keine einzige überzählige Note, also volle
+  // Genauigkeit. Gegen eine Sechzehntelfrage ist der Gallop damit richtig.
+  //
+  // Das ist keine Schwäche der Messung, sondern der Frage: „spiel Sechzehntel"
+  // ist mit Anschlagszeitpunkten allein nicht prüfbar. Deshalb gibt es die
+  // Figur, aber keine Karte dazu — und dieser Test hält fest, warum.
+  const sechzehntel = figurById("sechzehntel")!
+  const jeSchlag = beatSeconds(90)
+  const einzaehler = Array.from({ length: EINZAEHLER_SCHLAEGE }, (_, i) => i * jeSchlag)
+  const start = EINZAEHLER_SCHLAEGE * jeSchlag
+  const schlaege = Array.from({ length: 8 }, (_, i) => start + i * jeSchlag)
+
+  it("bestünde ein Gallop die Sechzehntelfrage", () => {
+    const ergebnis = bewerteFigur({
+      onsets: [...einzaehler, ...patternTimes(schlaege, gallop, jeSchlag)],
+      einzaehler,
+      erwartet: patternTimes(schlaege, sechzehntel, jeSchlag),
+      toleranz: toleranceSeconds(sechzehntel, jeSchlag),
+    })
+    expect(ergebnis.trefferquote).toBeGreaterThanOrEqual(TREFFERQUOTE_RICHTIG)
+    expect(ergebnis.genauigkeit).toBe(1)
+    expect(ergebnis.richtig).toBe(true)
   })
 })

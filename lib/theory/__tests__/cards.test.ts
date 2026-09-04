@@ -1,10 +1,24 @@
 import { describe, expect, it } from "vitest"
 import { cardById, cardsOfStufe, THEORY_CARDS } from "@/lib/theory/cards"
 import { intervalBetween, noteAt } from "@/lib/theory/fretboard"
-import { beatSeconds, figurById, toleranceSeconds } from "@/lib/theory/rhythm"
+import {
+  beatSeconds,
+  beatsFor,
+  bewerteFigur,
+  EINZAEHLER_SCHLAEGE,
+  FIGUREN,
+  figurById,
+  patternTimes,
+  periodeOf,
+  toleranceSeconds,
+} from "@/lib/theory/rhythm"
 import { STUFEN, type Griff } from "@/lib/theory/types"
 
 const g = (saite: number, bund: number) => ({ saite, bund }) as Griff
+
+/** Kleinstes gemeinsames Vielfaches — für Längen, in denen zwei Figuren aufgehen. */
+const ggt = (a: number, b: number): number => (b === 0 ? a : ggt(b, a % b))
+const kgv = (a: number, b: number) => (a / ggt(a, b)) * b
 
 describe("Katalog", () => {
   it("hat lauter eindeutige Kennungen", () => {
@@ -105,10 +119,54 @@ describe("Gespielte Fragen", () => {
     for (const card of gespielt) {
       const figur = figurById(card.frage.rhythmus!.figurId)!
       const jeSchlag = beatSeconds(card.frage.rhythmus!.bpm)
-      const engster = Math.min(
-        ...figur.offsets.slice(1).map((offset, i) => (offset - figur.offsets[i]) * jeSchlag),
-      )
+      // Zwei Perioden hintereinander, damit auch der Abstand über die
+      // Wiederholungsgrenze zählt: bei einer Figur, die auf eine Lücke endet,
+      // ist genau der der engste. Bewusst aus den Offsets gerechnet und nicht
+      // über patternTimes — der Test soll unabhängig davon bleiben, was er prüft.
+      const periode = periodeOf(figur)
+      const zwei = [...figur.offsets, ...figur.offsets.map((offset) => offset + periode)]
+      const engster = Math.min(...zwei.slice(1).map((offset, i) => (offset - zwei[i]) * jeSchlag))
       expect(toleranceSeconds(figur, jeSchlag), card.id).toBeLessThan(engster / 2)
+    }
+  })
+
+  it("misst in ganzen Takten", () => {
+    // Die Figur bestimmt die Länge, nicht die Taktzahl — und wenn sie im Takt
+    // nicht aufgeht, steht auf dem Schirm „9 Schläge" statt „2 Takte". Das ist
+    // ehrlich, aber sonderbar; deshalb hier gerade rücken statt dort.
+    for (const card of gespielt) {
+      const { figurId, takte } = card.frage.rhythmus!
+      expect(beatsFor(figurById(figurId)!, takte) % 4, card.id).toBe(0)
+    }
+  })
+
+  it("stellt keine Figur, die eine andere aus Versehen mitbeantwortet", () => {
+    // Der Prüfstein für das ganze Verfahren: wer die gefragte Figur nicht
+    // kann, darf sie nicht mit einer anderen bestehen. Gemessen wird mit
+    // demselben Urteil wie in der App — Trefferquote *und* Genauigkeit.
+    for (const card of gespielt) {
+      const { figurId, bpm, takte } = card.frage.rhythmus!
+      const figur = figurById(figurId)!
+      const jeSchlag = beatSeconds(bpm)
+      const toleranz = toleranceSeconds(figur, jeSchlag)
+
+      for (const andere of FIGUREN) {
+        if (andere.id === figur.id) continue
+        // Genug Schläge, dass beide Figuren ganz aufgehen: eine abgeschnittene
+        // Periode sähe fälschlich nach Unterscheidbarkeit aus.
+        const laenge = kgv(beatsFor(figur, takte), periodeOf(andere))
+        const einzaehler = Array.from({ length: EINZAEHLER_SCHLAEGE }, (_, i) => i * jeSchlag)
+        const start = EINZAEHLER_SCHLAEGE * jeSchlag
+        const schlaege = Array.from({ length: laenge }, (_, i) => start + i * jeSchlag)
+
+        const urteil = bewerteFigur({
+          onsets: [...einzaehler, ...patternTimes(schlaege, andere, jeSchlag)],
+          einzaehler,
+          erwartet: patternTimes(schlaege, figur, jeSchlag),
+          toleranz,
+        })
+        expect(urteil.richtig, `${card.id} ← ${andere.id}`).toBe(false)
+      }
     }
   })
 })

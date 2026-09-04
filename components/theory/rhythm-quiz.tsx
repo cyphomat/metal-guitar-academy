@@ -7,6 +7,7 @@ import { useMetronome } from "@/hooks/use-metronome"
 import { useOnsetMic } from "@/hooks/use-onset-mic"
 import {
   beatSeconds,
+  beatsFor,
   bewerteFigur,
   EINZAEHLER_SCHLAEGE,
   patternTimes,
@@ -49,7 +50,10 @@ export function RhythmQuiz({ figur, bpm, takte, onFertig }: RhythmQuizProps) {
   const [ergebnis, setErgebnis] = useState<FigurBewertung | null>(null)
 
   const schlagzeiten = useRef<number[]>([])
-  const figurSchlaege = takte * SCHLAEGE_JE_TAKT
+  // Ganze Perioden, nicht ganze Takte: eine Dreiergruppe läuft über drei
+  // Schläge und ginge in zwei Takten nicht auf. Die Länge kommt deshalb aus
+  // der Figur, nicht aus der Taktzahl.
+  const figurSchlaege = beatsFor(figur, takte, SCHLAEGE_JE_TAKT)
   const gesamt = EINZAEHLER_SCHLAEGE + figurSchlaege
 
   const { onsets, disable: disableMic } = mic
@@ -119,6 +123,17 @@ export function RhythmQuiz({ figur, bpm, takte, onFertig }: RhythmQuizProps) {
 
   const restEinzaehler = Math.max(0, EINZAEHLER_SCHLAEGE - schlag)
 
+  // In Takten, solange die Figur in Takten aufgeht — sonst ehrlich in Schlägen.
+  // Eine Dreiergruppe läuft neun oder zwölf Schläge, und „zweieinviertel Takte"
+  // hilft niemandem.
+  const ganzeTakte = figurSchlaege % SCHLAEGE_JE_TAKT === 0 ? figurSchlaege / SCHLAEGE_JE_TAKT : null
+  const laenge =
+    ganzeTakte === null
+      ? `${figurSchlaege} Schläge`
+      : ganzeTakte === 1
+        ? "einen Takt"
+        : `${ganzeTakte} Takte`
+
   return (
     <div className="space-y-4">
       <div className="border border-line bg-panel p-[18px]">
@@ -129,9 +144,7 @@ export function RhythmQuiz({ figur, bpm, takte, onFertig }: RhythmQuizProps) {
 
         <p className="mt-3 text-[14.5px] leading-relaxed text-muted">
           {phase === "bereit" &&
-            `Zwei Takte Einzähler — auf jeden Schlag einen Ton —, dann ${
-              takte === 1 ? "einen Takt" : `${takte} Takte`
-            } die Figur.`}
+            `Zwei Takte Einzähler — auf jeden Schlag einen Ton —, dann ${laenge} die Figur.`}
           {phase === "einzaehler" && `Einzähler: noch ${restEinzaehler}`}
           {phase === "figur" && "Jetzt die Figur."}
           {phase === "fertig" && ergebnis && (
