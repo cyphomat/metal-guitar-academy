@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { buildSession, nextExtraBlock, priorityOf } from "../builder"
+import { bpmStepFor } from "../progress"
 import { DRILLS, DRILLS_BY_ID } from "../drills"
 import type { DrillResult, PracticeLog } from "../types"
 
@@ -63,7 +64,7 @@ describe("buildSession", () => {
     const history = log(result(drill.id, { bpm: 120, rating: 3, at: "2026-03-01T20:00:00.000Z" }))
     const plan = buildSession(history, { now: NOW, random: fixed })
     const block = plan.blocks.find((candidate) => candidate.drill.id === drill.id)
-    if (block) expect(block.bpm).toBe(120 + drill.bpmStep)
+    if (block) expect(block.bpm).toBe(120 + bpmStepFor(drill))
   })
 
   it("moves on rather than repeating what was just drilled", () => {
@@ -131,7 +132,7 @@ describe("drill catalogue", () => {
   it("has a target tempo above its start tempo", () => {
     for (const drill of DRILLS) {
       expect(drill.targetBpm).toBeGreaterThan(drill.startBpm)
-      expect(drill.bpmStep).toBeGreaterThan(0)
+      expect(bpmStepFor(drill)).toBeGreaterThan(0)
     }
   })
 })

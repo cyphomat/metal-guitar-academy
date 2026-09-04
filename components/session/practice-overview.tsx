@@ -55,7 +55,7 @@ export function PracticeOverview() {
   const tracked = DRILLS.filter((drill) => drill.kind !== "warmup")
     .map((drill) => {
       const progress = progressFor(log, drill.id)
-      return { drill, progress, mastery: masteryOf(drill, progress) }
+      return { drill, progress, mastery: masteryOf(drill, progress, profile) }
     })
     .filter((entry) => entry.progress.attempts > 0)
     .sort((a, b) => b.mastery - a.mastery)

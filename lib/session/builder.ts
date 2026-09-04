@@ -39,7 +39,7 @@ export function priorityOf(
   profile: Profile | null = null,
 ): number {
   const progress = progressFor(log, drill.id)
-  const weakness = 1 - masteryOf(drill, progress)
+  const weakness = 1 - masteryOf(drill, progress, profile)
   const staleness = Math.min(daysSince(progress.lastPlayedAt, now), 7) / 7
 
   // A drill never played is worth trying, but not ahead of a drill actively

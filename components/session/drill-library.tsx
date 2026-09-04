@@ -34,7 +34,7 @@ export function DrillLibrary() {
           <div className="grid gap-[9px] wide:grid-cols-2">
             {DRILLS.filter((drill) => drill.kind === section.kind).map((drill) => {
               const progress = progressFor(log, drill.id)
-              const mastery = masteryOf(drill, progress)
+              const mastery = masteryOf(drill, progress, profile)
 
               return (
                 <Link

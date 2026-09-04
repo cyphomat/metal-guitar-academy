@@ -48,8 +48,6 @@ export interface Drill {
   startBpm: number
   /** The tempo that counts as "owned". */
   targetBpm: number
-  /** How much to move the tempo after a good or bad round. */
-  bpmStep: number
   beatsPerBar: number
   /** Clicks per beat: 1 = quarters, 2 = eighths. */
   subdivision: number

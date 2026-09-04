@@ -1,7 +1,17 @@
 import { describe, expect, it } from "vitest"
-import { DRILLS_BY_ID } from "../drills"
-import { dayKey, daysPractisedInLast, masteryOf, nextBpm, progressFor, streakDays } from "../progress"
-import type { DrillResult, PracticeLog, Rating } from "../types"
+import { DRILLS, DRILLS_BY_ID } from "../drills"
+import { startBpmFor, type Profile } from "../profile"
+import {
+  bpmStepFor,
+  dayKey,
+  daysPractisedInLast,
+  floorBpmFor,
+  masteryOf,
+  nextBpm,
+  progressFor,
+  streakDays,
+} from "../progress"
+import { drillResultSchema, type DrillResult, type PracticeLog, type Rating } from "../types"
 
 const DRILL = DRILLS_BY_ID["tech-downpicking"]
 
@@ -26,11 +36,12 @@ describe("nextBpm", () => {
     expect(nextBpm(DRILL, progressFor(log(), DRILL.id))).toBe(DRILL.startBpm)
   })
 
+  const SCHRITT = bpmStepFor(DRILL)
   const cases: Array<[Rating, number]> = [
-    [4, 100 + DRILL.bpmStep * 2],
-    [3, 100 + DRILL.bpmStep],
+    [4, 100 + SCHRITT * 2],
+    [3, 100 + SCHRITT],
     [2, 100],
-    [1, 100 - DRILL.bpmStep],
+    [1, 100 - SCHRITT],
   ]
 
   it.each(cases)("moves the tempo per rating %i", (rating, expected) => {
@@ -38,9 +49,40 @@ describe("nextBpm", () => {
     expect(nextBpm(DRILL, state)).toBe(expected)
   })
 
-  it("never drops below a playable floor", () => {
+  it("misst den Schritt am Ziel, nicht in festen BPM", () => {
+    // Der eigentliche Punkt der Umstellung: derselbe Anteil, verschiedene BPM.
+    // Fünf Schritte waren auf einem 190er-Ziel 2,6 % und auf einem 100er 5 %.
+    expect(bpmStepFor(DRILLS_BY_ID["tech-downpicking"])).toBe(8) // Ziel 190
+    expect(bpmStepFor(DRILLS_BY_ID["tech-bending"])).toBe(4) // Ziel 100
+  })
+
+  it("nimmt auf jedem Drill denselben relativen Schritt", () => {
+    for (const drill of DRILLS) {
+      const anteil = bpmStepFor(drill) / drill.targetBpm
+      expect(anteil, drill.id).toBeGreaterThan(0.03)
+      expect(anteil, drill.id).toBeLessThan(0.055)
+    }
+  })
+
+  it("fällt nie unter ein Tempo, bei dem das noch dieser Drill ist", () => {
     const state = progressFor(log(result({ rating: 1, bpm: 40 })), DRILL.id)
-    expect(nextBpm(DRILL, state)).toBeGreaterThanOrEqual(40)
+    expect(nextBpm(DRILL, state)).toBe(floorBpmFor(DRILL))
+  })
+
+  it("hält den Boden unter jedem Starttempo, das ein Profil erzeugen kann", () => {
+    // Sonst schöbe eine zähe Runde einen Anfänger nach *oben*.
+    for (const drill of DRILLS) {
+      expect(floorBpmFor(drill), drill.id).toBeLessThanOrEqual(drill.startBpm * 0.8)
+    }
+  })
+
+  it("bleibt in dem, was der Log überhaupt aufnehmen kann", () => {
+    // Ein bpm über 300 fällt durchs Schema — und legt beim nächsten Lesen den
+    // *ganzen* Log beiseite, nicht nur diesen Eintrag.
+    const state = progressFor(log(result({ rating: 4, bpm: 300 })), DRILL.id)
+    expect(() =>
+      drillResultSchema.parse(result({ bpm: nextBpm(DRILL, state) })),
+    ).not.toThrow()
   })
 
   it("follows the most recent round, not the best one", () => {
@@ -51,7 +93,7 @@ describe("nextBpm", () => {
       ),
       DRILL.id,
     )
-    expect(nextBpm(DRILL, state)).toBe(120 - DRILL.bpmStep)
+    expect(nextBpm(DRILL, state)).toBe(120 - SCHRITT)
   })
 })
 
@@ -99,6 +141,29 @@ describe("masteryOf", () => {
   it("does not exceed 1 past the target", () => {
     const state = progressFor(log(result({ bpm: DRILL.targetBpm + 40, rating: 4 })), DRILL.id)
     expect(masteryOf(DRILL, state)).toBe(1)
+  })
+
+  it("beginnt bei null — beim Tempo, bei dem dieser Spieler angefangen hat", () => {
+    // Vorher stand ein Wiedereinsteiger nach der ersten sauberen Runde bei
+    // einem Viertel, ohne es erspielt zu haben: sein Starttempo ist 1,25-mal
+    // das des Katalogs, gemessen wurde aber ab dem des Katalogs.
+    const laeuft: Profile = {
+      version: 1,
+      experience: "laeuft",
+      focus: "beides",
+      at: new Date().toISOString(),
+    }
+    const von = startBpmFor(DRILL, laeuft)
+    const state = progressFor(log(result({ bpm: von, rating: 3 })), DRILL.id)
+
+    expect(masteryOf(DRILL, state, laeuft)).toBe(0)
+    // Ohne Profil bleibt es beim alten Wert — bestehende Anzeigen springen nicht.
+    expect(masteryOf(DRILL, state)).toBeGreaterThan(0.2)
+  })
+
+  it("öffnet jeden Drill ohne Profil genau beim Katalogwert", () => {
+    // Daran hängt, dass die Umstellung für alle ohne Profil folgenlos ist.
+    for (const drill of DRILLS) expect(startBpmFor(drill, null), drill.id).toBe(drill.startBpm)
   })
 })
 

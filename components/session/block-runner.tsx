@@ -13,6 +13,16 @@ import { analyseTiming, suggestRating, type TimingAnalysis } from "@/lib/audio/t
 import { RATINGS, TECHNIQUE_LABELS, type Rating, type SessionBlock, type TimingResult } from "@/lib/session/types"
 import { MdPause, MdPlayArrow, MdSkipNext } from "react-icons/md"
 
+/**
+ * Wie weit die Knöpfe das Tempo von Hand bewegen.
+ *
+ * Ein rundes Mass statt eines je Drill verschiedenen: die automatische
+ * Fortschreibung rechnet in Prozent vom Ziel, aber ein Knopf, der mal 5 und
+ * mal 8 sagt, ist ein Rätsel. Fünf passt zur Rundung der Starttempi — ein
+ * Metronom auf 74 hilft niemandem.
+ */
+const HAND_SCHRITT = 5
+
 function formatClock(seconds: number): string {
   const minutes = Math.floor(seconds / 60)
   return `${minutes}:${`${seconds % 60}`.padStart(2, "0")}`
@@ -231,15 +241,15 @@ export function BlockRunner({ block, index, total, onComplete }: BlockRunnerProp
             <div className="mt-2 flex items-center justify-end gap-2">
               <button
                 className="btn btn-ghost btn-small"
-                onClick={() => metronome.setBpm(metronome.bpm - drill.bpmStep)}
+                onClick={() => metronome.setBpm(metronome.bpm - HAND_SCHRITT)}
               >
-                −{drill.bpmStep}
+                −{HAND_SCHRITT}
               </button>
               <button
                 className="btn btn-ghost btn-small"
-                onClick={() => metronome.setBpm(metronome.bpm + drill.bpmStep)}
+                onClick={() => metronome.setBpm(metronome.bpm + HAND_SCHRITT)}
               >
-                +{drill.bpmStep}
+                +{HAND_SCHRITT}
               </button>
             </div>
           </div>

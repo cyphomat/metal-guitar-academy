@@ -22,6 +22,10 @@ export interface UseMetronome {
   stop: () => void
 }
 
+/** Was die Audio-Uhr und das Schema des Übungs-Logs übereinstimmend hergeben. */
+const MIN_BPM = 20
+const MAX_BPM = 300
+
 export function useMetronome(engine: AudioEngine, options: UseMetronomeOptions): UseMetronome {
   const { beatsPerBar = 4, subdivision = 1 } = options
 
@@ -58,8 +62,13 @@ export function useMetronome(engine: AudioEngine, options: UseMetronomeOptions):
   }, [])
 
   const setBpm = useCallback((next: number) => {
-    setBpmState(next)
-    metronomeRef.current?.setBpm(next)
+    // Dieselbe Grenze wie in der Audio-Uhr — und wichtiger: dieselbe wie im
+    // Schema des Übungs-Logs. Ungeklemmt landete ein Tempo über 300 im Log,
+    // fiele beim nächsten Lesen durch die Prüfung und legte nicht nur diesen
+    // Eintrag beiseite, sondern den ganzen Log.
+    const geklemmt = Math.max(MIN_BPM, Math.min(MAX_BPM, Math.round(next)))
+    setBpmState(geklemmt)
+    metronomeRef.current?.setBpm(geklemmt)
   }, [])
 
   const start = useCallback(async () => {
