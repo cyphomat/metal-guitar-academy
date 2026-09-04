@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="Open the app" src="https://img.shields.io/badge/App-open-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-379%20green-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-470%20green-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-works-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Dependencies" src="https://img.shields.io/badge/Dependencies-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -124,7 +124,7 @@ today — from the log, not from a hunch.
 
 ## The drills
 
-Thirteen of them. The tempo on the right is start → target; where you actually
+Nineteen of them. The tempo on the right is start → target; where you actually
 begin depends on your answer at first launch, and where it goes depends on what
 you play.
 
@@ -140,25 +140,27 @@ you play.
 | Drill | Technique | Goal | BPM |
 |---|---|---|---|
 | Downpicking Endurance | Downpicking | Stamina in pure downstrokes — the core of the thrash sound | 90 → 190 |
-| Chug Control | Palm muting | Even palm mutes: every chug the same loudness, the same length | 80 → 170 |
-| Gallop | Gallop | The eighth-plus-two-sixteenths pattern, clean and steady | 70 → 150 |
-| Power Chord Shifts | Power chords | Position changes with no gap and no stray noise | 70 → 160 |
-| Alternate Picking | Alternate picking | Even alternate picking on a single string | 60 → 140 |
+| Chug Control | Palm muting | Even palm mutes — every chug the same volume, the same length | 80 → 170 |
+| Gallop | Gallop | The eighth-plus-two-sixteenths figure, clean and steady | 70 → 150 |
+| Power Chord Shifts | Power chords | Position changes with no gap and no string noise | 70 → 160 |
+| Alternate Picking | Alternate picking | Even alternate picking on one string | 60 → 140 |
 | Pentatonik Box 1 | Pentatonic | A minor pentatonic in 5th position, up and down | 60 → 150 |
-| Bending & Vibrato | Bending | Hit the pitch of a whole-step bend, and hold it | 50 → 100 |
+| Bending & Vibrato | Bending | Hit the pitch of a whole-step bend and hold it | 50 → 100 |
+| Hammer-on und Pull-off | Legato | Notes made by the fretting hand alone | 55 → 130 |
+| Slides | Slides | Position changes in tempo, without losing the note | 55 → 120 |
+| Dead Notes | Dead notes | Attacks without pitch — filling the gaps without muddying the sound | 60 → 140 |
+| Tremolo Picking | Tremolo | Very fast alternate picking on one string, evenly | 70 → 180 |
 
 **Riff**
 
 | Drill | Technique | Goal | BPM |
 |---|---|---|---|
-| Ironclad | Gallop | Gallop plus position changes — the first real riff | 70 → 145 |
-| Chromatic Crawl | Palm muting | Open chugs against chromatic targets — timing under pressure | 80 → 160 |
+| Ironclad | Gallop | Gallop plus a position change — the first real riff | 70 → 145 |
+| Chromatic Crawl | Palm muting | Open chugs against chromatic target notes — timing under pressure | 80 → 160 |
 | Downpicked Dirge | Downpicking | Slow, heavy, all downstrokes — timing with nowhere to hide | 60 → 130 |
 | Escape Lick | Pentatonic | First lead lick: pentatonic with a bend at the end | 55 → 120 |
-
-All original patterns in the idiom — no transcribed tabs. Every drill carries
-its own cues and a collapsible **why it works this way** that explains the theory
-behind it in two sentences.
+| Ghost Machine | Dead notes | Dead notes in a riff — sixteenths where only half of them ring | 60 → 150 |
+| Hammer Down | Legato | Legato out of the open string, in a riff | 55 → 130 |
 
 ## Knowledge
 
@@ -171,7 +173,7 @@ second screen to read. So here the **question is the normal state** and the text
 is what comes after it: retrieval is measurably better for retention than
 re-reading, and in music it is barely used.
 
-Sixty-four concepts across six levels — from the semitone to how riffs are put
+Eighty-seven concepts across six levels — from the semitone to how riffs are put
 together. Each with two or three sentences and a question:
 
 - **Answer on the fretboard** where that is possible. Producing an answer beats
@@ -205,7 +207,7 @@ hobby of its own.
 
 ### A question you play
 
-Two cards do not ask for a term but for a figure: **play two bars of gallop.**
+Seven cards do not ask for a term but for a figure: **play two bars of gallop.**
 The microphone listens, and the verdict is measured rather than guessed — no
 flashcard program can do that, and it falls out here because the onset detection
 is already there.
@@ -216,7 +218,26 @@ not work: a figure is uneven, and a delay in the order of its own spacing looks
 like a *different* figure — measured, a reverse gallop shifted by 125 ms fits a
 gallop to over eighty percent. On evenly spaced beats the delay is unambiguous.
 
+Two things are counted: whether the attacks that were asked for arrived — and
+whether *only* those did. Without the second number, mindlessly playing through
+would pass every figure question, because a gallop's expected moments all sit on
+the sixteenth-note grid. For the same reason there is no question asking for
+sixteenths: they are the finest grid, every other figure is a subset of them,
+and the question could be passed with almost anything.
+
+A figure may also be longer than one beat. Three-note groupings — dotted
+eighths — only land back on the beat after three of them; that question runs
+three bars instead of two.
+
+For one card, loudness counts as well: **dead notes** are indistinguishable from
+straight sixteenths in time alone, the difference is entirely in how quiet the
+muted attacks are. Measured, they still separate from the noise by a factor of
+1.5 under heavy distortion. Accents do not — they stay between 1.15 and 1.24 and
+sit inside that noise. So they are explained rather than measured.
+
 Without a microphone nothing is blocked: the explanation can be shown anyway.
+That counts as *not measured*, not as played wrong — at that point the app
+simply knows too little to judge.
 
 ## What the microphone hears
 

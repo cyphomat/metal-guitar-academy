@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://cyphomat.github.io/riffforge/"><img alt="App öffnen" src="https://img.shields.io/badge/App-öffnen-e8a23d?style=for-the-badge&labelColor=17161b"></a>
-  <img alt="Tests" src="https://img.shields.io/badge/Tests-379%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-470%20grün-7fa65c?style=for-the-badge&labelColor=17161b">
   <img alt="Offline" src="https://img.shields.io/badge/Offline-läuft-6f93ad?style=for-the-badge&labelColor=17161b">
   <img alt="Abhängigkeiten" src="https://img.shields.io/badge/Abhängigkeiten-6-a7a3ab?style=for-the-badge&labelColor=17161b">
 </p>
@@ -120,7 +120,7 @@ heutigen Tag — aus dem Log, nicht aus dem Bauch.
 
 ## Die Übungen
 
-Dreizehn Stück. Das Tempo rechts ist Start → Ziel; wo du tatsächlich anfängst,
+Neunzehn Stück. Das Tempo rechts ist Start → Ziel; wo du tatsächlich anfängst,
 hängt an deiner Antwort beim ersten Start, und wie es weitergeht an dem, was du
 spielst.
 
@@ -140,8 +140,12 @@ spielst.
 | Gallop | Gallop | Das Achtel-plus-zwei-Sechzehntel-Muster sauber und stabil | 70 → 150 |
 | Power Chord Shifts | Power Chords | Lagenwechsel ohne Lücke und ohne Nebengeräusch | 70 → 160 |
 | Alternate Picking | Alternate Picking | Gleichmässiger Wechselschlag auf einer Saite | 60 → 140 |
-| Pentatonik Box 1 | Pentatonik | A-Moll-Pentatonik in der 5. Lage, hoch und runter | 60 → 150 |
+| Pentatonik Box 1 | Pentatonic | A-Moll-Pentatonik in der 5. Lage, hoch und runter | 60 → 150 |
 | Bending & Vibrato | Bending | Ganztonziehen auf Tonhöhe treffen und halten | 50 → 100 |
+| Hammer-on und Pull-off | Legato | Töne mit der Greifhand erzeugen, ohne die Anschlaghand | 55 → 130 |
+| Slides | Slides | Lagenwechsel im Tempo, ohne den Ton zu verlieren | 55 → 120 |
+| Dead Notes | Dead Notes | Anschläge ohne Ton — die Lücken füllen, ohne den Klang zu trüben | 60 → 140 |
+| Tremolo Picking | Tremolo | Sehr schneller Wechselschlag auf einer Saite, gleichmässig | 70 → 180 |
 
 **Riff**
 
@@ -150,11 +154,9 @@ spielst.
 | Ironclad | Gallop | Gallop plus Lagenwechsel — das erste richtige Riff | 70 → 145 |
 | Chromatic Crawl | Palm Muting | Offene Chugs gegen chromatische Zielnoten — Timing unter Druck | 80 → 160 |
 | Downpicked Dirge | Downpicking | Langsam, schwer, alles Abschlag — Timing ohne Versteck | 60 → 130 |
-| Escape Lick | Pentatonik | Erstes Lead-Lick: Pentatonik mit Bending am Ende | 55 → 120 |
-
-Alles eigene Patterns im jeweiligen Stil — keine abgeschriebenen Tabs. Jeder
-Drill bringt seine eigenen Cues mit und ein aufklappbares **Warum das so ist**,
-das die Theorie dahinter in zwei Sätzen erklärt.
+| Escape Lick | Pentatonic | Erstes Lead-Lick: Pentatonik mit Bending am Ende | 55 → 120 |
+| Ghost Machine | Dead Notes | Dead Notes im Riff — Sechzehntel, von denen nur die Hälfte klingt | 60 → 150 |
+| Hammer Down | Legato | Legato aus der Leersaite heraus, im Riff-Kontext | 55 → 130 |
 
 ## Wissen
 
@@ -167,7 +169,7 @@ ein zweiter Bildschirm zum Lesen ist. Deshalb ist hier die **Frage der
 Normalzustand** und der Text das, was danach kommt: Abfragen behält sich
 messbar besser als Nachlesen, und für Musik ist das kaum umgesetzt.
 
-Vierundsechzig Begriffe in sechs Stufen — vom Halbton bis zum Riff-Bau. Jeder
+Siebenundachtzig Begriffe in sechs Stufen — vom Halbton bis zum Riff-Bau. Jeder
 mit zwei, drei Sätzen und einer Frage:
 
 - **Auf dem Griffbrett zeigen**, wo das geht. Antworten produzieren bringt mehr
@@ -204,7 +206,7 @@ eigenes Hobby.
 
 ### Eine Frage, die man spielt
 
-Zwei Karten fragen keinen Begriff ab, sondern eine Figur: **Spiel zwei Takte
+Sieben Karten fragen keinen Begriff ab, sondern eine Figur: **Spiel zwei Takte
 Gallop.** Das Mikrofon hört mit, und die Bewertung ist gemessen statt geraten —
 das kann kein Karteikartenprogramm, und es fällt hier heraus, weil die
 Anschlagserkennung ohnehin da ist.
@@ -216,7 +218,27 @@ Grössenordnung ihrer Abstände sieht aus wie eine *andere* Figur — nachgemess
 passt ein umgekehrter Gallop um 125 ms verschoben zu über achtzig Prozent auf
 einen Gallop. Auf gleichmässigen Schlägen ist der Versatz dagegen eindeutig.
 
-Ohne Mikrofon blockiert nichts: die Auflösung lässt sich auch so zeigen.
+Gezählt wird dabei zweierlei: ob die verlangten Anschläge kamen — und ob
+*nur* die kamen. Ohne die zweite Zahl bestünde stures Dauerspiel jede
+Figurfrage, denn die Zeitpunkte eines Gallops liegen alle auf dem
+Sechzehntelraster. Aus demselben Grund gibt es keine Frage nach Sechzehnteln:
+sie sind das feinste Raster, jede andere Figur ist eine Teilmenge davon, und
+die Frage wäre mit fast allem zu bestehen.
+
+Eine Figur darf auch länger sein als ein Schlag. Dreiergruppen — punktierte
+Achtel — schliessen erst nach drei Schlägen wieder auf den Schlag; die Frage
+läuft deshalb drei Takte statt zwei.
+
+Bei einer Karte zählt zusätzlich die Lautstärke: **Dead Notes** sind im
+Zeitraster von geraden Sechzehnteln nicht zu unterscheiden, der Unterschied
+steckt allein darin, wie leise die gedämpften Anschläge sind. Nachgemessen
+trennen sie sich auch bei starker Verzerrung noch um Faktor 1,5 vom Rauschen.
+Akzente tun das nicht — sie bleiben bei 1,15 bis 1,24 und liegen damit im
+Rauschen. Deshalb werden sie erklärt und nicht gemessen.
+
+Ohne Mikrofon blockiert nichts: die Auflösung lässt sich auch so zeigen. Das
+gilt dann als *nicht gemessen*, nicht als danebengespielt — die App weiss an
+der Stelle schlicht zu wenig für ein Urteil.
 
 ## Was das Mikrofon hört
 

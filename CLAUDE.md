@@ -101,7 +101,12 @@ Komponente.
 - **Antworten auf dem Griffbrett sind gerechnet, nicht getippt.** Der Katalog
   holt jede richtige Stelle aus `lib/theory/fretboard.ts`. Ein Tippfehler in
   einer Tabelle mit hundert Tönen fällt niemandem auf; ein Fehler in der
-  Rechnung fällt in den Tests auf. Und was die Erklärungen an Tönen und
+  Rechnung fällt in den Tests auf. Das gilt auch für die Pentatonik-Lagen:
+  `pentatonikLage` leitet sie aus Grundton und Lagennummer ab, und der
+  Prüfstein ist, dass Lage 1 von A-Moll aus der Rechnung auf genau die Form
+  fällt, die im Lehrbuch steht. Nebenbei hält der Test fest, was leicht falsch
+  angenommen wird: die Lagen laufen im Kreis, und welche zuunterst liegt, hängt
+  am Grundton — bei A-Moll ist es Lage 4, nicht Lage 1. Und was die Erklärungen an Tönen und
   Abständen behaupten, prüft `__tests__/cards.test.ts` nach — Übungsmaterial,
   das lügt, ist schlimmer als keines.
 - **Zwei Logs, zwei Dateien im Datenrepo.** `uebungen.json` und
@@ -120,6 +125,40 @@ Komponente.
   nachgemessen passt ein umgekehrter Gallop um 125 ms verschoben zu über
   achtzig Prozent auf einen Gallop. Auf gleichmässigen Schlägen ist der
   Versatz dagegen eindeutig. Deshalb zwei Takte zählen, dann spielen.
+- **Treffen ist nicht genug.** Eine Figur wird auch an der *Genauigkeit*
+  gemessen: welcher Anteil der gehörten Anschläge überhaupt verlangt war. Ohne
+  sie besteht stures Dauerspiel jede Figurfrage — die erwarteten Zeitpunkte
+  eines Gallops (0, ½, ¾) liegen alle auf dem Sechzehntelraster. Derselbe
+  Fehler wie beim Einzähler, nur in der anderen Richtung. Und die Kehrseite:
+  eine Frage nach dem *feinsten* Raster ist gar nicht stellbar, weil jede
+  andere Figur eine Teilmenge davon ist. Deshalb gibt es die Sechzehntelfigur,
+  aber keine Karte dazu — und einen Katalogtest, der jede gespielte Frage
+  abweist, die eine andere Figur aus Versehen mitbeantwortet.
+- **Eine Figur kann länger sein als ein Schlag.** `periodeSchlaege` sagt, nach
+  wie vielen Schlägen sie sich wiederholt; ohne das wäre alles, was quer zum
+  Schlag läuft, nicht aufschreibbar. Zwei Folgen daraus: `toleranceSeconds`
+  braucht *zwei volle Perioden*, sonst bleibt der Abstand über die
+  Wiederholungsgrenze ungesehen — bei der Synkope ist genau der der engste. Und
+  `patternTimes` hängt jede Note an ihren eigenen gemessenen Klick, statt drei
+  Schläge aus einem hochzurechnen; sonst liefe wieder eine zweite Uhr mit.
+- **Nur messen, was sich trennt.** Dämpfung ja, Akzente nein. Nachgemessen
+  gegen das echte Worklet: eine Dead Note trennt sich unter starker Verzerrung
+  noch um Faktor 1,54 von einer normalen, bei 1,03 bis 1,13 Streuung innerhalb
+  einer Gruppe. Ein Akzent bleibt bei 1,15 bis 1,24 und liegt damit im
+  Rauschen. Wer eine neue Messung erwägt, misst erst und baut dann — mit
+  Zahlen, damit die Entscheidung nachprüfbar bleibt statt Geschmack zu sein.
+- **Der Katalog ist streng, der Log ist nachsichtig.** `drillResultSchema`
+  prüft die Technik nicht gegen `TECHNIQUES`. Ein Log-Eintrag ist Vergangenheit
+  und verweist auf einen Drill, den es auf diesem Gerät vielleicht noch nicht
+  gibt; mit der Aufzählung geprüft verlöre ein Gerät auf älterem Stand beim
+  Abgleich nicht diesen Eintrag, sondern den *ganzen* Log.
+- **Tempo ist ein Anteil des Ziels.** `nextBpm` bewegt sich um Prozent von
+  `targetBpm`, nicht um eine feste Zahl BPM — fünf Schritte heissen bei Ziel
+  190 etwas anderes als bei Ziel 100, und der Drill mit der längsten Strecke
+  kroch am langsamsten. Ebenso misst `masteryOf` ab dem Starttempo *dieses
+  Spielers*: `startBpmFor` skaliert es mit dem Profil, und wer ab dem
+  Katalogwert misst, schenkt einem Wiedereinsteiger ein Viertel Beherrschung.
+  Das verzerrt nicht nur die Anzeige — `priorityOf` wählt darüber aus.
 - **Die Fragen sitzen zwischen den Blöcken, nicht in ihnen.** Eine Frage hat
   kein Tempo, keine Bewertung und keinen Eintrag im Übungs-Log. Zwei Portionen
   à zwei Fragen, mehr nicht — die Viertelstunde ist das Produkt. Wer keine
