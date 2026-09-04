@@ -8,6 +8,7 @@ import {
   EINZAEHLER_SCHLAEGE,
   FIGUREN,
   figurById,
+  patternMarks,
   patternTimes,
   periodeOf,
   toleranceSeconds,
@@ -159,8 +160,15 @@ describe("Gespielte Fragen", () => {
         const start = EINZAEHLER_SCHLAEGE * jeSchlag
         const schlaege = Array.from({ length: laenge }, (_, i) => start + i * jeSchlag)
 
+        // Der falsche Spieler spielt die andere Figur gleichmässig laut — wer
+        // die verlangte Figur nicht kennt, dämpft auch nicht gezielt. Genau so
+        // trennt sich eine Dead-Note-Figur von ihrem ungedämpften Zwilling,
+        // der im Zeitraster identisch ist.
+        const gespieltZeiten = patternTimes(schlaege, andere, jeSchlag)
         const urteil = bewerteFigur({
-          onsets: [...einzaehler, ...patternTimes(schlaege, andere, jeSchlag)],
+          onsets: [...einzaehler, ...gespieltZeiten],
+          anschlaege: [...einzaehler, ...gespieltZeiten].map((time) => ({ time, level: 0.5 })),
+          marken: patternMarks(schlaege, figur, jeSchlag),
           einzaehler,
           erwartet: patternTimes(schlaege, figur, jeSchlag),
           toleranz,

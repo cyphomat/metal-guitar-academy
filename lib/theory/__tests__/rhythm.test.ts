@@ -3,10 +3,13 @@ import {
   beatSeconds,
   beatsFor,
   bewerteFigur,
+  DAEMPFUNG_MINDESTENS,
+  daempfungsVerhaeltnis,
   EINZAEHLER_SCHLAEGE,
   FIGUREN,
   figurById,
   GENAUIGKEIT_RICHTIG,
+  patternMarks,
   patternTimes,
   periodeOf,
   toleranceSeconds,
@@ -284,6 +287,75 @@ describe("bewerteFigur, mehrschlägig", () => {
   it("lässt einen Gallop nicht als Dreiergruppe durchgehen", () => {
     const ergebnis = bewerteFigur({ onsets: spiele(gallop), einzaehler, erwartet, toleranz })
     expect(ergebnis.richtig).toBe(false)
+  })
+})
+
+describe("Dämpfung", () => {
+  const dead = figurById("dead-notes")!
+  const jeSchlag = beatSeconds(90)
+  const einzaehler = Array.from({ length: EINZAEHLER_SCHLAEGE }, (_, i) => i * jeSchlag)
+  const start = EINZAEHLER_SCHLAEGE * jeSchlag
+  const schlaege = Array.from({ length: 8 }, (_, i) => start + i * jeSchlag)
+  const marken = patternMarks(schlaege, dead, jeSchlag)
+  const erwartet = marken.map((marke) => marke.time)
+  const toleranz = toleranceSeconds(dead, jeSchlag)
+
+  /** Spielt die Figur; `verhaeltnis` ist, wie viel leiser die Dead Notes sind. */
+  const spiele = (verhaeltnis: number) => [
+    ...einzaehler.map((time) => ({ time, level: 0.5 })),
+    ...marken.map((marke) => ({
+      time: marke.time,
+      // Etwas Streuung, damit nicht der Idealfall geprüft wird: bei einer
+      // echten Aufnahme schwanken auch gleich laute Anschläge um rund ein Zehntel.
+      level: (marke.gedaempft ? 0.5 / verhaeltnis : 0.5) * (marke.time % 2 < 1 ? 1.06 : 0.94),
+    })),
+  ]
+
+  const bewerte = (verhaeltnis: number) => {
+    const anschlaege = spiele(verhaeltnis)
+    return bewerteFigur({
+      onsets: anschlaege.map((a) => a.time),
+      anschlaege,
+      marken,
+      einzaehler,
+      erwartet,
+      toleranz,
+    })
+  }
+
+  it("erkennt gedämpfte Nachschläge", () => {
+    // 1,54× ist, was unter starker Verzerrung übrig bleibt — gemessen, nicht
+    // geschätzt. Das muss reichen.
+    const ergebnis = bewerte(1.54)
+    expect(ergebnis.trefferquote).toBe(1)
+    expect(ergebnis.daempfung).toBeGreaterThan(DAEMPFUNG_MINDESTENS)
+    expect(ergebnis.richtig).toBe(true)
+  })
+
+  it("lässt gleich laut durchgespielte Sechzehntel nicht als Dead Notes gelten", () => {
+    // Zeitlich identisch, nur eben ohne Dämpfung. Die Trefferquote ist perfekt,
+    // die Genauigkeit auch — und trotzdem ist es die Figur nicht.
+    const ergebnis = bewerte(1)
+    expect(ergebnis.trefferquote).toBe(1)
+    expect(ergebnis.genauigkeit).toBe(1)
+    expect(ergebnis.richtig).toBe(false)
+  })
+
+  it("gilt ohne Pegel als nicht erbracht, statt stillschweigend durchzugehen", () => {
+    const ergebnis = bewerteFigur({
+      onsets: marken.map((m) => m.time),
+      marken,
+      einzaehler,
+      erwartet,
+      toleranz,
+    })
+    expect(ergebnis.daempfung).toBeNull()
+    expect(ergebnis.richtig).toBe(false)
+  })
+
+  it("misst nichts, wo nichts zu dämpfen ist", () => {
+    const ohne = patternMarks(schlaege, gallop, jeSchlag)
+    expect(daempfungsVerhaeltnis(spiele(2), ohne)).toBeNull()
   })
 })
 

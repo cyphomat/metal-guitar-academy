@@ -19,10 +19,31 @@ class OnsetProcessor extends AudioWorkletProcessor {
     /** Minimum gap between onsets, seconds. Kills double-triggers on one pick. */
     this.refractory = opts.refractory ?? 0.045
 
+    /**
+     * How many blocks to keep watching after a transient before reporting its
+     * level. The block that crosses the threshold is only 2.7 ms into the
+     * attack, and the crossing point moves with the running baseline — a note
+     * after a loud one crosses later in its own envelope. Taking the peak over
+     * a short window instead makes the reported level comparable between
+     * notes, which is what an accent is: one note louder than its neighbours.
+     * Ten blocks is 27 ms, well inside the 45 ms refractory, so two onsets
+     * never share a window.
+     */
+    this.peakBlocks = opts.peakBlocks ?? 10
+
     this.baseline = 0
     this.lastOnsetTime = -1
     this.peakSinceReport = 0
     this.blocksSinceReport = 0
+    /** Onset waiting for its level: { time, peak, blocksLeft }. */
+    this.pending = null
+  }
+
+  /** Meldet den offenen Anschlag, falls es einen gibt. */
+  report() {
+    if (!this.pending) return
+    this.port.postMessage({ type: "onset", time: this.pending.time, level: this.pending.peak })
+    this.pending = null
   }
 
   process(inputs) {
@@ -43,8 +64,19 @@ class OnsetProcessor extends AudioWorkletProcessor {
 
     if (isTransient) {
       this.lastOnsetTime = currentTime
-      this.port.postMessage({ type: "onset", time: currentTime, level: rms })
+      // Ein noch offener Anschlag wird zuerst gemeldet. Bei den Vorgabewerten
+      // kann das nicht vorkommen — die Sperrzeit ist länger als das Fenster —,
+      // aber beide sind einstellbar, und ein verschluckter Anschlag wäre ein
+      // stiller Messfehler.
+      this.report()
+      // Der Zeitpunkt steht sofort fest, der Pegel erst nach dem Fenster.
+      // Gemeldet wird beides zusammen, und die Zeit bleibt die der Erkennung.
+      this.pending = { time: currentTime, peak: rms, blocksLeft: this.peakBlocks }
+    } else if (this.pending) {
+      if (rms > this.pending.peak) this.pending.peak = rms
     }
+
+    if (this.pending && (this.pending.blocksLeft -= 1) <= 0) this.report()
 
     // Asymmetric follower: rises slowly so a sustained note does not become the
     // new normal mid-phrase, falls quickly so the next pick still stands out.

@@ -10,7 +10,7 @@ import {
   beatsFor,
   bewerteFigur,
   EINZAEHLER_SCHLAEGE,
-  patternTimes,
+  patternMarks,
   toleranceSeconds,
   type FigurBewertung,
   type Rhythmusfigur,
@@ -56,7 +56,7 @@ export function RhythmQuiz({ figur, bpm, takte, onFertig }: RhythmQuizProps) {
   const figurSchlaege = beatsFor(figur, takte, SCHLAEGE_JE_TAKT)
   const gesamt = EINZAEHLER_SCHLAEGE + figurSchlaege
 
-  const { onsets, disable: disableMic } = mic
+  const { anschlaege, onsets, disable: disableMic } = mic
 
   const auswerten = useCallback(() => {
     const zeiten = schlagzeiten.current
@@ -67,17 +67,22 @@ export function RhythmQuiz({ figur, bpm, takte, onFertig }: RhythmQuizProps) {
     const figurBeats = zeiten.slice(EINZAEHLER_SCHLAEGE, EINZAEHLER_SCHLAEGE + figurSchlaege)
     const jeSchlag = beatSeconds(bpm)
 
+    // Die Marken tragen mit, welcher Anschlag gedämpft sein soll; ohne
+    // Dämpfung in der Figur ändert das nichts.
+    const marken = patternMarks(figurBeats, figur, jeSchlag)
     const bewertung = bewerteFigur({
       onsets: onsets(),
+      anschlaege: anschlaege(),
+      marken,
       einzaehler,
-      erwartet: patternTimes(figurBeats, figur, jeSchlag),
+      erwartet: marken.map((marke) => marke.time),
       toleranz: toleranceSeconds(figur, jeSchlag),
     })
     disableMic()
     setErgebnis(bewertung)
     setPhase("fertig")
     onFertig(bewertung)
-  }, [bpm, disableMic, figur, figurSchlaege, onFertig, onsets])
+  }, [anschlaege, bpm, disableMic, figur, figurSchlaege, onFertig, onsets])
 
   const auswertenRef = useRef(auswerten)
   auswertenRef.current = auswerten

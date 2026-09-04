@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import type { AudioEngine } from "@/lib/audio/audio-engine"
 import { OnsetDetector, type MicStatus } from "@/lib/audio/onset-detector"
+import type { Anschlag } from "@/lib/audio/timing"
 
 export interface UseOnsetMic {
   status: MicStatus
@@ -12,6 +13,8 @@ export interface UseOnsetMic {
   level: number
   /** Onset times on the shared audio clock, since the last reset. */
   onsets: () => number[]
+  /** Dieselben Anschläge, mit ihrem Pegel. */
+  anschlaege: () => Anschlag[]
   enable: () => Promise<boolean>
   disable: () => void
   reset: () => void
@@ -19,7 +22,7 @@ export interface UseOnsetMic {
 
 export function useOnsetMic(engine: AudioEngine): UseOnsetMic {
   const detectorRef = useRef<OnsetDetector | null>(null)
-  const onsetsRef = useRef<number[]>([])
+  const anschlaegeRef = useRef<Anschlag[]>([])
 
   const [status, setStatus] = useState<MicStatus>("idle")
   const [detail, setDetail] = useState<string | null>(null)
@@ -28,8 +31,8 @@ export function useOnsetMic(engine: AudioEngine): UseOnsetMic {
   const getDetector = useCallback(() => {
     if (!detectorRef.current) {
       detectorRef.current = new OnsetDetector(engine, {
-        onOnset: (time) => {
-          onsetsRef.current.push(time)
+        onOnset: (time, level) => {
+          anschlaegeRef.current.push({ time, level })
         },
         // Meter only: a little smoothing so it reads as a level, not a strobe.
         onLevel: (value) => setLevel((previous) => Math.max(value, previous * 0.82)),
@@ -57,10 +60,13 @@ export function useOnsetMic(engine: AudioEngine): UseOnsetMic {
   }, [])
 
   const reset = useCallback(() => {
-    onsetsRef.current = []
+    anschlaegeRef.current = []
   }, [])
 
-  const onsets = useCallback(() => onsetsRef.current, [])
+  const anschlaege = useCallback(() => anschlaegeRef.current, [])
+  // Der übliche Fall braucht nur die Zeiten. Frisch abgeleitet statt zweimal
+  // geführt — zwei Listen desselben liefen irgendwann auseinander.
+  const onsets = useCallback(() => anschlaegeRef.current.map((a) => a.time), [])
 
-  return { status, detail, level, onsets, enable, disable, reset }
+  return { status, detail, level, onsets, anschlaege, enable, disable, reset }
 }

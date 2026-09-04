@@ -11,6 +11,19 @@
 
 export type TimingTrend = "steady" | "rushing" | "dragging"
 
+/**
+ * One heard attack: when, and how loud.
+ *
+ * The level is the peak over a short window after the transient, and it is
+ * only meaningful *between* attacks of the same recording — against input
+ * gain, mic distance and distortion the absolute value says nothing, the
+ * ratio of two attacks says a lot.
+ */
+export interface Anschlag {
+  time: number
+  level: number
+}
+
 export interface TimingAnalysis {
   /** Clicks that wanted a note. */
   expected: number
