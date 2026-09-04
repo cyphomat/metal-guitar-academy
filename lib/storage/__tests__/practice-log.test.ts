@@ -87,6 +87,21 @@ describe("practice log storage", () => {
     expect(Object.keys(storage)).toHaveLength(0)
   })
 
+  it("liest einen Log mit unbekannter Technik, statt ihn beiseitezulegen", async () => {
+    // Der Fall, den es zu verhindern gilt: ein Gerät auf älterem Stand holt
+    // beim Abgleich einen Log, in dem eine Technik steht, die es noch nicht
+    // kennt. Wäre das Feld gegen die Aufzählung geprüft, verlöre dieses Gerät
+    // beim Lesen seinen *ganzen* Übungs-Log — nicht nur den einen Eintrag.
+    const storage = installStorage()
+    const log = goodLog()
+    log.results.push({ ...log.results[0], drillId: "tech-aus-der-zukunft", technique: "wasauchimmer" })
+    storage.setItem(KEY, JSON.stringify(log))
+    const { loadLog } = await freshModule()
+
+    expect(loadLog().results).toHaveLength(2)
+    expect(Object.keys(storage).filter((key) => key.includes(".broken"))).toHaveLength(0)
+  })
+
   it("meldet gespeicherte Daten auch dann, wenn der Log das Schema reisst", async () => {
     const storage = installStorage()
     storage.setItem(KEY, "kein JSON")

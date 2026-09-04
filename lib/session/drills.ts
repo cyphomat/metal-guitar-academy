@@ -323,6 +323,153 @@ E|-------------------------------|`,
     beatsPerBar: 4,
     subdivision: 2,
   },
+  {
+    id: "tech-legato",
+    title: "Hammer-on und Pull-off",
+    kind: "technique",
+    technique: "legato",
+    goal: "Töne mit der Greifhand erzeugen, ohne die Anschlaghand",
+    cues: [
+      "Nur der erste Ton jeder Vierergruppe wird angeschlagen",
+      "Hammer-on aus dem Fingergelenk, nicht aus dem Arm",
+      "Beim Pull-off die Saite leicht zur Seite ziehen, nicht nur abheben",
+    ],
+    tab: `e|----------------------------------|
+B|----------------------------------|
+G|----------------------------------|
+D|----------------------------------|
+A|----------------------------------|
+E|-5h7p5--7h9p7--5h7p5--7h9p7-------|
+   N      N      N      N`,
+    why: "Ein Hammer-on ist ein Ton ohne Anschlag: die Saite schwingt schon, der Finger ändert nur ihre Länge. Deshalb klingt Legato weicher als angeschlagene Töne — es fehlt der Transient, und genau den hört das Ohr als Härte.",
+    startBpm: 55,
+    targetBpm: 130,
+    beatsPerBar: 4,
+    subdivision: 2,
+  },
+  {
+    id: "tech-slides",
+    title: "Slides",
+    kind: "technique",
+    technique: "slides",
+    goal: "Lagenwechsel im Tempo, ohne den Ton zu verlieren",
+    cues: [
+      "Der Druck bleibt gleich, während der Finger wandert",
+      "Ziel ist der Bund, nicht die Richtung — landen, nicht rutschen",
+      "Erst langsam auf Zielsicherheit, dann aufs Tempo",
+    ],
+    tab: `e|----------------------------------|
+B|----------------------------------|
+G|----------------------------------|
+D|----------------------------------|
+A|-5/7----7\\5----5/9----9\\5--------|
+E|----------------------------------|
+   N     N      N     N`,
+    why: "Ein Slide ist der einzige Weg, zwei Töne ohne Unterbrechung zu verbinden — dazwischen liegt jeder Bund, den er überstreicht. Deshalb trägt er über Lagenwechsel hinweg, wo ein neuer Anschlag die Linie zerschnitte.",
+    startBpm: 55,
+    targetBpm: 120,
+    beatsPerBar: 4,
+    subdivision: 1,
+  },
+  {
+    id: "tech-dead-notes",
+    title: "Dead Notes",
+    kind: "technique",
+    technique: "dead-notes",
+    goal: "Anschläge ohne Ton — die Lücken füllen, ohne den Klang zu trüben",
+    cues: [
+      "Greifhand liegt lose auf, drückt nicht auf den Bund",
+      "Die Anschlaghand läuft durch, als wäre jeder Ton gleich",
+      "Nur ein Klacken, kein Ton — sonst liegt der Finger zu fest",
+    ],
+    tab: `e|----------------------------------|
+B|----------------------------------|
+G|----------------------------------|
+D|----------------------------------|
+A|----------------------------------|
+E|-0-x-0-x--0-x-0-x--0-x-0-x--------|
+   PM------------------------
+   N V N V  N V N V  N V N V`,
+    why: "Eine Dead Note ist ein Anschlag ohne Tonhöhe. Sie hält die Anschlaghand in gleichmässiger Bewegung, ohne dem Riff eine weitere Note hinzuzufügen — deshalb klingt ein Riff mit Dead Notes treibender, aber nicht voller.",
+    startBpm: 60,
+    targetBpm: 140,
+    beatsPerBar: 4,
+    subdivision: 2,
+  },
+  {
+    id: "tech-tremolo",
+    title: "Tremolo Picking",
+    kind: "technique",
+    technique: "tremolo",
+    goal: "Sehr schneller Wechselschlag auf einer Saite, gleichmässig",
+    cues: [
+      "Bewegung aus dem Handgelenk, der Arm bleibt ruhig",
+      "Plektrum flach halten und wenig eintauchen",
+      "Gleichmässig schlägt schneller als schnell — Tempo kommt zuletzt",
+    ],
+    tab: `e|----------------------------------|
+B|----------------------------------|
+G|----------------------------------|
+D|----------------------------------|
+A|----------------------------------|
+E|-0000000000000000--3333333333333333-|
+   N V N V N V N V   N V N V N V N V`,
+    why: "Beim Tremolo verschwindet der einzelne Anschlag und übrig bleibt eine Fläche. Genau deshalb tragen ganze Genres darauf: die Tonhöhe bleibt hörbar, der Rhythmus verschwindet, und das Riff wird zum Klangteppich statt zur Figur.",
+    startBpm: 70,
+    targetBpm: 180,
+    beatsPerBar: 4,
+    subdivision: 1,
+  },
+  {
+    id: "riff-ghost",
+    title: "Ghost Machine",
+    kind: "riff",
+    technique: "dead-notes",
+    goal: "Dead Notes im Riff — Sechzehntel, von denen nur die Hälfte klingt",
+    cues: [
+      "Nur die Töne auf Schlag und Mitte klingen, die Nachschläge sind tot",
+      "Der Handballen bleibt liegen, auch auf den toten Anschlägen",
+      "Wenn es matscht, liegt die Greifhand zu fest",
+    ],
+    tab: `e|--------------------------------|
+B|--------------------------------|
+G|--------------------------------|
+D|-----------------5-x-5-x--------|
+A|-----------------5-x-5-x--------|
+E|-0-x-0-x-0-x-0-x-3-x-3-x--------|
+   PM--------------------------
+   E5               A5`,
+    why: "Die toten Anschläge liegen genau da, wo bei durchgespielten Sechzehnteln ein Ton käme. Weil sie im Zeitraster nicht fehlen, hört man das Tempo weiter — nur eben ohne die Tonhöhe, und genau das erzeugt den Druck.",
+    startBpm: 60,
+    targetBpm: 150,
+    beatsPerBar: 4,
+    subdivision: 2,
+  },
+  {
+    id: "riff-hammer",
+    title: "Hammer Down",
+    kind: "riff",
+    technique: "legato",
+    goal: "Legato aus der Leersaite heraus, im Riff-Kontext",
+    cues: [
+      "Der Hammer-on kommt aus der leeren Saite — kein zweiter Anschlag",
+      "Der Powerchord danach muss sofort sitzen",
+      "Die Leersaite darf nicht mitklingen, wenn der Akkord kommt",
+    ],
+    tab: `e|--------------------------------|
+B|--------------------------------|
+G|--------------------------------|
+D|--------------7--------5--------|
+A|--------------7--------5--------|
+E|-0h3-0h5-0h3--5--0h3---3--------|
+   N   N   N    N  N     N
+                E5       D5`,
+    why: "Aus der Leersaite heraus gehämmerte Töne kosten keinen Anschlag — die Anschlaghand hat Zeit, sich auf den nächsten Powerchord vorzubereiten. Deshalb lassen sich so Figuren spielen, die für einen reinen Wechselschlag zu schnell wären.",
+    startBpm: 55,
+    targetBpm: 130,
+    beatsPerBar: 4,
+    subdivision: 2,
+  },
 ]
 
 export const DRILLS_BY_ID: Record<string, Drill> = Object.fromEntries(

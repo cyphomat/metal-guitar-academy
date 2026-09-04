@@ -92,16 +92,32 @@ describe("focusBonus", () => {
 })
 
 describe("buildSession with a focus", () => {
+  // Geprüft wird der Zuschlag, nicht eine abgeschriebene Liste von Techniken:
+  // die ging veraltet, sobald der Katalog eine neue Technik bekam, und meldete
+  // dann einen Fehler in der Auswahl statt in sich selbst.
   it("opens a lead player on lead work", () => {
-    const plan = buildSession(EMPTY, { now: NOW, random: fixed, profile: makeProfile("wieder", "lead") })
+    const profile = makeProfile("wieder", "lead")
+    const plan = buildSession(EMPTY, { now: NOW, random: fixed, profile })
     const technique = plan.blocks.find((block) => block.drill.kind === "technique")!
-    expect(["pentatonic", "bending", "alternate-picking"]).toContain(technique.drill.technique)
+    expect(focusBonus(technique.drill, profile), technique.drill.id).toBeGreaterThan(0)
   })
 
   it("opens a rhythm player on the right hand", () => {
-    const plan = buildSession(EMPTY, { now: NOW, random: fixed, profile: makeProfile("wieder", "rhythmus") })
+    const profile = makeProfile("wieder", "rhythmus")
+    const plan = buildSession(EMPTY, { now: NOW, random: fixed, profile })
     const technique = plan.blocks.find((block) => block.drill.kind === "technique")!
-    expect(["downpicking", "palm-mute", "gallop", "power-chords"]).toContain(technique.drill.technique)
+    expect(focusBonus(technique.drill, profile), technique.drill.id).toBeGreaterThan(0)
+  })
+
+  it("teilt jede Technik genau einem Schwerpunkt zu", () => {
+    // Ein Drill, den weder Rhythmus noch Lead beansprucht, bekäme für keinen
+    // Schwerpunkt einen Zuschlag und käme bei beiden zuletzt.
+    for (const drill of DRILLS) {
+      if (drill.kind === "warmup") continue
+      const rhythmus = focusBonus(drill, makeProfile("wieder", "rhythmus"))
+      const lead = focusBonus(drill, makeProfile("wieder", "lead"))
+      expect(Math.max(rhythmus, lead), drill.id).toBeGreaterThan(0)
+    }
   })
 
   it("carries the scaled tempo into the blocks", () => {

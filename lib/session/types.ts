@@ -9,6 +9,10 @@ export const TECHNIQUES = [
   "alternate-picking",
   "pentatonic",
   "bending",
+  "legato",
+  "slides",
+  "dead-notes",
+  "tremolo",
 ] as const
 
 export type Technique = (typeof TECHNIQUES)[number]
@@ -22,6 +26,10 @@ export const TECHNIQUE_LABELS: Record<Technique, string> = {
   "alternate-picking": "Alternate Picking",
   pentatonic: "Pentatonic",
   bending: "Bending",
+  legato: "Legato",
+  slides: "Slides",
+  "dead-notes": "Dead Notes",
+  tremolo: "Tremolo",
 }
 
 /** Where a drill sits in the arc of a session. */
@@ -79,7 +87,21 @@ export type TimingResult = z.infer<typeof timingResultSchema>
 
 export const drillResultSchema = z.object({
   drillId: z.string(),
-  technique: z.enum(TECHNIQUES),
+  /**
+   * Der Katalog ist streng, der Log ist nachsichtig.
+   *
+   * Bewusst kein `z.enum(TECHNIQUES)`: ein Log-Eintrag ist ein Stück
+   * Vergangenheit und verweist auf einen Drill, den es auf diesem Gerät
+   * vielleicht noch nicht oder nicht mehr gibt. Mit der Aufzählung geprüft
+   * wäre jede neue Technik ein Bruch für jedes Gerät, das noch nicht
+   * aktualisiert hat — es liest beim Abgleich einen Log mit einem unbekannten
+   * Wert, die Prüfung schlägt fehl, und der *ganze* Log landet beiseite.
+   *
+   * Nichts liest dieses Feld; alle Anzeigen nehmen `drill.technique` aus dem
+   * Katalog. Es steht hier nur, weil ein Log ohne Technik schwerer zu lesen
+   * wäre, wenn der Drill einmal fehlt.
+   */
+  technique: z.string(),
   bpm: z.number().int().min(20).max(300),
   rating: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]),
   /** Seconds actually spent on the block. */

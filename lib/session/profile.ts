@@ -71,8 +71,15 @@ export function startBpmFor(drill: Drill, profile: Profile | null): number {
   return Math.max(40, Math.round(scaled / 5) * 5)
 }
 
-const RHYTHM: Technique[] = ["downpicking", "palm-mute", "gallop", "power-chords"]
-const LEAD: Technique[] = ["pentatonic", "bending", "alternate-picking"]
+const RHYTHM: Technique[] = [
+  "downpicking",
+  "palm-mute",
+  "gallop",
+  "power-chords",
+  "dead-notes",
+  "tremolo",
+]
+const LEAD: Technique[] = ["pentatonic", "bending", "alternate-picking", "legato", "slides"]
 
 /**
  * Wie stark ein Drill zum gewählten Schwerpunkt passt.
